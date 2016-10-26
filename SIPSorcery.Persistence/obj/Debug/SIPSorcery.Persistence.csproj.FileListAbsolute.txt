@@ -1,0 +1,5 @@
+F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.Persistence.dll
+F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.Persistence.pdb
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Persistence\obj\Debug\SIPSorcery.Persistence.csprojResolveAssemblyReference.cache
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Persistence\obj\Debug\SIPSorcery.Persistence.dll
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Persistence\obj\Debug\SIPSorcery.Persistence.pdb

@@ -1,0 +1,5 @@
+F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.Net.dll
+F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.Net.pdb
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Net\obj\Debug\SIPSorcery.Net.csprojResolveAssemblyReference.cache
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Net\obj\Debug\SIPSorcery.Net.dll
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Net\obj\Debug\SIPSorcery.Net.pdb
