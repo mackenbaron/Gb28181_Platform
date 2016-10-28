@@ -264,7 +264,9 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ISIPMonitorService.cs" />
     <Compile Include="SIPMessage\SIPMessageCore.cs" />
+    <Compile Include="SIPMonitor\SIPMonitorCore.cs" />
     <Compile Include="SIPRegistrar\SIPRegistrarBindingsManager.cs" />
     <Compile Include="SIPRegistrar\SIPUserAgentConfiguration.cs" />
     <Compile Include="SIPRegistrar\SIPRegistrarCore.cs" />

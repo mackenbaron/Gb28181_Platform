@@ -1,5 +1,6 @@
 ﻿using log4net;
 using SIPSorcery.Net;
+using SIPSorcery.Servers.SIPMonitor;
 using SIPSorcery.SIP;
 using SIPSorcery.SIP.App;
 using SIPSorcery.Sys;
@@ -11,7 +12,9 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace SIPSorcery.Servers.SIPMessage
 {
@@ -45,42 +48,17 @@ namespace SIPSorcery.Servers.SIPMessage
         Playback
     }
 
+    /// <summary>
+    /// sip消息核心处理
+    /// </summary>
     public class SIPMessageCore
     {
         #region 私有字段
         private static ILog logger = AppState.logger;
         /// <summary>
-        /// 本地sip终结点
-        /// </summary>
-        private SIPEndPoint _localEndPoint;
-        /// <summary>
-        /// 远程sip终结点
-        /// </summary>
-        private SIPEndPoint _remoteEndPoint;
-        /// <summary>
-        /// sip实时视频请求
-        /// </summary>
-        private SIPRequest _realReqSession;
-        /// <summary>
-        /// sip传输请求
-        /// </summary>
-        private SIPTransport _mSIPTransport;
-        /// <summary>
-        /// 用户代理
-        /// </summary>
-        private string _userAgent;
-        /// <summary>
-        /// rtp数据通道
-        /// </summary>
-        private RTPChannel _rtpChannel;
-        /// <summary>
         /// 远程RTCP终结点
         /// </summary>
         private IPEndPoint _rtcpRemoteEndPoint;
-        /// <summary>
-        /// 媒体端口(0rtp port,1 rtcp port)
-        /// </summary>
-        private int[] _mediaPort;
         /// <summary>
         /// rtcp套接字连接
         /// </summary>
@@ -97,15 +75,47 @@ namespace SIPSorcery.Servers.SIPMessage
         private uint _senderOctetCount = 0;
         private DateTime _senderLastSentAt = DateTime.MinValue;
 
-        private string _localSIPId;
-        private string _remoteSIPId;
         private bool _initSIP = false;
         private int MEDIA_PORT_START = 10000;
         private int MEDIA_PORT_END = 20000;
+        private RegistrarCore m_registrarCore;
+
+        /// <summary>
+        /// 用户代理
+        /// </summary>
+        internal string UserAgent;
+        /// <summary>
+        /// 本地sip终结点
+        /// </summary>
+        internal SIPEndPoint LocalEndPoint;
+        /// <summary>
+        /// 远程sip终结点
+        /// </summary>
+        internal SIPEndPoint RemoteEndPoint;
+        /// <summary>
+        /// sip实时视频请求
+        /// </summary>
+        internal SIPRequest RealReqSession;
+        /// <summary>
+        /// sip传输请求
+        /// </summary>
+        internal SIPTransport Transport;
+        /// <summary>
+        /// 本地sip编码
+        /// </summary>
+        internal string LocalSIPId;
+        /// <summary>
+        /// 远程sip编码
+        /// </summary>
+        internal string RemoteSIPId;
+        /// <summary>
+        /// 监控服务
+        /// </summary>
+        public Dictionary<string, ISIPMonitorService> MonitorService;
         /// <summary>
         /// sip服务状态
         /// </summary>
-        public event Action<SipServiceStatus> OnSIPServiceChanged;
+        public event Action<string, SipServiceStatus> OnSIPServiceChanged;
         /// <summary>
         /// 设备目录接收
         /// </summary>
@@ -114,8 +124,20 @@ namespace SIPSorcery.Servers.SIPMessage
 
         public SIPMessageCore(SIPTransport transport, string userAgent)
         {
-            _mSIPTransport = transport;
-            _userAgent = userAgent;
+            Transport = transport;
+            UserAgent = userAgent;
+        }
+
+        public void Initialize(string switchboarduserAgentPrefix,
+            SIPAuthenticateRequestDelegate sipRequestAuthenticator,
+            GetCanonicalDomainDelegate getCanonicalDomain,
+            SIPAssetGetDelegate<SIPAccount> getSIPAccount,
+            SIPUserAgentConfigurationManager userAgentConfigs,
+            SIPRegistrarBindingsManager registrarBindingsManager)
+        {
+            m_registrarCore = new RegistrarCore(Transport, registrarBindingsManager, getSIPAccount, getCanonicalDomain, true, true, userAgentConfigs, sipRequestAuthenticator, switchboarduserAgentPrefix);
+            m_registrarCore.Start(1);
+            MonitorService = new Dictionary<string, ISIPMonitorService>();
         }
 
         /// <summary>
@@ -126,48 +148,63 @@ namespace SIPSorcery.Servers.SIPMessage
         /// <param name="request">sip请求</param>
         public void AddMessageRequest(SIPEndPoint localSIPEndPoint, SIPEndPoint remoteEndPoint, SIPRequest request)
         {
-            if (request.Method == SIPMethodsEnum.MESSAGE)
+            //注册请求
+            if (request.Method == SIPMethodsEnum.REGISTER)
+            {
+                m_registrarCore.AddRegisterRequest(localSIPEndPoint, remoteEndPoint, request);
+            }
+            //消息请求
+            else if (request.Method == SIPMethodsEnum.MESSAGE)
             {
                 KeepAlive keepAlive = KeepAlive.Instance.Read(request.Body);
                 if (keepAlive != null)  //心跳
                 {
-
                     if (!_initSIP)
                     {
-                        _localEndPoint = request.Header.To.ToURI.ToSIPEndPoint();
-                        _remoteEndPoint = request.Header.From.FromURI.ToSIPEndPoint();
-                        _localSIPId = request.Header.To.ToURI.User;
-                        _remoteSIPId = request.Header.From.FromURI.User;
-                        _rtpChannel = new RTPChannel(_remoteEndPoint.GetIPEndPoint());
-                        _rtpChannel.OnFrameReady += RtpChannel_OnFrameReady;
+                        LocalEndPoint = request.Header.To.ToURI.ToSIPEndPoint();
+                        RemoteEndPoint = request.Header.From.FromURI.ToSIPEndPoint();
+                        LocalSIPId = request.Header.To.ToURI.User;
+                        RemoteSIPId = request.Header.From.FromURI.User;
                     }
 
                     _initSIP = true;
-                    OnSIPServiceChange(SipServiceStatus.Complete);
+
+                    OnSIPServiceChange(RemoteSIPId, SipServiceStatus.Complete);
                 }
                 else   //目录检索
                 {
                     Catalog catalog = Catalog.Instance.Read(request.Body);
                     if (catalog != null)
                     {
+                        foreach (var cata in catalog.DeviceList.Items)
+                        {
+                            lock (MonitorService)
+                            {
+                                if (!MonitorService.ContainsKey(cata.DeviceID))
+                                {
+                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name);
+                                    monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
+                                    MonitorService.Add(catalog.DeviceID, monitor);
+                                }
+                            }
+                        }
                         OnCatalogReceive(catalog);
                     }
                 }
-
                 SIPResponse msgRes = GetResponse(localSIPEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
-                _mSIPTransport.SendResponse(msgRes);
+                Transport.SendResponse(msgRes);
             }
+            //停止播放请求
             else if (request.Method == SIPMethodsEnum.BYE)
             {
                 SIPResponse byeRes = GetResponse(localSIPEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
-                _mSIPTransport.SendResponse(byeRes);
-
+                Transport.SendResponse(byeRes);
             }
         }
 
-        private void RtpChannel_OnFrameReady(RTPFrame frame)
+        private void monitor_OnSIPServiceChanged(string msg, SipServiceStatus state)
         {
-            
+            OnSIPServiceChange(msg, state);
         }
 
         /// <summary>
@@ -184,25 +221,24 @@ namespace SIPSorcery.Servers.SIPMessage
             }
             else if (response.Status == SIPResponseStatusCodesEnum.Ok)
             {
-                if (_realReqSession.Header.CallId == response.Header.CallId &&
+                if (RealReqSession.Header.CallId == response.Header.CallId &&
                     response.Header.ContentType.ToLower() == "application/sdp")
                 {
-                    //SDP okSDP = SDP.ParseSDPDescription(response.Body);
-                    SIPRequest ackReq = AckRequest(response);
-                    _mSIPTransport.SendRequest(_remoteEndPoint, ackReq);
+                    SIPRequest ackReq = MonitorService[response.Header.To.ToURI.User].AckRequest(response);
+                    Transport.SendRequest(RemoteEndPoint, ackReq);
                 }
             }
         }
 
-        public void OnSIPServiceChange(SipServiceStatus state)
+        public void OnSIPServiceChange(string msg, SipServiceStatus state)
         {
-            Action<SipServiceStatus> action = OnSIPServiceChanged;
+            Action<string, SipServiceStatus> action = OnSIPServiceChanged;
 
             if (action == null) return;
 
-            foreach (Action<SipServiceStatus> handler in action.GetInvocationList())
+            foreach (Action<string, SipServiceStatus> handler in action.GetInvocationList())
             {
-                try { handler(state); }
+                try { handler(msg, state); }
                 catch { continue; }
             }
         }
@@ -232,7 +268,7 @@ namespace SIPSorcery.Servers.SIPMessage
                 response.Header.CSeqMethod = request.Header.CSeqMethod;
                 response.Header.Vias = request.Header.Vias;
                 //response.Header.Server = _userAgent;
-                response.Header.UserAgent = _userAgent;
+                response.Header.UserAgent = UserAgent;
                 response.Header.CSeq = request.Header.CSeq;
 
                 if (response.Header.To.ToTag == null || request.Header.To.ToTag.Trim().Length == 0)
@@ -250,139 +286,14 @@ namespace SIPSorcery.Servers.SIPMessage
         }
 
         /// <summary>
-        /// 实时视频请求
-        /// </summary>
-        /// <param name="deviceId">设备编码</param>
-        public void RealVideoReq(string deviceId)
-        {
-            if (_localEndPoint == null)
-            {
-                OnSIPServiceChange(SipServiceStatus.Wait);
-                return;
-            }
-
-            _mediaPort = SetMediaPort();
-            string localIp = _localEndPoint.Address.ToString();
-            SDPConnectionInformation sdpConn = new SDPConnectionInformation(localIp);
-
-            SDP sdp = new SDP();
-            sdp.Version = 0;
-            sdp.SessionId = "0";
-            sdp.Username = _localSIPId;
-            sdp.SessionName = SessionName.Play.ToString();
-            sdp.Connection = sdpConn;
-            sdp.Timing = "0 0";
-            sdp.Address = localIp;
-
-            SDPMediaFormat psFormat = new SDPMediaFormat(SDPMediaFormatsEnum.PS);
-            psFormat.IsStandardAttribute = false;
-            SDPMediaFormat h264Format = new SDPMediaFormat(SDPMediaFormatsEnum.H264);
-            h264Format.IsStandardAttribute = false;
-            SDPMediaAnnouncement media = new SDPMediaAnnouncement();
-
-            media.Media = SDPMediaTypesEnum.video;
-
-            media.MediaFormats.Add(psFormat);
-            media.MediaFormats.Add(h264Format);
-            media.AddExtra("a=recvonly");
-            media.AddFormatParameterAttribute(psFormat.FormatID, psFormat.Name);
-            media.AddFormatParameterAttribute(h264Format.FormatID, h264Format.Name);
-            media.Port = _mediaPort[0];
-
-            sdp.Media.Add(media);
-            string str = sdp.ToString();
-
-            SIPURI remoteUri = new SIPURI(_remoteSIPId, _remoteEndPoint.ToHost(), "");
-            SIPURI localUri = new SIPURI(_localSIPId, _localEndPoint.ToHost(), "");
-            SIPFromHeader from = new SIPFromHeader(null, localUri, CallProperties.CreateNewTag());
-            SIPToHeader to = new SIPToHeader(null, remoteUri, null);
-            SIPRequest catalogReq = _mSIPTransport.GetRequest(SIPMethodsEnum.INVITE, remoteUri);
-            SIPContactHeader contactHeader = new SIPContactHeader(null, localUri);
-
-            catalogReq.Header.From = from;
-            catalogReq.Header.Contact.Clear();
-            catalogReq.Header.Contact.Add(contactHeader);
-            catalogReq.Header.Allow = null;
-            catalogReq.Header.To = to;
-            catalogReq.Header.UserAgent = _userAgent;
-            catalogReq.Header.CSeq = CallProperties.CreateNewCSeq();
-            catalogReq.Header.CallId = CallProperties.CreateNewCallId();
-            catalogReq.Header.Subject = ToSubject();
-            catalogReq.Header.ContentType = "Application/sdp";
-
-            catalogReq.Body = sdp.ToString();
-            _realReqSession = catalogReq;
-            _mSIPTransport.SendRequest(_remoteEndPoint, catalogReq);
-
-
-            _rtpChannel.IsClosed = false;
-            _rtpChannel.ReservePorts(_mediaPort[0], _mediaPort[1]);
-            _rtpChannel.Start();
-        }
-
-        /// <summary>
-        /// 确认接收视频请求
-        /// </summary>
-        /// <param name="response">响应消息</param>
-        /// <returns></returns>
-        private SIPRequest AckRequest(SIPResponse response)
-        {
-            SIPURI localUri = new SIPURI(_localSIPId, _localEndPoint.ToHost(), "");
-            SIPURI remoteURI = new SIPURI(_remoteSIPId, _remoteEndPoint.ToHost(), "");
-            SIPRequest ackRequest = _mSIPTransport.GetRequest(SIPMethodsEnum.ACK, remoteURI);
-            SIPFromHeader from = new SIPFromHeader(null, _realReqSession.Header.From.FromURI, response.Header.From.FromTag);
-            SIPToHeader to = new SIPToHeader(null, remoteURI, response.Header.To.ToTag);
-            SIPContactHeader contactHeader = new SIPContactHeader(null, localUri);
-            SIPHeader header = new SIPHeader(from, to, response.Header.CSeq, response.Header.CallId);
-            header.CSeqMethod = SIPMethodsEnum.ACK;
-            header.Contact = response.Header.Contact;
-            header.Contact.Clear();
-            header.Contact.Add(contactHeader);
-            header.Vias = response.Header.Vias;
-            header.MaxForwards = response.Header.MaxForwards;
-            header.ContentLength = response.Header.ContentLength;
-            header.UserAgent = _userAgent;
-            header.Allow = null;
-            ackRequest.Header = header;
-            return ackRequest;
-        }
-
-        public void ByeVideoReq(string p)
-        {
-            if (_localEndPoint == null)
-            {
-                OnSIPServiceChange(SipServiceStatus.Wait);
-                return;
-            }
-            SIPURI localURI = new SIPURI(_localSIPId, _localEndPoint.ToHost(), "");
-            SIPURI remoteURI = new SIPURI(_remoteSIPId, _remoteEndPoint.ToHost(), "");
-            SIPFromHeader from = new SIPFromHeader(null, localURI, _realReqSession.Header.From.FromTag);
-            SIPToHeader to = new SIPToHeader(null, remoteURI, _realReqSession.Header.To.ToTag);
-            SIPRequest byeReqr = _mSIPTransport.GetRequest(SIPMethodsEnum.BYE, remoteURI);
-            SIPHeader header = new SIPHeader(from, to, _realReqSession.Header.CSeq, _realReqSession.Header.CallId);
-            header.CSeqMethod = byeReqr.Header.CSeqMethod;
-            header.Vias = byeReqr.Header.Vias;
-            header.MaxForwards = byeReqr.Header.MaxForwards;
-            header.UserAgent = _userAgent;
-            byeReqr.Header.From = from;
-            byeReqr.Header = header;
-            _mSIPTransport.SendRequest(_remoteEndPoint, byeReqr);
-        }
-
-        private string ToSubject()
-        {
-            return _remoteSIPId + ":" + 0 + "," + _localSIPId + ":" + new Random().Next(ushort.MaxValue);
-        }
-
-        /// <summary>
         /// 设备目录查询
         /// </summary>
         /// <param name="cameraId">目的设备编码</param>
         public void DeviceCatalogQuery(string deviceId)
         {
-            if (_localEndPoint == null)
+            if (LocalEndPoint == null)
             {
-                OnSIPServiceChange(SipServiceStatus.Wait);
+                OnSIPServiceChange(deviceId, SipServiceStatus.Wait);
                 return;
             }
             SIPRequest req = QueryItems();
@@ -394,7 +305,7 @@ namespace SIPSorcery.Servers.SIPMessage
             };
             string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
             req.Body = xmlBody;
-            _mSIPTransport.SendRequest(_remoteEndPoint, req);
+            Transport.SendRequest(RemoteEndPoint, req);
         }
 
         /// <summary>
@@ -403,23 +314,32 @@ namespace SIPSorcery.Servers.SIPMessage
         /// <returns></returns>
         private SIPRequest QueryItems()
         {
-            SIPURI remoteUri = new SIPURI(_remoteSIPId, _remoteEndPoint.ToHost(), "");
-            SIPURI localUri = new SIPURI(_localSIPId, _localEndPoint.ToHost(), "");
+            SIPURI remoteUri = new SIPURI(RemoteSIPId, RemoteEndPoint.ToHost(), "");
+            SIPURI localUri = new SIPURI(LocalSIPId, LocalEndPoint.ToHost(), "");
             SIPFromHeader from = new SIPFromHeader(null, localUri, CallProperties.CreateNewTag());
             SIPToHeader to = new SIPToHeader(null, remoteUri, CallProperties.CreateNewTag());
-            SIPRequest catalogReq = _mSIPTransport.GetRequest(SIPMethodsEnum.MESSAGE, remoteUri);
+            SIPRequest catalogReq = Transport.GetRequest(SIPMethodsEnum.MESSAGE, remoteUri);
             catalogReq.Header.From = from;
             catalogReq.Header.Contact = null;
             catalogReq.Header.Allow = null;
             catalogReq.Header.To = to;
-            catalogReq.Header.UserAgent = _userAgent;
+            catalogReq.Header.UserAgent = UserAgent;
             catalogReq.Header.CSeq = CallProperties.CreateNewCSeq();
             catalogReq.Header.CallId = CallProperties.CreateNewCallId();
             catalogReq.Header.ContentType = "Application/MANSCDP+xml";
             return catalogReq;
         }
 
-
+        public void Stop()
+        {
+            LocalEndPoint = null;
+            LocalSIPId = null;
+            RemoteEndPoint = null;
+            RemoteSIPId = null;
+            Transport = null;
+            MonitorService.Clear();
+            MonitorService = null;
+        }
 
         /// <summary>
         /// 设置媒体(rtp/rtcp)端口号
@@ -430,7 +350,7 @@ namespace SIPSorcery.Servers.SIPMessage
             var inUseUDPPorts = (from p in IPGlobalProperties.GetIPGlobalProperties().GetActiveUdpListeners() where p.Port >= MEDIA_PORT_START select p.Port).OrderBy(x => x).ToList();
 
             int rtpPort = 0;
-            int controlPort = 0;
+            int rtcpPort = 0;
 
             if (inUseUDPPorts.Count > 0)
             {
@@ -449,7 +369,7 @@ namespace SIPSorcery.Servers.SIPMessage
                 {
                     if (!inUseUDPPorts.Contains(index))
                     {
-                        controlPort = index;
+                        rtcpPort = index;
                         break;
                     }
                 }
@@ -457,7 +377,7 @@ namespace SIPSorcery.Servers.SIPMessage
             else
             {
                 rtpPort = MEDIA_PORT_START;
-                controlPort = MEDIA_PORT_START + 1;
+                rtcpPort = MEDIA_PORT_START + 1;
             }
 
             if (MEDIA_PORT_START >= MEDIA_PORT_END)
@@ -467,11 +387,9 @@ namespace SIPSorcery.Servers.SIPMessage
             MEDIA_PORT_START += 2;
             int[] mediaPort = new int[2];
             mediaPort[0] = rtpPort;
-            mediaPort[1] = controlPort;
+            mediaPort[1] = rtcpPort;
             return mediaPort;
         }
-
-
     }
 
     //    #region 构造函数

@@ -44,12 +44,12 @@ using log4net;
 using SIPSorcery.Sys;
 using System.Configuration;
 
-namespace Gb28181_Client.Register
+namespace Gb28181_Client.Message
 {
     /// <summary>
     /// Retrieves application conifguration settings from App.Config.
     /// </summary>
-    public class SIPRegistrarState:IConfigurationSectionHandler
+    public class SIPMessageState:IConfigurationSectionHandler
     {
         private const string LOGGER_NAME = "siprergistrar";
 
@@ -76,7 +76,7 @@ namespace Gb28181_Client.Register
         public static readonly string SwitchboardUserAgentPrefix;
         public static readonly int ThreadCount = 1;
 
-        static SIPRegistrarState()
+        static SIPMessageState()
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Gb28181_Client.Register
                 }
                 catch (Exception logExcp)
                 {
-                    Console.WriteLine("Exception SIPRegistrarState Configure Logging. " + logExcp.Message);
+                    Console.WriteLine("Exception SIPMessageState Configure Logging. " + logExcp.Message);
                 }
 
                 #endregion

@@ -1,4 +1,4 @@
-﻿using Gb28181_Client.Register;
+﻿using Gb28181_Client.Message;
 using log4net;
 using SIPSorcery.Persistence;
 using SIPSorcery.Servers.SIPMessage;
@@ -21,7 +21,7 @@ using System.Xml;
 
 namespace Gb28181_Client
 {
-    public delegate void SetSIPServiceText(SipServiceStatus state);
+    public delegate void SetSIPServiceText(string msg, SipServiceStatus state);
     public delegate void SetCatalogText(Catalog cata);
 
     public partial class Form1 : Form
@@ -36,7 +36,7 @@ namespace Gb28181_Client
 
         private static StorageTypes m_sipRegistrarStorageType;
         private static string m_sipRegistrarStorageConnStr;
-        private SIPRegistrarDaemon _registerDaemon;
+        private SIPMessageDaemon _messageDaemon;
 
         public Form1()
         {
@@ -57,37 +57,37 @@ namespace Gb28181_Client
             SIPDomainManager sipDomainManager = new SIPDomainManager(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr);
             SIPAssetPersistor<SIPRegistrarBinding> sipRegistrarBindingPersistor = SIPAssetPersistorFactory<SIPRegistrarBinding>.CreateSIPAssetPersistor(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr, m_sipRegistrarBindingsXMLFilename);
 
-            _registerDaemon = new SIPRegistrarDaemon(sipDomainManager.GetDomain, sipAccountsPersistor.Get, sipRegistrarBindingPersistor, SIPRequestAuthenticator.AuthenticateSIPRequest);
+            _messageDaemon = new SIPMessageDaemon(sipDomainManager.GetDomain, sipAccountsPersistor.Get, sipRegistrarBindingPersistor, SIPRequestAuthenticator.AuthenticateSIPRequest);
         }
 
         private void btnStart_Click(object sender, System.EventArgs e)
         {
             Initialize();
-            Thread daemonThread = new Thread(_registerDaemon.Start);
-            daemonThread.Start();
-            Thread.Sleep(100);
-            _registerDaemon.m_msgCore.OnSIPServiceChanged += m_msgCore_SIPInitHandle;
-            _registerDaemon.m_msgCore.OnCatalogReceived += m_msgCore_OnCatalogReceived;
+            _messageDaemon.Start();
+            _messageDaemon.MessageCore.OnSIPServiceChanged += m_msgCore_SIPInitHandle;
+            _messageDaemon.MessageCore.OnCatalogReceived += m_msgCore_OnCatalogReceived;
             lblStatus.Text = "sip服务已启动。。。";
             lblStatus.ForeColor = Color.FromArgb(0, 192, 0);
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            _registerDaemon.Stop();
+            _messageDaemon.Stop();
+            _messageDaemon.MessageCore.OnSIPServiceChanged -= m_msgCore_SIPInitHandle;
+            _messageDaemon.MessageCore.OnCatalogReceived -= m_msgCore_OnCatalogReceived;
+            lvDev.Items.Clear();
             lblStatus.Text = "sip服务已停止。。。";
             lblStatus.ForeColor = Color.Blue;
         }
 
         private void btnCatalog_Click(object sender, EventArgs e)
         {
-            _registerDaemon.m_msgCore.DeviceCatalogQuery(txtDeviceId.Text.Trim());
-            lblStatus.Text = "查询设备目录请求";
+            _messageDaemon.MessageCore.DeviceCatalogQuery(txtDeviceId.Text.Trim());
         }
 
         private void m_msgCore_OnCatalogReceived(Catalog cata)
         {
-            if (lBoxCatalog.InvokeRequired)
+            if (lvDev.InvokeRequired)
             {
                 SetCatalogText setCata = new SetCatalogText(SetDevText);
                 this.Invoke(setCata, cata);
@@ -106,20 +106,35 @@ namespace Gb28181_Client
         {
             foreach (Catalog.Item item in cata.DeviceList.Items)
             {
-                lBoxCatalog.Items.Add(item.Name + "---" + item.DeviceID);
+                ListViewItem lvItem = new ListViewItem(new string[] { item.Name, item.DeviceID });
+                lvItem.ImageKey = item.DeviceID;
+                int lvTotal = 0;
+                foreach (var v in lvDev.Items.Cast<ListViewItem>())
+                {
+                    if (v.ImageKey == lvItem.ImageKey)
+                    {
+                        lvTotal++;
+                        break;
+                    }
+                }
+                if (lvTotal > 0)
+                {
+                    continue;
+                }
+                lvDev.Items.Add(lvItem);
             }
         }
 
-        private void m_msgCore_SIPInitHandle(SipServiceStatus state)
+        private void m_msgCore_SIPInitHandle(string msg, SipServiceStatus state)
         {
             if (lblStatus.InvokeRequired)
             {
                 SetSIPServiceText sipService = new SetSIPServiceText(SetSIPService);
-                this.Invoke(sipService, state);
+                this.Invoke(sipService,msg, state);
             }
             else
             {
-                SetSIPService(state);
+                SetSIPService(msg, state);
             }
         }
 
@@ -127,32 +142,41 @@ namespace Gb28181_Client
         /// 设置sip服务状态
         /// </summary>
         /// <param name="state">sip状态</param>
-        private void SetSIPService(SipServiceStatus state)
+        private void SetSIPService(string msg, SipServiceStatus state)
         {
             if (state == SipServiceStatus.Wait)
             {
-                lblStatus.Text = "SIP服务未初始化完成";
+                lblStatus.Text = msg + "-SIP服务未初始化完成";
                 lblStatus.ForeColor = Color.YellowGreen;
             }
             else
             {
-                lblStatus.Text = "SIP服务已初始化完成";
-                lblStatus.ForeColor = Color.ForestGreen;
+                lblStatus.Text = msg + "-SIP服务已初始化完成";
+                lblStatus.ForeColor = Color.Green;
             }
         }
 
         private void btnReal_Click(object sender, EventArgs e)
         {
-            _registerDaemon.m_msgCore.RealVideoReq(txtDeviceId.Text.Trim());
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(txtDeviceId.Text.Trim()))
+            {
+                return;
+            }
+            _messageDaemon.MessageCore.MonitorService[txtDeviceId.Text.Trim()].RealVideoReq();
         }
 
         private void btnBye_Click(object sender, EventArgs e)
         {
-            _registerDaemon.m_msgCore.ByeVideoReq(txtDeviceId.Text.Trim());
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(txtDeviceId.Text.Trim()))
+            {
+                return;
+            }
+            _messageDaemon.MessageCore.MonitorService[txtDeviceId.Text.Trim()].ByeVideoReq();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
         }
     }
 }

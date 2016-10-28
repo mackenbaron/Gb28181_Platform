@@ -34,10 +34,12 @@
             this.btnCatalog = new System.Windows.Forms.Button();
             this.txtDeviceId = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.lBoxCatalog = new System.Windows.Forms.ListBox();
             this.btnReal = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnBye = new System.Windows.Forms.Button();
+            this.lvDev = new System.Windows.Forms.ListView();
+            this.devId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.devName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // btnStart
@@ -98,15 +100,6 @@
             this.label1.TabIndex = 5;
             this.label1.Text = "远程SIP编码";
             // 
-            // lBoxCatalog
-            // 
-            this.lBoxCatalog.FormattingEnabled = true;
-            this.lBoxCatalog.ItemHeight = 12;
-            this.lBoxCatalog.Location = new System.Drawing.Point(14, 117);
-            this.lBoxCatalog.Name = "lBoxCatalog";
-            this.lBoxCatalog.Size = new System.Drawing.Size(210, 160);
-            this.lBoxCatalog.TabIndex = 7;
-            // 
             // btnReal
             // 
             this.btnReal.Location = new System.Drawing.Point(248, 160);
@@ -137,15 +130,38 @@
             this.btnBye.UseVisualStyleBackColor = true;
             this.btnBye.Click += new System.EventHandler(this.btnBye_Click);
             // 
+            // lvDev
+            // 
+            this.lvDev.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.devName,
+            this.devId});
+            this.lvDev.FullRowSelect = true;
+            this.lvDev.Location = new System.Drawing.Point(12, 117);
+            this.lvDev.MultiSelect = false;
+            this.lvDev.Name = "lvDev";
+            this.lvDev.Size = new System.Drawing.Size(212, 163);
+            this.lvDev.TabIndex = 11;
+            this.lvDev.UseCompatibleStateImageBehavior = false;
+            this.lvDev.View = System.Windows.Forms.View.Details;
+            // 
+            // devId
+            // 
+            this.devId.Text = "设备编码";
+            this.devId.Width = 148;
+            // 
+            // devName
+            // 
+            this.devName.Text = "设备名称";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(365, 292);
+            this.Controls.Add(this.lvDev);
             this.Controls.Add(this.btnBye);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnReal);
-            this.Controls.Add(this.lBoxCatalog);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtDeviceId);
             this.Controls.Add(this.btnCatalog);
@@ -170,10 +186,12 @@
         private System.Windows.Forms.Button btnCatalog;
         private System.Windows.Forms.TextBox txtDeviceId;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ListBox lBoxCatalog;
         private System.Windows.Forms.Button btnReal;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnBye;
+        private System.Windows.Forms.ListView lvDev;
+        private System.Windows.Forms.ColumnHeader devName;
+        private System.Windows.Forms.ColumnHeader devId;
     }
 }
 
