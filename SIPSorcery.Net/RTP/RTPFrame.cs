@@ -104,7 +104,9 @@ namespace SIPSorcery.Net
 
         public void AddRTPPacket(RTPPacket rtpPacket)
         {
-            _packets.Add(rtpPacket);
+            lock (_packets) {
+                _packets.Add(rtpPacket);
+            }
 
             //if (HasMarker && FramePayload == null)
             //{
@@ -122,25 +124,33 @@ namespace SIPSorcery.Net
             // The frame has the marker bit set. Check that there are no missing sequence numbers.
             uint previousSeqNum = 0;
 
-            foreach (var rtpPacket in _packets.OrderBy(x => x.Header.SequenceNumber))
+            try
             {
-                if (previousSeqNum == 0)
+                foreach (var rtpPacket in _packets.OrderBy(x => x.Header.SequenceNumber))
                 {
-                    previousSeqNum = rtpPacket.Header.SequenceNumber;
-                    //payload.AddRange(rtpPacket.Payload.Skip(payloadHeaderLength));
-                    //payloadPackets.Add(rtpPacket);
+                    if (previousSeqNum == 0)
+                    {
+                        previousSeqNum = rtpPacket.Header.SequenceNumber;
+                        //payload.AddRange(rtpPacket.Payload.Skip(payloadHeaderLength));
+                        //payloadPackets.Add(rtpPacket);
+                    }
+                    else if (previousSeqNum != rtpPacket.Header.SequenceNumber - 1)
+                    {
+                        // Missing packet.
+                        return false;
+                    }
+                    else
+                    {
+                        previousSeqNum = rtpPacket.Header.SequenceNumber;
+                        //payload.AddRange(rtpPacket.Payload.Skip(payloadHeaderLength));
+                        //payloadPackets.Add(rtpPacket);
+                    }
                 }
-                else if (previousSeqNum != rtpPacket.Header.SequenceNumber - 1)
-                {
-                    // Missing packet.
-                    return false;
-                }
-                else
-                {
-                    previousSeqNum = rtpPacket.Header.SequenceNumber;
-                    //payload.AddRange(rtpPacket.Payload.Skip(payloadHeaderLength));
-                    //payloadPackets.Add(rtpPacket);
-                }
+            }
+            catch (Exception ex)
+            {
+                
+               // throw;
             }
 
             //return payload.ToArray();

@@ -34,19 +34,17 @@ namespace SIPSorcery.Servers.SIPMonitor
             _msgCore = msgCore;
             _deviceId = deviceId;
             _deviceName = name;
-            _rtpChannel = new RTPChannel();
-            _rtpChannel.OnFrameReady += _rtpChannel_OnFrameReady;
         }
 
-        //FileStream m_fs = null;
+        FileStream m_fs = null;
         private void _rtpChannel_OnFrameReady(RTPFrame frame)
         {
-            //if (this.m_fs == null)
-            //{
-            //    this.m_fs = new FileStream("D:\\test.h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
-            //}
-            //byte[] buffer = frame.GetFramePayload();
-            //this.m_fs.Write(buffer, 0, buffer.Length);
+            if (this.m_fs == null)
+            {
+                this.m_fs = new FileStream("D:\\test.h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+            }
+            byte[] buffer = frame.GetFramePayload();
+            this.m_fs.Write(buffer, 0, buffer.Length);
         }
 
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
@@ -73,8 +71,7 @@ namespace SIPSorcery.Servers.SIPMonitor
                 OnSIPServiceChange(_deviceName + "-" + _deviceId, SipServiceStatus.Wait);
                 return;
             }
-
-            _rtpChannel.RemoteEndPoint = _msgCore.RemoteEndPoint.GetIPEndPoint();
+            
             int[] mediaPort = _msgCore.SetMediaPort();
 
             string localIp = _msgCore.LocalEndPoint.Address.ToString();
@@ -128,7 +125,9 @@ namespace SIPSorcery.Servers.SIPMonitor
             _msgCore.RealReqSession = realReq;
             _msgCore.Transport.SendRequest(_msgCore.RemoteEndPoint, realReq);
 
-            _rtpChannel.IsClosed = false;
+            _rtpChannel = new RTPChannel();
+            _rtpChannel.RemoteEndPoint = _msgCore.RemoteEndPoint.GetIPEndPoint();
+            _rtpChannel.OnFrameReady += _rtpChannel_OnFrameReady;
             _rtpChannel.ReservePorts(mediaPort[0], mediaPort[1]);
             _rtpChannel.SetFrameType(FrameTypesEnum.H264);
             _rtpChannel.Start();

@@ -152,7 +152,9 @@ namespace SIPSorcery.Net
         {
             get { return _isClosed; }
             set
-            { value = _isClosed; }
+            {
+                _isClosed = value;
+            }
         }
 
         // Fields that track the RTP stream being managed in this channel.
@@ -210,7 +212,7 @@ namespace SIPSorcery.Net
         //    }
         //}
 
-         public void ReservePorts()
+        public void ReservePorts()
         {
             ReservePorts(MEDIA_PORT_START, MEDIA_PORT_END);
         }
@@ -555,7 +557,7 @@ namespace SIPSorcery.Net
                             {
                                 System.Diagnostics.Debug.WriteLine("Ignoring RTP packet with timestamp " + rtpPacket.Header.Timestamp + " as it's earlier than the last complete frame.");
                             }
-                            else if(_frameType == FrameTypesEnum.Audio)
+                            else if (_frameType == FrameTypesEnum.Audio)
                             {
                                 var frame = RTPFrame.MakeSinglePacketFrame(rtpPacket);
 
@@ -574,12 +576,12 @@ namespace SIPSorcery.Net
                             }
                             else
                             {
-                                while (_frames.Count > MAX_FRAMES_QUEUE_LENGTH)
-                                {
-                                    var oldestFrame = _frames.OrderBy(x => x.Timestamp).First();
-                                    _frames.Remove(oldestFrame);
-                                    System.Diagnostics.Debug.WriteLine("Receive queue full, dropping oldest frame with timestamp " + oldestFrame.Timestamp + ".");
-                                }
+                                //while (_frames.Count > MAX_FRAMES_QUEUE_LENGTH)
+                                //{
+                                //    var oldestFrame = _frames.OrderBy(x => x.Timestamp).First();
+                                //    _frames.Remove(oldestFrame);
+                                //    System.Diagnostics.Debug.WriteLine("Receive queue full, dropping oldest frame with timestamp " + oldestFrame.Timestamp + ".");
+                                //}
 
                                 //int frameHeaderLength = 0;
 
@@ -590,50 +592,52 @@ namespace SIPSorcery.Net
                                 //    // For a VP8 packet only the Payload descriptor part of the header is not part of the encoded bit stream.
                                 //    frameHeaderLength = vp8Header.PayloadDescriptorLength;
                                 //}
-
-                                var frame = _frames.Where(x => x.Timestamp == rtpPacket.Header.Timestamp).SingleOrDefault();
-
-                                if (frame == null)
+                                lock (_frames)
                                 {
-                                    frame = new RTPFrame() { Timestamp = rtpPacket.Header.Timestamp, HasMarker = rtpPacket.Header.MarkerBit == 1, FrameType = _frameType };
-                                    frame.AddRTPPacket(rtpPacket);
-                                    _frames.Add(frame);
-                                }
-                                else
-                                {
-                                    frame.HasMarker = rtpPacket.Header.MarkerBit == 1;
-                                    frame.AddRTPPacket(rtpPacket);
-                                }
+                                    var frame = _frames.Where(x => x.Timestamp == rtpPacket.Header.Timestamp).FirstOrDefault();
 
-                                if (frame.IsComplete())
-                                {
-                                    // The frame is ready for handing over to the UI.
-                                    byte[] imageBytes = frame.GetFramePayload();
-
-                                    _lastFrameSize = imageBytes.Length;
-                                    _framesSinceLastCalc++;
-
-                                    _lastCompleteFrameTimestamp = rtpPacket.Header.Timestamp;
-                                    //System.Diagnostics.Debug.WriteLine("Frame ready " + frame.Timestamp + ", sequence numbers " + frame.StartSequenceNumber + " to " + frame.EndSequenceNumber + ",  payload length " + imageBytes.Length + ".");
-                                    _frames.Remove(frame);
-
-                                    // Also remove any earlier frames as we don't care about anything that's earlier than the current complete frame.
-                                    foreach (var oldFrame in _frames.Where(x => x.Timestamp <= rtpPacket.Header.Timestamp).ToList())
+                                    if (frame == null)
                                     {
-                                        System.Diagnostics.Debug.WriteLine("Discarding old frame for timestamp " + oldFrame.Timestamp + ".");
-                                        _frames.Remove(oldFrame);
+                                        frame = new RTPFrame() { Timestamp = rtpPacket.Header.Timestamp, HasMarker = rtpPacket.Header.MarkerBit == 1, FrameType = _frameType };
+                                        frame.AddRTPPacket(rtpPacket);
+                                        _frames.Add(frame);
+                                    }
+                                    else
+                                    {
+                                        frame.HasMarker = rtpPacket.Header.MarkerBit == 1;
+                                        frame.AddRTPPacket(rtpPacket);
                                     }
 
-                                    if (OnFrameReady != null)
+                                    if (frame.IsComplete())
                                     {
-                                        try
+                                        // The frame is ready for handing over to the UI.
+                                        byte[] imageBytes = frame.GetFramePayload();
+
+                                        _lastFrameSize = imageBytes.Length;
+                                        _framesSinceLastCalc++;
+
+                                        _lastCompleteFrameTimestamp = rtpPacket.Header.Timestamp;
+                                        //System.Diagnostics.Debug.WriteLine("Frame ready " + frame.Timestamp + ", sequence numbers " + frame.StartSequenceNumber + " to " + frame.EndSequenceNumber + ",  payload length " + imageBytes.Length + ".");
+                                        _frames.Remove(frame);
+
+                                        // Also remove any earlier frames as we don't care about anything that's earlier than the current complete frame.
+                                        foreach (var oldFrame in _frames.Where(x => x.Timestamp <= rtpPacket.Header.Timestamp).ToList())
                                         {
-                                            //System.Diagnostics.Debug.WriteLine("RTP frame ready for timestamp " + frame.Timestamp + ".");
-                                            OnFrameReady(frame);
+                                            System.Diagnostics.Debug.WriteLine("Discarding old frame for timestamp " + oldFrame.Timestamp + ".");
+                                            _frames.Remove(oldFrame);
                                         }
-                                        catch (Exception frameReadyExcp)
+
+                                        if (OnFrameReady != null)
                                         {
-                                            logger.Error("Exception RTPChannel.ProcessRTPPackets OnFrameReady. " + frameReadyExcp);
+                                            try
+                                            {
+                                                //System.Diagnostics.Debug.WriteLine("RTP frame ready for timestamp " + frame.Timestamp + ".");
+                                                OnFrameReady(frame);
+                                            }
+                                            catch (Exception frameReadyExcp)
+                                            {
+                                                logger.Error("Exception RTPChannel.ProcessRTPPackets OnFrameReady. " + frameReadyExcp);
+                                            }
                                         }
                                     }
                                 }
@@ -1087,7 +1091,7 @@ namespace SIPSorcery.Net
             return (uint)(ticks90k % UInt32.MaxValue);
         }
 
-       
+
 
         /// <summary>
         /// Utility function to create RtpJpegHeader either for initial packet or template for further packets
