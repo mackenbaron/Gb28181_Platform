@@ -54,7 +54,7 @@ namespace SIPSorcery.Servers.SIPMessage
     public class SIPMessageCore
     {
         #region 私有字段
-        private static ILog logger = AppState.logger;
+
         /// <summary>
         /// 远程RTCP终结点
         /// </summary>
@@ -75,10 +75,14 @@ namespace SIPSorcery.Servers.SIPMessage
         private uint _senderOctetCount = 0;
         private DateTime _senderLastSentAt = DateTime.MinValue;
 
+
+        private static ILog logger = AppState.logger;
+
         private bool _initSIP = false;
         private int MEDIA_PORT_START = 10000;
         private int MEDIA_PORT_END = 20000;
         private RegistrarCore m_registrarCore;
+        private TaskTiming _catalogTask;
 
         /// <summary>
         /// 用户代理
@@ -120,6 +124,10 @@ namespace SIPSorcery.Servers.SIPMessage
         /// 设备目录接收
         /// </summary>
         public event Action<Catalog> OnCatalogReceived;
+        /// <summary>
+        /// 消息发送超时
+        /// </summary>
+        public event Action<SIPResponse> SendRequestTimeout;
         #endregion
 
         public SIPMessageCore(SIPTransport transport, string userAgent)
@@ -184,7 +192,7 @@ namespace SIPSorcery.Servers.SIPMessage
                                 {
                                     ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name);
                                     monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
-                                    MonitorService.Add(catalog.DeviceID, monitor);
+                                    MonitorService.Add(cata.DeviceID, monitor);
                                 }
                             }
                         }
@@ -215,14 +223,17 @@ namespace SIPSorcery.Servers.SIPMessage
         /// <param name="response">sip响应</param>
         public void AddMessageResponse(SIPEndPoint localSIPEndPoint, SIPEndPoint remoteEndPoint, SIPResponse response)
         {
+            if (SendRequestTimeout != null)
+            {
+                SendRequestTimeout(response);
+            }
             if (response.Status == SIPResponseStatusCodesEnum.Trying)
             {
 
             }
             else if (response.Status == SIPResponseStatusCodesEnum.Ok)
             {
-                if (RealReqSession.Header.CallId == response.Header.CallId &&
-                    response.Header.ContentType.ToLower() == "application/sdp")
+                if (response.Header.ContentType.ToLower() == "application/sdp")
                 {
                     SIPRequest ackReq = MonitorService[response.Header.To.ToURI.User].AckRequest(response);
                     Transport.SendRequest(RemoteEndPoint, ackReq);
@@ -296,7 +307,11 @@ namespace SIPSorcery.Servers.SIPMessage
                 OnSIPServiceChange(deviceId, SipServiceStatus.Wait);
                 return;
             }
-            SIPRequest req = QueryItems();
+            string fromTag = CallProperties.CreateNewTag();
+            string toTag = CallProperties.CreateNewTag();
+            int cSeq = CallProperties.CreateNewCSeq();
+            string callId = CallProperties.CreateNewCallId();
+            SIPRequest catalogReq = QueryItems(fromTag, toTag, cSeq, callId);
             CatalogQuery catalog = new CatalogQuery()
             {
                 CommandType = VariableType.Catalog,
@@ -304,34 +319,45 @@ namespace SIPSorcery.Servers.SIPMessage
                 SN = new Random().Next(9999)
             };
             string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
-            req.Body = xmlBody;
-            Transport.SendRequest(RemoteEndPoint, req);
+            catalogReq.Body = xmlBody;
+            Transport.SendRequest(RemoteEndPoint, catalogReq);
+            //_catalogTask = new TaskTiming(catalogReq, Transport);
+            //this.SendRequestTimeout += _catalogTask.MessageSendRequestTimeout;
+            //_catalogTask.Start();
         }
 
         /// <summary>
         /// 查询设备目录请求
         /// </summary>
         /// <returns></returns>
-        private SIPRequest QueryItems()
+        private SIPRequest QueryItems(string fromTag, string toTag, int cSeq, string callId)
         {
             SIPURI remoteUri = new SIPURI(RemoteSIPId, RemoteEndPoint.ToHost(), "");
             SIPURI localUri = new SIPURI(LocalSIPId, LocalEndPoint.ToHost(), "");
-            SIPFromHeader from = new SIPFromHeader(null, localUri, CallProperties.CreateNewTag());
-            SIPToHeader to = new SIPToHeader(null, remoteUri, CallProperties.CreateNewTag());
+            SIPFromHeader from = new SIPFromHeader(null, localUri, fromTag);
+            SIPToHeader to = new SIPToHeader(null, remoteUri, toTag);
             SIPRequest catalogReq = Transport.GetRequest(SIPMethodsEnum.MESSAGE, remoteUri);
             catalogReq.Header.From = from;
             catalogReq.Header.Contact = null;
             catalogReq.Header.Allow = null;
             catalogReq.Header.To = to;
             catalogReq.Header.UserAgent = UserAgent;
-            catalogReq.Header.CSeq = CallProperties.CreateNewCSeq();
-            catalogReq.Header.CallId = CallProperties.CreateNewCallId();
-            catalogReq.Header.ContentType = "Application/MANSCDP+xml";
+            catalogReq.Header.CSeq = cSeq;
+            catalogReq.Header.CallId = callId;
+            catalogReq.Header.ContentType = "application/MANSCDP+xml";
             return catalogReq;
         }
 
         public void Stop()
         {
+            if (_catalogTask != null)
+            {
+                _catalogTask.Stop();
+            }
+            foreach (var item in MonitorService)
+            {
+                item.Value.Stop();
+            }
             LocalEndPoint = null;
             LocalSIPId = null;
             RemoteEndPoint = null;

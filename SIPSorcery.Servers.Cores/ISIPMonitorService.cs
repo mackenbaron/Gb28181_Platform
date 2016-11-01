@@ -24,7 +24,7 @@ namespace SIPSorcery.Servers
         void ByeVideoReq();
 
         /// <summary>
-        /// 确认接收视频请求
+        /// 确认接收实时视频请求
         /// </summary>
         /// <param name="response">sip响应</param>
         /// <returns>sip请求</returns>
@@ -34,5 +34,10 @@ namespace SIPSorcery.Servers
         /// sip服务状态
         /// </summary>
         event Action<string, SipServiceStatus> OnSIPServiceChanged;
+
+        /// <summary>
+        /// 停止监控服务
+        /// </summary>
+        void Stop();
     }
 }

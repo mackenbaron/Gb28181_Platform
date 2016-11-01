@@ -38,8 +38,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnBye = new System.Windows.Forms.Button();
             this.lvDev = new System.Windows.Forms.ListView();
-            this.devId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.devName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.devId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // btnStart
@@ -66,7 +66,7 @@
             // 
             this.lblStatus.AutoSize = true;
             this.lblStatus.ForeColor = System.Drawing.Color.Red;
-            this.lblStatus.Location = new System.Drawing.Point(10, 53);
+            this.lblStatus.Location = new System.Drawing.Point(13, 50);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(77, 12);
             this.lblStatus.TabIndex = 2;
@@ -89,7 +89,7 @@
             this.txtDeviceId.Name = "txtDeviceId";
             this.txtDeviceId.Size = new System.Drawing.Size(137, 21);
             this.txtDeviceId.TabIndex = 4;
-            this.txtDeviceId.Text = "34020000001320000009";
+            this.txtDeviceId.Text = "34020000001320000001";
             // 
             // label1
             // 
@@ -139,25 +139,25 @@
             this.lvDev.Location = new System.Drawing.Point(12, 117);
             this.lvDev.MultiSelect = false;
             this.lvDev.Name = "lvDev";
-            this.lvDev.Size = new System.Drawing.Size(212, 163);
+            this.lvDev.Size = new System.Drawing.Size(216, 163);
             this.lvDev.TabIndex = 11;
             this.lvDev.UseCompatibleStateImageBehavior = false;
             this.lvDev.View = System.Windows.Forms.View.Details;
+            // 
+            // devName
+            // 
+            this.devName.Text = "设备名称";
             // 
             // devId
             // 
             this.devId.Text = "设备编码";
             this.devId.Width = 148;
             // 
-            // devName
-            // 
-            this.devName.Text = "设备名称";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 292);
+            this.ClientSize = new System.Drawing.Size(343, 292);
             this.Controls.Add(this.lvDev);
             this.Controls.Add(this.btnBye);
             this.Controls.Add(this.button1);

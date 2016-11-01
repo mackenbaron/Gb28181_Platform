@@ -1,5 +1,6 @@
 ﻿using Gb28181_Client.Message;
 using log4net;
+using SIPSorcery.Net;
 using SIPSorcery.Persistence;
 using SIPSorcery.Servers.SIPMessage;
 using SIPSorcery.SIP;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -130,7 +132,7 @@ namespace Gb28181_Client
             if (lblStatus.InvokeRequired)
             {
                 SetSIPServiceText sipService = new SetSIPServiceText(SetSIPService);
-                this.Invoke(sipService,msg, state);
+                this.Invoke(sipService, msg, state);
             }
             else
             {
@@ -158,25 +160,91 @@ namespace Gb28181_Client
 
         private void btnReal_Click(object sender, EventArgs e)
         {
-            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(txtDeviceId.Text.Trim()))
+            ListViewItem devItem = new ListViewItem() ;
+            foreach (var item in lvDev.SelectedItems.Cast<ListViewItem>())
+            {
+                devItem = item;
+            }
+            //lvDev.SelectedItems[0];
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[txtDeviceId.Text.Trim()].RealVideoReq();
+            _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].RealVideoReq();
         }
 
         private void btnBye_Click(object sender, EventArgs e)
         {
-            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(txtDeviceId.Text.Trim()))
+            ListViewItem devItem = new ListViewItem();
+            foreach (var item in lvDev.SelectedItems.Cast<ListViewItem>())
+            {
+                devItem = item;
+            }
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[txtDeviceId.Text.Trim()].ByeVideoReq();
+            _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].ByeVideoReq();
+        }
+
+        /// <summary>
+        /// 返回自1970年以来的秒数
+        /// </summary>
+        /// <param name="time">时间</param>
+        /// <returns></returns>
+        public uint DateToTimeStamp(DateTime date)
+        {
+            //DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            DateTime startTime = new DateTime(1970, 1, 1);
+            return (uint)(date - startTime).TotalSeconds;
+        }
+
+        /// <summary>
+        /// 返回自1970以来的时间
+        /// </summary>
+        /// <param name="timestamp">时间戳(1147763686)</param>
+        /// <returns></returns>
+        public DateTime TimeStampToDate(uint timestamp)
+        {
+            return new DateTime(1970, 1, 1).AddSeconds(timestamp);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            DateTime date = new DateTime(2016, 11, 1, 10, 0, 0);
+            uint startTime = DateToTimeStamp(date);
+            uint stopTime = DateToTimeStamp(date.AddHours(2));
+            string localIp = "192.168.10.104";
 
+            SDPConnectionInformation sdpConn = new SDPConnectionInformation(localIp);
+
+            SDP sdp = new SDP();
+            sdp.Version = 0;
+            sdp.SessionId = "0";
+            sdp.Username = "34010000002000000001";
+            sdp.SessionName = SessionName.Playback.ToString();
+            sdp.Connection = sdpConn;
+            sdp.Timing = startTime + " " + stopTime;
+            sdp.Address = localIp;
+
+            SDPMediaFormat psFormat = new SDPMediaFormat(SDPMediaFormatsEnum.PS);
+            psFormat.IsStandardAttribute = false;
+            SDPMediaFormat h264Format = new SDPMediaFormat(SDPMediaFormatsEnum.H264);
+            h264Format.IsStandardAttribute = false;
+            SDPMediaAnnouncement media = new SDPMediaAnnouncement();
+
+            media.Media = SDPMediaTypesEnum.video;
+
+            media.MediaFormats.Add(psFormat);
+            media.MediaFormats.Add(h264Format);
+            media.AddExtra("a=recvonly");
+            media.AddFormatParameterAttribute(psFormat.FormatID, psFormat.Name);
+            media.AddFormatParameterAttribute(h264Format.FormatID, h264Format.Name);
+            media.Port = 10000;
+
+            sdp.Media.Add(media);
+
+            string sdpBody = sdp.ToString();
         }
     }
 }

@@ -2644,7 +2644,8 @@ namespace SIPSorcery.SIP
 
         public void SetDateHeader()
         {
-            Date = DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss ") + "GMT";
+            //Date = DateTime.UtcNow.ToString("ddd, dd MMM yyyy HH:mm:ss ") + "GMT";
+            Date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff");
         }
 
         public SIPHeader Copy()

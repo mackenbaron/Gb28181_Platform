@@ -556,7 +556,7 @@ namespace SIPSorcery.Servers
                 //okResponse.Header.Server = m_serverAgent;
                 okResponse.Header.UserAgent = m_serverAgent;
                 okResponse.Header.MaxForwards = Int32.MinValue;
-                //okResponse.Header.SetDateHeader();
+                okResponse.Header.SetDateHeader();
 
                 return okResponse;
             }
