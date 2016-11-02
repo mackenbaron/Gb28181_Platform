@@ -58,7 +58,7 @@ namespace SIPSorcery.Servers
         {
             if (_response == null || _request.Header.CallId != _response.Header.CallId)
             {
-                _interval +=100;
+                _interval +=1000;
                 _trans.SendRequest(_request);
             }
             else

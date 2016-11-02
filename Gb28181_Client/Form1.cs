@@ -59,7 +59,18 @@ namespace Gb28181_Client
             SIPDomainManager sipDomainManager = new SIPDomainManager(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr);
             SIPAssetPersistor<SIPRegistrarBinding> sipRegistrarBindingPersistor = SIPAssetPersistorFactory<SIPRegistrarBinding>.CreateSIPAssetPersistor(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr, m_sipRegistrarBindingsXMLFilename);
 
-            _messageDaemon = new SIPMessageDaemon(sipDomainManager.GetDomain, sipAccountsPersistor.Get, sipRegistrarBindingPersistor, SIPRequestAuthenticator.AuthenticateSIPRequest);
+            Dictionary<string, string> devList = new Dictionary<string, string>();
+            devList.Add("34020000001320000011", "大华151");
+            devList.Add("34020000001320000012", "大华20");
+
+            foreach (var item in devList)
+            {
+                ListViewItem lvItem = new ListViewItem(new string[] { item.Value, item.Key });
+                lvItem.ImageKey = item.Key;
+                lvDev.Items.Add(lvItem);
+            }
+
+            _messageDaemon = new SIPMessageDaemon(sipDomainManager.GetDomain, sipAccountsPersistor.Get, sipRegistrarBindingPersistor, SIPRequestAuthenticator.AuthenticateSIPRequest, devList);
         }
 
         private void btnStart_Click(object sender, System.EventArgs e)
@@ -160,7 +171,7 @@ namespace Gb28181_Client
 
         private void btnReal_Click(object sender, EventArgs e)
         {
-            ListViewItem devItem = new ListViewItem() ;
+            ListViewItem devItem = new ListViewItem();
             foreach (var item in lvDev.SelectedItems.Cast<ListViewItem>())
             {
                 devItem = item;

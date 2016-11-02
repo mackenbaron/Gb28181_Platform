@@ -80,7 +80,10 @@ namespace SIPSorcery.Servers.SIPMonitor
             string fromTag = CallProperties.CreateNewTag();
             int cSeq = CallProperties.CreateNewCSeq();
             string callId = CallProperties.CreateNewCallId();
-
+            if (_rtpChannel != null)
+            {
+                _rtpChannel.Close();
+            }
             SIPRequest realReq = RealVideoReq(localIp, mediaPort, fromTag, cSeq, callId);
             _msgCore.Transport.SendRequest(_msgCore.RemoteEndPoint, realReq);
             //_realTask = new TaskTiming(realReq, _msgCore.Transport);
@@ -204,6 +207,10 @@ namespace SIPSorcery.Servers.SIPMonitor
             if (_byeTask != null)
             {
                 _byeTask.Stop();
+            }
+            if (_rtpChannel != null)
+            {
+                _rtpChannel.Close();
             }
         }
 
@@ -392,5 +399,11 @@ namespace SIPSorcery.Servers.SIPMonitor
             videoPESList.Clear();
         }
         #endregion
+
+
+        public void OnRealVideoBadRequest(string msg)
+        {
+            this.Stop();
+        }
     }
 }

@@ -72,6 +72,7 @@ namespace Gb28181_Client.Message
         private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
         private SIPAssetPersistor<SIPRegistrarBinding> m_registrarBindingsPersistor;
         private SIPAuthenticateRequestDelegate SIPAuthenticateRequest_External;
+        private Dictionary<string, string> _devList;
 
         public SIPMessageCore MessageCore;
 
@@ -79,12 +80,14 @@ namespace Gb28181_Client.Message
             GetCanonicalDomainDelegate getDomain,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             SIPAssetPersistor<SIPRegistrarBinding> registrarBindingsPersistor,
-            SIPAuthenticateRequestDelegate sipRequestAuthenticator)
+            SIPAuthenticateRequestDelegate sipRequestAuthenticator,
+            Dictionary<string,string>devList)
         {
             GetCanonicalDomain_External = getDomain;
             GetSIPAccount_External = getSIPAccount;
             m_registrarBindingsPersistor = registrarBindingsPersistor;
             SIPAuthenticateRequest_External = sipRequestAuthenticator;
+            _devList = devList;
         }
 
         public void Start()
@@ -120,7 +123,7 @@ namespace Gb28181_Client.Message
                 m_registrarBindingsManager.Start();
 
                 MessageCore = new SIPMessageCore(m_sipTransport, userAgentConfigManager.DefaultUserAgent);
-                MessageCore.Initialize(m_switchboardUserAgentPrefix, SIPAuthenticateRequest_External, GetCanonicalDomain_External, GetSIPAccount_External, userAgentConfigManager, m_registrarBindingsManager);
+                MessageCore.Initialize(m_switchboardUserAgentPrefix, SIPAuthenticateRequest_External, GetCanonicalDomain_External, GetSIPAccount_External, userAgentConfigManager, m_registrarBindingsManager, _devList);
                 m_sipTransport.SIPTransportRequestReceived += MessageCore.AddMessageRequest;
                 m_sipTransport.SIPTransportResponseReceived += MessageCore.AddMessageResponse;
 

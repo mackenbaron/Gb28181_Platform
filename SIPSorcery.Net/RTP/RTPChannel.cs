@@ -298,6 +298,9 @@ namespace SIPSorcery.Net
         //    }
         //}
 
+
+        Thread _thRTPRecv;
+        Thread _thProcRTP;
         /// <summary>
         /// Starts listenting on the RTP and control ports.
         /// </summary>
@@ -307,8 +310,12 @@ namespace SIPSorcery.Net
             {
                 _startedAt = DateTime.Now;
 
-                ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
-                ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
+                _thRTPRecv = new Thread(new ThreadStart(RTPReceive));
+                _thRTPRecv.Start();
+                _thProcRTP = new Thread(new ThreadStart(ProcessRTPPackets));
+                _thProcRTP.Start();
+                //ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
+                //ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
 
                 _controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
                 _controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
@@ -331,6 +338,8 @@ namespace SIPSorcery.Net
                     logger.Debug("RTPChannel closing, RTP port " + _rtpPort + ".");
 
                     _isClosed = true;
+                    _thRTPRecv.Abort();
+                    _thProcRTP.Abort();
 
                     if (_rtpSocket != null)
                     {

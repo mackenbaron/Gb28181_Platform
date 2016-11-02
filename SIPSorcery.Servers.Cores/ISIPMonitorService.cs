@@ -39,5 +39,11 @@ namespace SIPSorcery.Servers
         /// 停止监控服务
         /// </summary>
         void Stop();
+
+        /// <summary>
+        /// 实时请求失败
+        /// </summary>
+        /// <param name="msg">失败消息</param>
+        void OnRealVideoBadRequest(string msg);
     }
 }

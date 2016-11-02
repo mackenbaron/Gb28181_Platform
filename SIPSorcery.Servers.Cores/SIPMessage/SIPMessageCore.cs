@@ -97,10 +97,6 @@ namespace SIPSorcery.Servers.SIPMessage
         /// </summary>
         internal SIPEndPoint RemoteEndPoint;
         /// <summary>
-        /// sip实时视频请求
-        /// </summary>
-        internal SIPRequest RealReqSession;
-        /// <summary>
         /// sip传输请求
         /// </summary>
         internal SIPTransport Transport;
@@ -141,11 +137,19 @@ namespace SIPSorcery.Servers.SIPMessage
             GetCanonicalDomainDelegate getCanonicalDomain,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             SIPUserAgentConfigurationManager userAgentConfigs,
-            SIPRegistrarBindingsManager registrarBindingsManager)
+            SIPRegistrarBindingsManager registrarBindingsManager,
+            Dictionary<string, string> devList)
         {
             m_registrarCore = new RegistrarCore(Transport, registrarBindingsManager, getSIPAccount, getCanonicalDomain, true, true, userAgentConfigs, sipRequestAuthenticator, switchboarduserAgentPrefix);
             m_registrarCore.Start(1);
             MonitorService = new Dictionary<string, ISIPMonitorService>();
+
+            foreach (var item in devList)
+            {
+                ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value);
+                monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
+                MonitorService.Add(item.Key, monitor);
+            }
         }
 
         /// <summary>
@@ -210,11 +214,6 @@ namespace SIPSorcery.Servers.SIPMessage
             }
         }
 
-        private void monitor_OnSIPServiceChanged(string msg, SipServiceStatus state)
-        {
-            OnSIPServiceChange(msg, state);
-        }
-
         /// <summary>
         /// sip响应消息
         /// </summary>
@@ -229,7 +228,7 @@ namespace SIPSorcery.Servers.SIPMessage
             }
             if (response.Status == SIPResponseStatusCodesEnum.Trying)
             {
-
+                logger.Debug("up platform return waiting process msg...");
             }
             else if (response.Status == SIPResponseStatusCodesEnum.Ok)
             {
@@ -239,6 +238,22 @@ namespace SIPSorcery.Servers.SIPMessage
                     Transport.SendRequest(RemoteEndPoint, ackReq);
                 }
             }
+            else if (response.Status == SIPResponseStatusCodesEnum.BadRequest)
+            {
+                string msg = "realVideo bad request";
+                if (response.Header.Warning != null)
+                {
+                    msg += response.Header.Warning;
+                }
+                //SIPResponse badRes = new SIPResponse(SIPResponseStatusCodesEnum.Ok, "", LocalEndPoint);
+                //Transport.SendResponse(RemoteEndPoint, badRes);
+                MonitorService[response.Header.To.ToURI.User].OnRealVideoBadRequest(msg);
+            }
+        }
+
+        private void monitor_OnSIPServiceChanged(string msg, SipServiceStatus state)
+        {
+            OnSIPServiceChange(msg, state);
         }
 
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
