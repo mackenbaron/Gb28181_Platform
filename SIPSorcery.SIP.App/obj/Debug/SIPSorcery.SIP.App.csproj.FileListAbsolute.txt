@@ -1,5 +1,0 @@
-F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.SIP.App.dll
-F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.SIP.App.pdb
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.App\obj\Debug\SIPSorcery.SIP.App.csprojResolveAssemblyReference.cache
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.App\obj\Debug\SIPSorcery.SIP.App.dll
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.App\obj\Debug\SIPSorcery.SIP.App.pdb

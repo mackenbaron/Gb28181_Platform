@@ -1,7 +1,0 @@
-F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.SIP.Core.dll
-F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.SIP.Core.pdb
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.Core\obj\Debug\SIPSorcery.SIP.Core.csprojResolveAssemblyReference.cache
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.Core\obj\Debug\SIPSorcery.SIP.Properties.Resources.resources
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.Core\obj\Debug\SIPSorcery.SIP.Core.csproj.GenerateResource.Cache
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.Core\obj\Debug\SIPSorcery.SIP.Core.dll
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.SIP.Core\obj\Debug\SIPSorcery.SIP.Core.pdb

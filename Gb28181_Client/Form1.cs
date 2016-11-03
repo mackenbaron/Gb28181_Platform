@@ -31,8 +31,8 @@ namespace Gb28181_Client
         private static readonly string m_storageTypeKey = SIPSorceryConfiguration.PERSISTENCE_STORAGETYPE_KEY;
         private static readonly string m_connStrKey = SIPSorceryConfiguration.PERSISTENCE_STORAGECONNSTR_KEY;
 
-        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.SIP.App.AssemblyState.XML_SIPACCOUNTS_FILENAME;
-        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.SIP.App.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
+        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_SIPACCOUNTS_FILENAME;
+        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
 
         private static ILog logger = AppState.logger;
 
@@ -176,7 +176,6 @@ namespace Gb28181_Client
             {
                 devItem = item;
             }
-            //lvDev.SelectedItems[0];
             if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
             {
                 return;
@@ -198,33 +197,14 @@ namespace Gb28181_Client
             _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].ByeVideoReq();
         }
 
-        /// <summary>
-        /// 返回自1970年以来的秒数
-        /// </summary>
-        /// <param name="time">时间</param>
-        /// <returns></returns>
-        public uint DateToTimeStamp(DateTime date)
-        {
-            //DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            DateTime startTime = new DateTime(1970, 1, 1);
-            return (uint)(date - startTime).TotalSeconds;
-        }
 
-        /// <summary>
-        /// 返回自1970以来的时间
-        /// </summary>
-        /// <param name="timestamp">时间戳(1147763686)</param>
-        /// <returns></returns>
-        public DateTime TimeStampToDate(uint timestamp)
-        {
-            return new DateTime(1970, 1, 1).AddSeconds(timestamp);
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
             DateTime date = new DateTime(2016, 11, 1, 10, 0, 0);
-            uint startTime = DateToTimeStamp(date);
-            uint stopTime = DateToTimeStamp(date.AddHours(2));
+
+            uint startTime = TimeConvert.DateToTimeStamp(date);
+            uint stopTime = TimeConvert.DateToTimeStamp(date.AddHours(2));
             string localIp = "192.168.10.104";
 
             SDPConnectionInformation sdpConn = new SDPConnectionInformation(localIp);
