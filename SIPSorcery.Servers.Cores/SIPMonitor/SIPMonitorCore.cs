@@ -228,7 +228,7 @@ namespace SIPSorcery.Servers.SIPMonitor
             sdp.Version = 0;
             sdp.SessionId = "0";
             sdp.Username = _msgCore.LocalSIPId;
-            sdp.SessionName = SessionName.Play.ToString();
+            sdp.SessionName = CommandType.Play.ToString();
             sdp.Connection = sdpConn;
             sdp.Timing = "0 0";
             sdp.Address = localIp;
@@ -269,7 +269,7 @@ namespace SIPSorcery.Servers.SIPMonitor
             sdp.Version = 0;
             sdp.SessionId = "0";
             sdp.Username = _msgCore.LocalSIPId;
-            sdp.SessionName = SessionName.Playback.ToString();
+            sdp.SessionName = CommandType.Playback.ToString();
             sdp.Connection = sdpConn;
             sdp.Timing = startTime + " " + endTime;
             sdp.Address = localIp;

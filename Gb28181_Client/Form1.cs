@@ -233,7 +233,7 @@ namespace Gb28181_Client
             sdp.Version = 0;
             sdp.SessionId = "0";
             sdp.Username = "34010000002000000001";
-            sdp.SessionName = SessionName.Playback.ToString();
+            sdp.SessionName = SIPSorcery.Sys.XML.CommandType.Playback.ToString();
             sdp.Connection = sdpConn;
             sdp.Timing = startTime + " " + stopTime;
             sdp.Address = localIp;

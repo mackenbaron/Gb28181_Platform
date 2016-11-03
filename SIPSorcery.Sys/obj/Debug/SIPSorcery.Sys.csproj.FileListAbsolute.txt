@@ -2,3 +2,4 @@ F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.Sys.dll
 F:\VisionVera\SourceCoder\Gb28181_Platform\Build\SIPSorcery.Sys.pdb
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Sys\obj\Debug\SIPSorcery.Sys.dll
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Sys\obj\Debug\SIPSorcery.Sys.pdb
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.Sys\obj\Debug\SIPSorcery.Sys.csprojResolveAssemblyReference.cache

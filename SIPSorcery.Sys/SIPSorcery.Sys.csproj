@@ -167,13 +167,8 @@
     <Compile Include="WCFUtility.cs" />
     <Compile Include="WrapperImpersonationContext.cs" />
     <Compile Include="XML\Catalog.cs" />
-    <Compile Include="XML\Device.cs" />
-    <Compile Include="XML\DeviceItems.cs" />
     <Compile Include="XML\KeepAlive.cs" />
-    <Compile Include="XML\RealVideo.cs" />
-    <Compile Include="XML\Response.cs" />
-    <Compile Include="XML\SipAccountTable.cs" />
-    <Compile Include="XML\VariableType.cs" />
+    <Compile Include="XML\CommandType.cs" />
     <Compile Include="XML\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>

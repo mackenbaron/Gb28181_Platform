@@ -34,21 +34,6 @@ namespace SIPSorcery.Servers.SIPMessage
     }
 
     /// <summary>
-    /// 会话类型
-    /// </summary>
-    public enum SessionName
-    {
-        /// <summary>
-        /// 实时视频
-        /// </summary>
-        Play,
-        /// <summary>
-        /// 录像
-        /// </summary>
-        Playback
-    }
-
-    /// <summary>
     /// sip消息核心处理
     /// </summary>
     public class SIPMessageCore
@@ -245,8 +230,8 @@ namespace SIPSorcery.Servers.SIPMessage
                 {
                     msg += response.Header.Warning;
                 }
-                //SIPResponse badRes = new SIPResponse(SIPResponseStatusCodesEnum.Ok, "", LocalEndPoint);
-                //Transport.SendResponse(RemoteEndPoint, badRes);
+                SIPResponse badRes = new SIPResponse(SIPResponseStatusCodesEnum.Ok, "", LocalEndPoint);
+                Transport.SendResponse(RemoteEndPoint, badRes);
                 MonitorService[response.Header.To.ToURI.User].OnRealVideoBadRequest(msg);
             }
         }
@@ -329,7 +314,7 @@ namespace SIPSorcery.Servers.SIPMessage
             SIPRequest catalogReq = QueryItems(fromTag, toTag, cSeq, callId);
             CatalogQuery catalog = new CatalogQuery()
             {
-                CommandType = VariableType.Catalog,
+                CommandType = CommandType.Catalog,
                 DeviceID = deviceId,
                 SN = new Random().Next(9999)
             };

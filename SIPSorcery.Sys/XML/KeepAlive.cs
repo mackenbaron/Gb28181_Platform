@@ -16,13 +16,13 @@ namespace SIPSorcery.Sys.XML
         private static KeepAlive _instance;
 
         /// <summary>
-        /// 实例
+        /// 单例模式访问
         /// </summary>
         public static KeepAlive Instance
         {
             get
             {
-                if (_instance ==null)
+                if (_instance == null)
                 {
                     _instance = new KeepAlive();
                 }
