@@ -33,11 +33,11 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using SIPSorcery.Net;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Net;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public class SIPClientUserAgent : ISIPClientUserAgent
     {

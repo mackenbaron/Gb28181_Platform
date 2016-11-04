@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
 #if !SILVERLIGHT
 using System.Data;
 using System.Data.Linq.Mapping;
 #endif
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     [Table(Name = "cdr")]
     public class SIPCDRAsset : ISIPAsset

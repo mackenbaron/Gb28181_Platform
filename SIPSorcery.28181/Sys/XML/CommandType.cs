@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIPSorcery.Sys.XML
+namespace SIPSorcery.GB28181.Sys.XML
 {
     /// <summary>
     /// 命令类型

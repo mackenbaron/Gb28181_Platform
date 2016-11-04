@@ -36,7 +36,7 @@ using System.Net;
 using System.Text;
 using log4net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     /// <summary>
     /// This attribue is the same as the mapped address attribute except the address details are XOR'ed with the STUN magic cookie. 

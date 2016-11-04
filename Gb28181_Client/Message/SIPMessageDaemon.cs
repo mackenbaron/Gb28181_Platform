@@ -42,13 +42,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Xml;
-using SIPSorcery.Persistence;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Servers;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Persistence;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Servers;
+using SIPSorcery.GB28181.Sys;
 using log4net;
-using SIPSorcery.Servers.SIPMessage;
+using SIPSorcery.GB28181.Servers.SIPMessage;
 
 namespace Gb28181_Client.Message
 {
@@ -129,6 +129,7 @@ namespace Gb28181_Client.Message
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 logger.Debug("SIP Registrar successfully started.");
+                Console.ForegroundColor = ConsoleColor.White;
             }
             catch (Exception excp)
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using log4net;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public enum StorageTypes
     {

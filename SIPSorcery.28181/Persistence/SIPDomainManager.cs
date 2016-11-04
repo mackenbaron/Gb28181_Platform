@@ -51,15 +51,15 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
-using SIPSorcery.Persistence;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Persistence;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public delegate string GetCanonicalDomainDelegate(string host, bool wildCardOk);     // Used to get the canonical domain from a host portion of a SIP URI.
 

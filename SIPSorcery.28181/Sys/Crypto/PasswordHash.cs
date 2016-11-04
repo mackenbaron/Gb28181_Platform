@@ -21,7 +21,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public class PasswordHash
     {

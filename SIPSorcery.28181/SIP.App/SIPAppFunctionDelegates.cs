@@ -38,7 +38,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public delegate void SIPMonitorLogDelegate(SIPMonitorEvent monitorEvent);
     public delegate void SIPMonitorMachineLogDelegate(SIPMonitorMachineEvent machineEvent);

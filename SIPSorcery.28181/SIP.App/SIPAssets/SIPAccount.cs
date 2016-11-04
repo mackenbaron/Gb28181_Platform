@@ -39,7 +39,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if !SILVERLIGHT
@@ -47,7 +47,7 @@ using System.Data;
 using System.Data.Linq.Mapping;
 #endif
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     /// <remarks>
     /// SIP account usernames can be treated by some SIP Sorcery server agents as domain name like structures where a username of

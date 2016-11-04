@@ -34,10 +34,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public class SIPDNSServiceResult
     {

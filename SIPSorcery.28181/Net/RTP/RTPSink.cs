@@ -19,14 +19,14 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
 	public delegate void RTPSinkClosed(Guid streamId, Guid callId);
 	public delegate void RTPDataReceived(Guid streamId, byte[] rtpPayload, IPEndPoint remoteEndPoint);

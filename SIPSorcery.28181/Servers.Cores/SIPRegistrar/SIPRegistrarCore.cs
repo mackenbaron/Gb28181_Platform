@@ -50,17 +50,17 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
-using SIPSorcery.Persistence;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Persistence;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Servers
+namespace SIPSorcery.GB28181.Servers
 {
     public enum RegisterResultEnum
     {

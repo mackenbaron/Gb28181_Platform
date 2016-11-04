@@ -35,14 +35,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if !SILVERLIGHT
 using System.Data;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public delegate void CDRReadyDelegate(SIPCDR cdr);                // Used to inform CDR handlers when a CDR has been udpated.
 

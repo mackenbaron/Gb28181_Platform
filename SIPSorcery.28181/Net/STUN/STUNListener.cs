@@ -37,14 +37,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
 	/*public class IncomingMessage
 	{

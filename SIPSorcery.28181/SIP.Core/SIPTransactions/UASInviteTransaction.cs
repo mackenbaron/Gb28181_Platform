@@ -38,14 +38,14 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     /// <summary>
     /// The server transaction for an INVITE request. This transaction processes incoming calls RECEIVED by the application.

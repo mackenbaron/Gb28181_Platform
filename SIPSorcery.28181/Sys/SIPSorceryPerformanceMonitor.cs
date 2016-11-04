@@ -48,7 +48,7 @@ using log4net;
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public class SIPSorceryPerformanceMonitor
     {

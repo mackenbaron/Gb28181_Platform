@@ -41,7 +41,7 @@ using log4net;
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
 	public class SIPCancelTransaction : SIPTransaction
 	{

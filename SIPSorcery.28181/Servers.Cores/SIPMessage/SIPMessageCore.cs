@@ -1,10 +1,10 @@
 ﻿using log4net;
-using SIPSorcery.Net;
-using SIPSorcery.Servers.SIPMonitor;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
-using SIPSorcery.Sys.XML;
+using SIPSorcery.GB28181.Net;
+using SIPSorcery.GB28181.Servers.SIPMonitor;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
+using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace SIPSorcery.Servers.SIPMessage
+namespace SIPSorcery.GB28181.Servers.SIPMessage
 {
     /// <summary>
     /// SIP服务状态

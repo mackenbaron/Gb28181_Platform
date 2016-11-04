@@ -40,13 +40,13 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using SIPSorcery.Net;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Net;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public class SIPPacketMangler
     {

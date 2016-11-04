@@ -32,7 +32,7 @@
 
 using System;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
 	public enum SIPUserAgentRolesEnum
 	{

@@ -36,9 +36,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using log4net;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     /// <summary>
     /// This class represents a back-to-back (B2B) user agent (UA) that is used to attach an outgoing

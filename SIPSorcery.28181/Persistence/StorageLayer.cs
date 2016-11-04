@@ -29,7 +29,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 using MySql.Data.MySqlClient;
 using Npgsql;
@@ -39,7 +39,7 @@ using NpgsqlTypes;
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Persistence
+namespace SIPSorcery.GB28181.Persistence
 {
 	public class StorageLayer
 	{

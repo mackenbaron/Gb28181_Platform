@@ -37,12 +37,12 @@
 // ============================================================================
 
 using System;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
-using SIPSorcery.Persistence.XML;
+using SIPSorcery.GB28181.Persistence.XML;
 
-namespace SIPSorcery.Persistence
+namespace SIPSorcery.GB28181.Persistence
 {
     public class SIPAssetPersistorFactory<T> where T : class, ISIPAsset, new()
     {

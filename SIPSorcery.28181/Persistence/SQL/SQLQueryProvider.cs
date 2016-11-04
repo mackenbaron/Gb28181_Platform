@@ -5,11 +5,11 @@ using System.Data.Common;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Transactions;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.Persistence {
+namespace SIPSorcery.GB28181.Persistence {
 
     public class SQLQueryProvider : QueryProvider {
 

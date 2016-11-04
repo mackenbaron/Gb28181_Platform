@@ -42,10 +42,10 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public class SIPTLSChannel : SIPChannel
     {

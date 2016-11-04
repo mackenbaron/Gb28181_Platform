@@ -23,7 +23,7 @@ using System;
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
 	public class RTCPReportPacket
 	{

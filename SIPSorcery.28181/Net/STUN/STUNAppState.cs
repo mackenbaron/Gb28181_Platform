@@ -43,7 +43,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using log4net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
 	/// <summary>
 	/// This class maintains static application configuration settings that can be used by all classes within

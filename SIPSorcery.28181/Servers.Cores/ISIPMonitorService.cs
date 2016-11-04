@@ -1,12 +1,12 @@
-﻿using SIPSorcery.Servers.SIPMessage;
-using SIPSorcery.SIP;
+﻿using SIPSorcery.GB28181.Servers.SIPMessage;
+using SIPSorcery.GB28181.SIP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIPSorcery.Servers
+namespace SIPSorcery.GB28181.Servers
 {
     /// <summary>
     /// 监控服务
@@ -46,5 +46,10 @@ namespace SIPSorcery.Servers
         /// <param name="response">失败消息</param>
         /// <returns></returns>
         void BadRequest(string msg);
+
+        /// <summary>
+        /// 视频流回调完成
+        /// </summary>
+        event Action<byte[]> OnStreamReady;
     }
 }

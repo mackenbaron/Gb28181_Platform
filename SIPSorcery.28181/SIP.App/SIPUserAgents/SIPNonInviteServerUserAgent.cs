@@ -36,10 +36,10 @@
 // ============================================================================
 
 using System;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public class SIPNonInviteServerUserAgent : ISIPServerUserAgent
     {

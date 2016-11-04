@@ -21,7 +21,7 @@ using System.Text.RegularExpressions;
 using Heijden.DNS;
 using log4net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public class DNSManager
     {

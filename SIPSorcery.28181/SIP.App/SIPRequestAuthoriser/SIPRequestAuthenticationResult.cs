@@ -35,7 +35,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public class SIPRequestAuthenticationResult {
 

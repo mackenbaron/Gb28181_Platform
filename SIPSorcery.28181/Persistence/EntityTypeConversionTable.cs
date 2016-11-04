@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
-namespace SIPSorcery.Persistence
+namespace SIPSorcery.GB28181.Persistence
 {
     public class EntityTypeConversionTable
     {

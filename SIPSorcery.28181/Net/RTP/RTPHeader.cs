@@ -53,9 +53,9 @@
 using System;
 using System.Collections;
 using System.Net;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public class RTPHeader
     {

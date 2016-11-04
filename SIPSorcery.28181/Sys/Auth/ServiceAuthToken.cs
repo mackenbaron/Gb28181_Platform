@@ -48,7 +48,7 @@ using System.Web;
 using System.Web.Services;
 #endif
 
-namespace SIPSorcery.Sys.Auth
+namespace SIPSorcery.GB28181.Sys.Auth
 {
     public class ServiceAuthToken
     {

@@ -38,7 +38,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     // SIP Channel delegates.
     public delegate void SIPMessageSentDelegate(SIPChannel sipChannel, SIPEndPoint remoteEndPoint, byte[] buffer);

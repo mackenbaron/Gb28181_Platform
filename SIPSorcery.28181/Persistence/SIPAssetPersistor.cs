@@ -40,8 +40,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if !SILVERLIGHT
@@ -51,7 +51,7 @@ using System.Data.Linq;
 using System.Data.Linq.Mapping;
 #endif
 
-namespace SIPSorcery.Persistence
+namespace SIPSorcery.GB28181.Persistence
 {
 #if !SILVERLIGHT
     public delegate T SIPAssetGetFromDirectQueryDelegate<T>(string sqlQuery, params IDbDataParameter[] sqlParameters);

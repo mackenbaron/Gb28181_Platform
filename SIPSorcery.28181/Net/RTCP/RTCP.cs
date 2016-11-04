@@ -21,14 +21,14 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 //using SIPSorcery.SIP;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {	   
     public class RTPReceiveRecord
 	{

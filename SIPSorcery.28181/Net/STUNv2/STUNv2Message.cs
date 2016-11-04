@@ -36,10 +36,10 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public class STUNv2Message
 	{

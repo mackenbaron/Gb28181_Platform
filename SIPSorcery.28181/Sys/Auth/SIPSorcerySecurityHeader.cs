@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Xml;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.Sys.Auth
+namespace SIPSorcery.GB28181.Sys.Auth
 {
     public class SIPSorcerySecurityHeader : MessageHeader
     {

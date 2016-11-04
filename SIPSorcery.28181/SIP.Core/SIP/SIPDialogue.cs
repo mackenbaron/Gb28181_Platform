@@ -36,10 +36,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Threading;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public enum SIPDialogueStateEnum
     {

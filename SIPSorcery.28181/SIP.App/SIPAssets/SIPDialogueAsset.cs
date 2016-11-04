@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
 #if !SILVERLIGHT
 using System.Data;
@@ -13,7 +13,7 @@ using System.Data.Linq;
 using System.Data.Linq.Mapping;
 #endif
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     [Table(Name = "sipdialogues")]
     public class SIPDialogueAsset: ISIPAsset

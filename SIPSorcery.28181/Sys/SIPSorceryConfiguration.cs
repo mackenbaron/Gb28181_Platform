@@ -4,12 +4,12 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public class SIPSorceryConfiguration
     {
-        public const string PERSISTENCE_STORAGETYPE_KEY = "PersistenceStorageType";
-        public const string PERSISTENCE_STORAGECONNSTR_KEY = "PersistenceConnStr";
+        public const string PERSISTENCE_STORAGETYPE_KEY = "DBStorageType";
+        public const string PERSISTENCE_STORAGECONNSTR_KEY = "DBConnStr";
 
         public StorageTypes PersistenceStorageType { get; private set; }
         public string PersistenceConnStr { get; private set;}

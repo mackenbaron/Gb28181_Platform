@@ -39,7 +39,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if !SILVERLIGHT
@@ -47,7 +47,7 @@ using System.Data;
 using System.Data.Linq.Mapping;
 #endif
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     /// <remarks>
     /// The mechanism to load the SIP domain records differs for XML and SQL data stores. Because the domain and domain alias

@@ -40,10 +40,10 @@ using System.Configuration;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
 	/// <summary>
 	/// This class maintains static application configuration settings that can be used by all classes within

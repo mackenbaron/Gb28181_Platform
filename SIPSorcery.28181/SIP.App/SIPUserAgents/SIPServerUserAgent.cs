@@ -31,10 +31,10 @@
 //-----------------------------------------------------------------------------
 
 using System;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     /// <remarks>
     /// A To tag MUST be set on all non 100 Trying responses, see RFC 3261 "8.2.6.2 Headers and Tags".

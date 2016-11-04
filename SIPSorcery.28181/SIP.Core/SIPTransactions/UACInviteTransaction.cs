@@ -37,10 +37,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     /// <summary>
     /// SIP transaction that initiates a call to a SIP User Agent Server. This transaction processes outgoing calls SENT by the application.

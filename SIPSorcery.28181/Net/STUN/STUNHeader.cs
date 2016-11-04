@@ -74,14 +74,14 @@
 using System;
 using System.Net;
 using System.Text;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public enum STUNMessageTypesEnum
     {

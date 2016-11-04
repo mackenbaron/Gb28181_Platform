@@ -35,7 +35,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SIPSorcery.SIP.App 
+namespace SIPSorcery.GB28181.SIP.App 
 {
     public delegate void SIPUASDelegate(ISIPServerUserAgent uas);
 

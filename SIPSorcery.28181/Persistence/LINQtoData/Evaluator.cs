@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace SIPSorcery.Persistence {
+namespace SIPSorcery.GB28181.Persistence {
 
     public static class Evaluator {
 

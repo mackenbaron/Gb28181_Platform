@@ -30,7 +30,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //-----------------------------------------------------------------------------
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public enum IceConnectionStatesEnum
     {

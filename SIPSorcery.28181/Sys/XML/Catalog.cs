@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace SIPSorcery.Sys.XML
+namespace SIPSorcery.GB28181.Sys.XML
 {
     /// <summary>
     /// 设备目录信息

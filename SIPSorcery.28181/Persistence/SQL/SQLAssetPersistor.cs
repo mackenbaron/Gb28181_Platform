@@ -42,10 +42,10 @@ using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 
-namespace SIPSorcery.Persistence
+namespace SIPSorcery.GB28181.Persistence
 {
     public class SQLAssetPersistor<T> : SIPAssetPersistor<T> where T : class, ISIPAsset, new()
     {

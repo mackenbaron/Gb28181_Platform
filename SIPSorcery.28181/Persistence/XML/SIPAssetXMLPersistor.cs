@@ -47,11 +47,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
-using SIPSorcery.SIP.App;
+using SIPSorcery.GB28181.SIP.App;
 
-namespace SIPSorcery.Persistence.XML
+namespace SIPSorcery.GB28181.Persistence.XML
 {
     public class SIPAssetXMLPersistor<T> : SIPAssetPersistor<T> where T : ISIPAsset, new()
     {

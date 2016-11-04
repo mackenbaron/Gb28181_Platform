@@ -1,8 +1,8 @@
-﻿using SIPSorcery.Net;
-using SIPSorcery.Servers.Cores.Packet;
-using SIPSorcery.Servers.SIPMessage;
-using SIPSorcery.SIP;
-using SIPSorcery.Sys.XML;
+﻿using SIPSorcery.GB28181.Net;
+using SIPSorcery.GB28181.Servers.Cores.Packet;
+using SIPSorcery.GB28181.Servers.SIPMessage;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIPSorcery.Servers.SIPMonitor
+namespace SIPSorcery.GB28181.Servers.SIPMonitor
 {
     /// <summary>
     /// sip监控核心处理
@@ -27,6 +27,7 @@ namespace SIPSorcery.Servers.SIPMonitor
         private TaskTiming _realTask;
         private TaskTiming _byeTask;
         private SIPRequest _realReqSession;
+        private int[] _mediaPort;
 
         /// <summary>
         /// sip服务状态
@@ -45,7 +46,11 @@ namespace SIPSorcery.Servers.SIPMonitor
         private void _rtpChannel_OnFrameReady(RTPFrame frame)
         {
             byte[] buffer = frame.GetFramePayload();
-            Write(buffer);
+            if (OnStreamReady != null)
+            {
+                OnStreamReady(buffer);
+            }
+            //Write(buffer);
         }
 
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
@@ -72,8 +77,11 @@ namespace SIPSorcery.Servers.SIPMonitor
                 OnSIPServiceChange(_deviceName + "-" + _deviceId, SipServiceStatus.Wait);
                 return;
             }
+            if (_mediaPort == null)
+            {
+                _mediaPort = _msgCore.SetMediaPort();
 
-            int[] mediaPort = _msgCore.SetMediaPort();
+            }
 
             string localIp = _msgCore.LocalEndPoint.Address.ToString();
 
@@ -81,16 +89,12 @@ namespace SIPSorcery.Servers.SIPMonitor
             int cSeq = CallProperties.CreateNewCSeq();
             string callId = CallProperties.CreateNewCallId();
             this.Stop();
-            SIPRequest realReq = RealVideoReq(localIp, mediaPort, fromTag, cSeq, callId);
+            SIPRequest realReq = RealVideoReq(localIp, _mediaPort, fromTag, cSeq, callId);
             _msgCore.Transport.SendRequest(_msgCore.RemoteEndPoint, realReq);
             _realTask = new TaskTiming(realReq, _msgCore.Transport);
             _msgCore.SendRequestTimeout += _realTask.MessageSendRequestTimeout;
             _realTask.OnCloseRTPChannel += Task_OnCloseRTPChannel;
             _realTask.Start();
-
-            _rtpChannel = new RTPChannel(_msgCore.RemoteEndPoint.GetIPEndPoint(), mediaPort[0], mediaPort[1], FrameTypesEnum.H264);
-            _rtpChannel.OnFrameReady += _rtpChannel_OnFrameReady;
-            _rtpChannel.Start();
         }
 
         private void Task_OnCloseRTPChannel()
@@ -105,6 +109,10 @@ namespace SIPSorcery.Servers.SIPMonitor
         /// <returns></returns>
         public SIPRequest AckRequest(SIPResponse response)
         {
+            _rtpChannel = new RTPChannel(_msgCore.RemoteEndPoint.GetIPEndPoint(), _mediaPort[0], _mediaPort[1], FrameTypesEnum.H264);
+            _rtpChannel.OnFrameReady += _rtpChannel_OnFrameReady;
+            _rtpChannel.Start();
+
             SIPURI localUri = new SIPURI(_msgCore.LocalSIPId, _msgCore.LocalEndPoint.ToHost(), "");
             SIPURI remoteUri = new SIPURI(_deviceId, _msgCore.RemoteEndPoint.ToHost(), "");
             SIPRequest ackReq = _msgCore.Transport.GetRequest(SIPMethodsEnum.ACK, remoteUri);
@@ -220,6 +228,7 @@ namespace SIPSorcery.Servers.SIPMonitor
             }
             if (_rtpChannel != null)
             {
+                _rtpChannel.OnFrameReady -= _rtpChannel_OnFrameReady;
                 _rtpChannel.Close();
             }
         }
@@ -409,5 +418,8 @@ namespace SIPSorcery.Servers.SIPMonitor
             videoPESList.Clear();
         }
         #endregion
+
+
+        public event Action<byte[]> OnStreamReady;
     }
 }

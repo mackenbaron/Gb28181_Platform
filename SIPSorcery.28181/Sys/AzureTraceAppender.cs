@@ -7,7 +7,7 @@ using log4net;
 using log4net.Appender;
 using log4net.Core;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public class AzureTraceAppender : AppenderSkeleton
     {

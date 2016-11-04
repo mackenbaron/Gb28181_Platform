@@ -37,7 +37,7 @@ using System.Linq;
 using System.ServiceModel.Configuration;
 using System.Text;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public class WCFUtility
     {

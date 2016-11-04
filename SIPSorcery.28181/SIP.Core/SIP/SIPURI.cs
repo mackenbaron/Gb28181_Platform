@@ -36,10 +36,10 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     /// <summary>
     /// Implements the the absoluteURI structure from the SIP RFC (incomplete as at 17 nov 2006, AC).

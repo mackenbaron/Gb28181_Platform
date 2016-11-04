@@ -48,7 +48,7 @@ using log4net;
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public enum STUNAttributeTypesEnum
     {

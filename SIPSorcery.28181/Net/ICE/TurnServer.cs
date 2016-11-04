@@ -32,7 +32,7 @@
 
 using System.Net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public class TurnServer
     {

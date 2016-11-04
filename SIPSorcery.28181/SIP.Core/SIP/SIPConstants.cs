@@ -31,13 +31,13 @@
 //-----------------------------------------------------------------------------
 
 using System;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
 	public class SIPConstants
 	{

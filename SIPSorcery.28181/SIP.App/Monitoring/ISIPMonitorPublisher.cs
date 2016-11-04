@@ -5,7 +5,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public delegate List<string> GetNotificationsDelegate(string address, out string sessionID, out string sessionError);
 

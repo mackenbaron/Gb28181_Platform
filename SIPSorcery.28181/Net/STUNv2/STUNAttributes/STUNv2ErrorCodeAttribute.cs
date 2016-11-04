@@ -33,7 +33,7 @@
 using System;
 using System.Text;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public class STUNv2ErrorCodeAttribute : STUNv2Attribute
     {

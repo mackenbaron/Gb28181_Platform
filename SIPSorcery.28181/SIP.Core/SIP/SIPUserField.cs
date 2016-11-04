@@ -36,14 +36,14 @@
 using System;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
 	/// <summary>
 	/// name-addr      =  [ display-name ] LAQUOT addr-spec RAQUOT

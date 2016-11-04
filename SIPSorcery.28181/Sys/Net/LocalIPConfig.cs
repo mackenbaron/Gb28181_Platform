@@ -40,7 +40,7 @@ using System.Text;
 using System.Xml;
 using log4net;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public static class LocalIPConfig
     {

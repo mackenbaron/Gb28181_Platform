@@ -14,7 +14,7 @@
 
 using System;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
      /// <summary>
     /// Exmaples of size Payload Header size calculations:

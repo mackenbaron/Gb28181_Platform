@@ -37,12 +37,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.Persistence
+namespace SIPSorcery.GB28181.Persistence
 {
     public class SIPSorceryPersistor
     {
@@ -50,13 +50,13 @@ namespace SIPSorcery.Persistence
 
         private ILog logger = AppState.logger;
 
-        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_SIPACCOUNTS_FILENAME;
-        private static readonly string m_sipProvidersXMLFilename = SIPSorcery.SIP.AssemblyState.XML_SIPPROVIDERS_FILENAME;
-        private static readonly string m_sipDialplansXMLFilename = SIPSorcery.SIP.AssemblyState.XML_DIALPLANS_FILENAME;
-        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
-        private static readonly string m_sipProviderBindingsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_PROVIDER_BINDINGS_FILENAME;
-        private static readonly string m_sipDialoguesXMLFilename = SIPSorcery.SIP.AssemblyState.XML_SIPDIALOGUES_FILENAME;
-        private static readonly string m_sipCDRsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_SIPCDRS_FILENAME;
+        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_SIPACCOUNTS_FILENAME;
+        private static readonly string m_sipProvidersXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_SIPPROVIDERS_FILENAME;
+        private static readonly string m_sipDialplansXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_DIALPLANS_FILENAME;
+        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
+        private static readonly string m_sipProviderBindingsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_PROVIDER_BINDINGS_FILENAME;
+        private static readonly string m_sipDialoguesXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_SIPDIALOGUES_FILENAME;
+        private static readonly string m_sipCDRsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_SIPCDRS_FILENAME;
 
         private SIPAssetPersistor<SIPAccount> m_sipAccountsPersistor;
         public SIPAssetPersistor<SIPAccount> SIPAccountsPersistor { get { return m_sipAccountsPersistor; } }

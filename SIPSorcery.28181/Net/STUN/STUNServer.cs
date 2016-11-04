@@ -35,14 +35,14 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public delegate void STUNSendMessageDelegate(IPEndPoint dst, byte[] buffer);  // Used so the STUN server can operate in a muli-plexed fashion with things like a SIP server.
 

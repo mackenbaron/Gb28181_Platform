@@ -12,7 +12,7 @@
 
 using System;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
 	public class RTPPacket
 	{

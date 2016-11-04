@@ -36,7 +36,7 @@ using System.Net;
 using System.Text;
 using log4net;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public class STUNv2ChangeRequestAttribute : STUNv2Attribute
     {

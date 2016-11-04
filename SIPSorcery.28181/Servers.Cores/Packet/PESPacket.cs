@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIPSorcery.Servers.Cores.Packet
+namespace SIPSorcery.GB28181.Servers.Cores.Packet
 {
     public class PESPacket : IByteObj
     {

@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
-namespace SIPSorcery.Persistence {
+namespace SIPSorcery.GB28181.Persistence {
 
     public abstract class ExpressionVisitor {
         protected ExpressionVisitor() {

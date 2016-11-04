@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     class Program
     {

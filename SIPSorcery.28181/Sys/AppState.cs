@@ -27,7 +27,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using log4net;
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public class AppState : IConfigurationSectionHandler
     {

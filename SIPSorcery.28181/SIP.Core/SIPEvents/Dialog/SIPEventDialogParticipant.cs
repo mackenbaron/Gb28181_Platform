@@ -42,9 +42,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public class SIPEventDialogParticipant
     {

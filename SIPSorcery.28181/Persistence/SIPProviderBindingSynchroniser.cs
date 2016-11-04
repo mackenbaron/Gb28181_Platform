@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SIPSorcery.Sys;
-using SIPSorcery.Persistence;
+using SIPSorcery.GB28181.Sys;
+using SIPSorcery.GB28181.Persistence;
 using log4net;
 
-namespace SIPSorcery.SIP.App
+namespace SIPSorcery.GB28181.SIP.App
 {
     public class SIPProviderBindingSynchroniser
     {

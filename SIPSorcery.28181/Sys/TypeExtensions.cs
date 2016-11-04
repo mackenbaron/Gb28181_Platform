@@ -7,7 +7,7 @@ using System.Text;
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Sys
+namespace SIPSorcery.GB28181.Sys
 {
     public static class TypeExtensions
     {

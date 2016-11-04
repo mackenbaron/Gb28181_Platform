@@ -41,7 +41,7 @@ using System.Net;
 using System.Text;
 using System.Xml;
 using log4net;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using System.Configuration;
 
 namespace Gb28181_Client.Message

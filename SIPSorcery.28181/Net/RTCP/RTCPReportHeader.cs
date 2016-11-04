@@ -28,13 +28,13 @@
 using System;
 using System.Collections;
 using System.Net;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public enum RTCPReportTypesEnum
     {

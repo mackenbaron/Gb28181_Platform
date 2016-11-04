@@ -35,7 +35,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
@@ -43,7 +43,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 //using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     /// <bnf>
 	///  Method SP Request-URI SP SIP-Version CRLF

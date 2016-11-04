@@ -32,14 +32,14 @@
 
 using System.Linq;
 using log4net;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml;
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     public static class SIPTransportConfig
     {

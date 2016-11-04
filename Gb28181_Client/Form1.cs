@@ -1,12 +1,12 @@
 ﻿using Gb28181_Client.Message;
 using log4net;
-using SIPSorcery.Net;
-using SIPSorcery.Persistence;
-using SIPSorcery.Servers.SIPMessage;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
-using SIPSorcery.Sys.XML;
+using SIPSorcery.GB28181.Net;
+using SIPSorcery.GB28181.Persistence;
+using SIPSorcery.GB28181.Servers.SIPMessage;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
+using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,8 +31,8 @@ namespace Gb28181_Client
         private static readonly string m_storageTypeKey = SIPSorceryConfiguration.PERSISTENCE_STORAGETYPE_KEY;
         private static readonly string m_connStrKey = SIPSorceryConfiguration.PERSISTENCE_STORAGECONNSTR_KEY;
 
-        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_SIPACCOUNTS_FILENAME;
-        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.SIP.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
+        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_SIPACCOUNTS_FILENAME;
+        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
 
         private static ILog logger = AppState.logger;
 
@@ -47,7 +47,7 @@ namespace Gb28181_Client
 
         private void Initialize()
         {
-            m_sipRegistrarStorageType = (AppState.GetConfigSetting(m_storageTypeKey) != null) ? StorageTypesConverter.GetStorageType(AppState.GetConfigSetting(m_storageTypeKey)) : StorageTypes.Unknown; ;
+            m_sipRegistrarStorageType = (AppState.GetConfigSetting(m_storageTypeKey) != null) ? StorageTypesConverter.GetStorageType(AppState.GetConfigSetting(m_storageTypeKey)) : StorageTypes.Unknown;
             m_sipRegistrarStorageConnStr = AppState.GetConfigSetting(m_connStrKey);
 
             if (m_sipRegistrarStorageType == StorageTypes.Unknown || m_sipRegistrarStorageConnStr.IsNullOrBlank())
@@ -213,7 +213,7 @@ namespace Gb28181_Client
             sdp.Version = 0;
             sdp.SessionId = "0";
             sdp.Username = "34010000002000000001";
-            sdp.SessionName = SIPSorcery.Sys.XML.CommandType.Playback.ToString();
+            sdp.SessionName = SIPSorcery.GB28181.Sys.XML.CommandType.Playback.ToString();
             sdp.Connection = sdpConn;
             sdp.Timing = startTime + " " + stopTime;
             sdp.Address = localIp;

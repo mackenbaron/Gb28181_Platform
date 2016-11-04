@@ -36,9 +36,9 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 
-namespace SIPSorcery.Net
+namespace SIPSorcery.GB28181.Net
 {
     public enum IceCandidateTypesEnum
     {

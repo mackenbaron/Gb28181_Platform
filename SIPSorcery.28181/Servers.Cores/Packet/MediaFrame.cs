@@ -6,7 +6,7 @@ using GLib.Net;
 using GLib.Extension;
 using System.IO;
 
-namespace SIPSorcery.Servers.Cores.Packet
+namespace SIPSorcery.GB28181.Servers.Cores.Packet
 {
     public enum AVCode {
         PIX_FMT_YUV420P = 0,

@@ -37,14 +37,14 @@ using System.Collections.Specialized;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace SIPSorcery.SIP
+namespace SIPSorcery.GB28181.SIP
 {
     /// <summary>
     /// Represents a series of name value pairs that are optionally included in SIP URIs and also as an additional

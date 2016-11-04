@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace SIPSorcery.Sys.XML
+namespace SIPSorcery.GB28181.Sys.XML
 {
     public abstract class XmlHelper<T> where T : class
     {

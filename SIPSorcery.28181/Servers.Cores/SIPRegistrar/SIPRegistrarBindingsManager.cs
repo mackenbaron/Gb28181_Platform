@@ -45,13 +45,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Transactions;
-using SIPSorcery.Persistence;
-using SIPSorcery.SIP;
-using SIPSorcery.SIP.App;
-using SIPSorcery.Sys;
+using SIPSorcery.GB28181.Persistence;
+using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.SIP.App;
+using SIPSorcery.GB28181.Sys;
 using log4net;
 
-namespace SIPSorcery.Servers
+namespace SIPSorcery.GB28181.Servers
 {
     public class SIPRegistrarBindingsManager
     {
