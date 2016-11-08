@@ -40,25 +40,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
     {
         #region 私有字段
 
-        /// <summary>
-        /// 远程RTCP终结点
-        /// </summary>
-        private IPEndPoint _rtcpRemoteEndPoint;
-        /// <summary>
-        /// rtcp套接字连接
-        /// </summary>
-        private Socket _rtcpSocket;
-        /// <summary>
-        /// rtcp时间戳
-        /// </summary>
-        private uint _rtcpTimestamp = 0;
-        /// <summary>
-        /// rtcp同步源
-        /// </summary>
-        private uint _rtcpSyncSource = 0;
-        private uint _senderPacketCount = 0;
-        private uint _senderOctetCount = 0;
-        private DateTime _senderLastSentAt = DateTime.MinValue;
+        
 
 
         private static ILog logger = AppState.logger;
@@ -306,7 +288,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// <summary>
         /// 设备目录查询
         /// </summary>
-        /// <param name="cameraId">目的设备编码</param>
+        /// <param name="deviceId">目的设备编码</param>
         public void DeviceCatalogQuery(string deviceId)
         {
             if (LocalEndPoint == null)

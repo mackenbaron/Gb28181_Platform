@@ -40,6 +40,13 @@
             this.lvDev = new System.Windows.Forms.ListView();
             this.devName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.devId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnRecord = new System.Windows.Forms.Button();
+            this.btnStopRecord = new System.Windows.Forms.Button();
+            this.txtStartTime = new System.Windows.Forms.TextBox();
+            this.txtStopTime = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnStart
@@ -74,7 +81,7 @@
             // 
             // btnCatalog
             // 
-            this.btnCatalog.Location = new System.Drawing.Point(248, 117);
+            this.btnCatalog.Location = new System.Drawing.Point(485, 117);
             this.btnCatalog.Name = "btnCatalog";
             this.btnCatalog.Size = new System.Drawing.Size(75, 23);
             this.btnCatalog.TabIndex = 3;
@@ -89,7 +96,7 @@
             this.txtDeviceId.Name = "txtDeviceId";
             this.txtDeviceId.Size = new System.Drawing.Size(137, 21);
             this.txtDeviceId.TabIndex = 4;
-            this.txtDeviceId.Text = "34020000001320000001";
+            this.txtDeviceId.Text = "161025051823746120";
             // 
             // label1
             // 
@@ -102,7 +109,7 @@
             // 
             // btnReal
             // 
-            this.btnReal.Location = new System.Drawing.Point(248, 160);
+            this.btnReal.Location = new System.Drawing.Point(485, 164);
             this.btnReal.Name = "btnReal";
             this.btnReal.Size = new System.Drawing.Size(75, 23);
             this.btnReal.TabIndex = 8;
@@ -112,7 +119,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(248, 243);
+            this.button1.Location = new System.Drawing.Point(484, 257);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 9;
@@ -122,7 +129,7 @@
             // 
             // btnBye
             // 
-            this.btnBye.Location = new System.Drawing.Point(247, 202);
+            this.btnBye.Location = new System.Drawing.Point(484, 209);
             this.btnBye.Name = "btnBye";
             this.btnBye.Size = new System.Drawing.Size(75, 23);
             this.btnBye.TabIndex = 10;
@@ -139,7 +146,7 @@
             this.lvDev.Location = new System.Drawing.Point(12, 117);
             this.lvDev.MultiSelect = false;
             this.lvDev.Name = "lvDev";
-            this.lvDev.Size = new System.Drawing.Size(216, 163);
+            this.lvDev.Size = new System.Drawing.Size(458, 296);
             this.lvDev.TabIndex = 11;
             this.lvDev.UseCompatibleStateImageBehavior = false;
             this.lvDev.View = System.Windows.Forms.View.Details;
@@ -147,17 +154,88 @@
             // devName
             // 
             this.devName.Text = "设备名称";
+            this.devName.Width = 300;
             // 
             // devId
             // 
             this.devId.Text = "设备编码";
-            this.devId.Width = 148;
+            this.devId.Width = 150;
+            // 
+            // btnRecord
+            // 
+            this.btnRecord.Location = new System.Drawing.Point(234, 417);
+            this.btnRecord.Name = "btnRecord";
+            this.btnRecord.Size = new System.Drawing.Size(75, 23);
+            this.btnRecord.TabIndex = 12;
+            this.btnRecord.Text = "Record";
+            this.btnRecord.UseVisualStyleBackColor = true;
+            this.btnRecord.Click += new System.EventHandler(this.btnRecord_Click);
+            // 
+            // btnStopRecord
+            // 
+            this.btnStopRecord.Location = new System.Drawing.Point(234, 457);
+            this.btnStopRecord.Name = "btnStopRecord";
+            this.btnStopRecord.Size = new System.Drawing.Size(75, 23);
+            this.btnStopRecord.TabIndex = 13;
+            this.btnStopRecord.Text = "StopRecord";
+            this.btnStopRecord.UseVisualStyleBackColor = true;
+            // 
+            // txtStartTime
+            // 
+            this.txtStartTime.Location = new System.Drawing.Point(91, 419);
+            this.txtStartTime.Name = "txtStartTime";
+            this.txtStartTime.Size = new System.Drawing.Size(137, 21);
+            this.txtStartTime.TabIndex = 14;
+            this.txtStartTime.Text = "2016-11-4 8:00:00";
+            // 
+            // txtStopTime
+            // 
+            this.txtStopTime.Location = new System.Drawing.Point(91, 457);
+            this.txtStopTime.Name = "txtStopTime";
+            this.txtStopTime.Size = new System.Drawing.Size(137, 21);
+            this.txtStopTime.TabIndex = 15;
+            this.txtStopTime.Text = "2016-11-4 10:00:00";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 424);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 12);
+            this.label2.TabIndex = 16;
+            this.label2.Text = "录像开始时间";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(8, 461);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(77, 12);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "录像结束时间";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(485, 298);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "Send";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(343, 298);
+            this.ClientSize = new System.Drawing.Size(570, 488);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtStopTime);
+            this.Controls.Add(this.txtStartTime);
+            this.Controls.Add(this.btnStopRecord);
+            this.Controls.Add(this.btnRecord);
             this.Controls.Add(this.lvDev);
             this.Controls.Add(this.btnBye);
             this.Controls.Add(this.button1);
@@ -192,6 +270,13 @@
         private System.Windows.Forms.ListView lvDev;
         private System.Windows.Forms.ColumnHeader devName;
         private System.Windows.Forms.ColumnHeader devId;
+        private System.Windows.Forms.Button btnRecord;
+        private System.Windows.Forms.Button btnStopRecord;
+        private System.Windows.Forms.TextBox txtStartTime;
+        private System.Windows.Forms.TextBox txtStopTime;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button2;
     }
 }
 

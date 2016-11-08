@@ -26,6 +26,11 @@ namespace SIPSorcery.GB28181.Servers
         /// </summary>
         public event Action OnCloseRTPChannel;
 
+        /// <summary>
+        /// 计时器初始化
+        /// </summary>
+        /// <param name="request">sip响应</param>
+        /// <param name="trans">sip传输</param>
         public TaskTiming(SIPRequest request, SIPTransport trans)
         {
             _request = request;

@@ -67,7 +67,7 @@ namespace SIPSorcery.GB28181.Net
         private const int RECEIVE_BUFFER_SIZE = 2048;
         private const int MEDIA_PORT_START = 10000;             // Arbitrary port number to start allocating RTP and control ports from.
         private const int MEDIA_PORT_END = 40000;               // Arbitrary port number that RTP and control ports won't be allocated above.
-        private const int RTP_PACKETS_MAX_QUEUE_LENGTH = 100;   // The maximum number of RTP packets that will be queued.
+        private const int RTP_PACKETS_MAX_QUEUE_LENGTH = 1000;   // The maximum number of RTP packets that will be queued.
         private const int RTP_RECEIVE_BUFFER_SIZE = 100000000;
         private const int RTP_SEND_BUFFER_SIZE = 100000000;
         private const int SRTP_SIGNATURE_LENGTH = 10;           // If SRTP is being used this many extra bytes need to be added to the RTP payload to hold the authentication signature.
@@ -175,13 +175,15 @@ namespace SIPSorcery.GB28181.Net
         private int _framesSinceLastCalc;
         private double _lastBWCalc;
         private double _lastFrameRate;
+        private uint _rtcpTimestamp = 0;
         private Thread _thRTPRecv;
         private Thread _thProcRTP;
+        private Thread _thrtcpRecv;
 
         //public event Action<string, byte[]> OnRTPDataReceived;
         public event Action OnRTPQueueFull;                         // Occurs if the RTP queue fills up and needs to be purged.
         public event Action OnRTPSocketDisconnected;
-        public event Action<byte[]> OnControlDataReceived;
+        public event Action<byte[], Socket> OnControlDataReceived;
         public event Action OnControlSocketDisconnected;
         public event Action<RTPFrame> OnFrameReady;
 
@@ -190,7 +192,7 @@ namespace SIPSorcery.GB28181.Net
             _createdAt = DateTime.Now;
         }
 
-        public RTPChannel(IPEndPoint remoteEndPoint,int rtpPort,int rtcpPort,FrameTypesEnum frameType)
+        public RTPChannel(IPEndPoint remoteEndPoint, int rtpPort, int rtcpPort, FrameTypesEnum frameType)
             : this()
         {
             _remoteEndPoint = remoteEndPoint;
@@ -301,7 +303,7 @@ namespace SIPSorcery.GB28181.Net
         //}
 
 
-        
+
         /// <summary>
         /// Starts listenting on the RTP and control ports.
         /// </summary>
@@ -317,13 +319,45 @@ namespace SIPSorcery.GB28181.Net
                 _thProcRTP.Start();
                 //ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
                 //ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
-
-                _controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
-                _controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
+                _thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
+                _thrtcpRecv.Start();
+                //_controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
+                //_controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
             }
             else
             {
                 logger.Warn("An RTPChannel could not start as either RTP or control sockets were not available.");
+            }
+        }
+
+        
+
+        private void RTCPReceive()
+        {
+            Thread.CurrentThread.Name = "rtpchanrecv-" + _rtpPort;
+
+            byte[] buffer = new byte[2048];
+
+            DateTime packetTimestamp = DateTime.Now;
+            try
+            {
+                EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                while (!_isClosed)
+                {
+                    int bytesRead = _controlSocket.ReceiveFrom(buffer, ref remoteEndPoint);
+                    if (bytesRead > 0)
+                    {
+                        _rtcpTimestamp = DateTimeToNptTimestamp90K(DateTime.Now);
+                        RTCPPacket senderReport = new RTCPPacket(_syncSource, DateTimeToNptTimestamp(packetTimestamp), _rtcpTimestamp, 0, 0);
+                        byte[] rtcpPacket = senderReport.GetBytes();
+                        _controlSocket.SendTo(rtcpPacket, 0, rtcpPacket.Length, SocketFlags.None, remoteEndPoint);
+                    }
+                    Thread.Sleep(500);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("Exception RTCPChannel.ControlSocketReceive. " + ex);
             }
         }
 
@@ -339,8 +373,7 @@ namespace SIPSorcery.GB28181.Net
                     logger.Debug("RTPChannel closing, RTP port " + _rtpPort + ".");
 
                     _isClosed = true;
-                    _thRTPRecv.Abort();
-                    _thProcRTP.Abort();
+
 
                     if (_rtpSocket != null)
                     {
@@ -351,6 +384,10 @@ namespace SIPSorcery.GB28181.Net
                     {
                         _controlSocket.Close();
                     }
+
+                    _thRTPRecv.Abort();
+                    _thProcRTP.Abort();
+                    _thrtcpRecv.Abort();
                 }
                 catch (ThreadAbortException ex)
                 {
@@ -708,7 +745,7 @@ namespace SIPSorcery.GB28181.Net
 
                     if (OnControlDataReceived != null)
                     {
-                        OnControlDataReceived(_controlSocketBuffer.Take(bytesRead).ToArray());
+                        OnControlDataReceived(_controlSocketBuffer.Take(bytesRead).ToArray(), _controlSocket);
                     }
 
                     _controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
@@ -1105,7 +1142,7 @@ namespace SIPSorcery.GB28181.Net
         /// bits of the integer part and the high 16 bits of the fractional part.
         /// The high 16 bits of the integer part must be determined independently.
         /// </notes>
-        private static ulong DateTimeToNptTimestamp(DateTime value)
+        public static ulong DateTimeToNptTimestamp(DateTime value)
         {
             DateTime baseDate = value >= UtcEpoch2036 ? UtcEpoch2036 : UtcEpoch1900;
 

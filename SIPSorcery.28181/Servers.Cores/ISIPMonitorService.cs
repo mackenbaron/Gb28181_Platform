@@ -24,6 +24,13 @@ namespace SIPSorcery.GB28181.Servers
         void ByeVideoReq();
 
         /// <summary>
+        /// 录像点播视频请求
+        /// </summary>
+        /// <param name="beginTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        void BackVideoReq(DateTime beginTime, DateTime endTime);
+
+        /// <summary>
         /// 确认接收实时视频请求
         /// </summary>
         /// <param name="response">sip响应</param>

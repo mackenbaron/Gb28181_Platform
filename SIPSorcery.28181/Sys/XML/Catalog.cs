@@ -93,6 +93,12 @@ namespace SIPSorcery.GB28181.Sys.XML
             public string Name { get; set; }
 
             /// <summary>
+            /// 目录类型
+            /// </summary>
+            [XmlElement("CatalogType")]
+            public int CatalogType { get; set; }
+
+            /// <summary>
             /// 制造商
             /// </summary>
             [XmlElement("Manufacturer")]

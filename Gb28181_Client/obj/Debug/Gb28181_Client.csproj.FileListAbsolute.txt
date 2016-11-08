@@ -1,4 +1,3 @@
-F:\VisionVera\SourceCoder\Gb28181_Platform\Gb28181_Client\bin\Debug\Gb28181_Client.exe.config
 F:\VisionVera\SourceCoder\Gb28181_Platform\Build\Gb28181_Client.exe.config
 F:\VisionVera\SourceCoder\Gb28181_Platform\Build\Gb28181_Client.exe
 F:\VisionVera\SourceCoder\Gb28181_Platform\Build\Gb28181_Client.pdb

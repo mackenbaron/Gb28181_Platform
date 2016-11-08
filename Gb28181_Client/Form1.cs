@@ -197,7 +197,22 @@ namespace Gb28181_Client
             _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].ByeVideoReq();
         }
 
+        private void btnRecord_Click(object sender, EventArgs e)
+        {
+            ListViewItem devItem = new ListViewItem();
+            foreach (var item in lvDev.SelectedItems.Cast<ListViewItem>())
+            {
+                devItem = item;
+            }
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
+            {
+                return;
+            }
 
+            DateTime startTime = DateTime.Parse(txtStartTime.Text.Trim());
+            DateTime stopTime = DateTime.Parse(txtStopTime.Text.Trim());
+            _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].BackVideoReq(startTime, stopTime);
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -205,7 +220,7 @@ namespace Gb28181_Client
 
             uint startTime = TimeConvert.DateToTimeStamp(date);
             uint stopTime = TimeConvert.DateToTimeStamp(date.AddHours(2));
-            string localIp = "192.168.10.104";
+            string localIp = "192.168.10.156";
 
             SDPConnectionInformation sdpConn = new SDPConnectionInformation(localIp);
 
@@ -236,6 +251,10 @@ namespace Gb28181_Client
             sdp.Media.Add(media);
 
             string sdpBody = sdp.ToString();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
         }
     }
 }
