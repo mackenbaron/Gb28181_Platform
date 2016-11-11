@@ -17,7 +17,6 @@ namespace SIPSorcery.GB28181.Servers
         private SIPTransport _trans;
         private SIPResponse _response;
         private Timer _timeSend;
-        private double _interval = 500;
         //发送请求次数
         private int _sendReqSeq = 1;
 
@@ -44,7 +43,6 @@ namespace SIPSorcery.GB28181.Servers
         public void Start()
         {
             _timeSend.Enabled = true;
-            _timeSend.Interval = _interval;
             _timeSend.Elapsed += timeSend_Elapsed;
             _timeSend.Start();
         }
@@ -72,27 +70,18 @@ namespace SIPSorcery.GB28181.Servers
             }
             else
             {
-                _timeSend.Stop();
+                this.Stop();
             }
-            _timeSend.Interval = _interval;
-            if (_sendReqSeq > 8)
+            _sendReqSeq++;
+            _timeSend.Interval = 2000;
+            if (_sendReqSeq > 5)
             {
-                _timeSend.Stop();
+                this.Stop();
                 if (OnCloseRTPChannel != null)
                 {
                     OnCloseRTPChannel();
                 }
-                _timeSend.Elapsed -= timeSend_Elapsed;
             }
-            else if (_sendReqSeq > 3)
-            {
-                _interval = 2000;
-            }
-            else if (_sendReqSeq > 5)
-            {
-                _interval = 3000;
-            }
-            _sendReqSeq++;
         }
 
         /// <summary>

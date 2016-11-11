@@ -40,9 +40,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
     {
         #region 私有字段
 
-        
-
-
         private static ILog logger = AppState.logger;
 
         private bool _initSIP = false;
@@ -195,7 +192,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             }
             if (response.Status == SIPResponseStatusCodesEnum.Trying)
             {
-                logger.Debug("up platform return waiting process msg...");
+                logger.Debug("up platform return waiting process msg | " + response.Status);
             }
             else if (response.Status == SIPResponseStatusCodesEnum.Ok)
             {
@@ -207,7 +204,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             }
             else if (response.Status == SIPResponseStatusCodesEnum.BadRequest)  //请求失败
             {
-                string msg = "realVideo bad request";
+                string msg = "RealVideo 400 " + response.Status;
                 if (response.Header.Warning != null)
                 {
                     msg += response.Header.Warning;
@@ -216,10 +213,11 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             }
             else if (response.Status == SIPResponseStatusCodesEnum.InternalServerError) //服务器内部错误
             {
-                string msg = "realVideo InternalServerError request";
-                if (response.Header.Warning != null)
+                string msg = "RealVideo 500 " + response.Status;
+                logger.Debug(msg);
+                if (response.Header.ErrorInfo != null)
                 {
-                    msg += response.Header.Warning;
+                    msg += response.Header.ErrorInfo;
                 }
                 MonitorService[response.Header.To.ToURI.User].BadRequest(msg);
             }
@@ -289,11 +287,11 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// 设备目录查询
         /// </summary>
         /// <param name="deviceId">目的设备编码</param>
-        public void DeviceCatalogQuery(string deviceId)
+        public void DeviceCatalogQuery()
         {
             if (LocalEndPoint == null)
             {
-                OnSIPServiceChange(deviceId, SipServiceStatus.Wait);
+                OnSIPServiceChange(RemoteSIPId, SipServiceStatus.Wait);
                 return;
             }
             string fromTag = CallProperties.CreateNewTag();
@@ -304,7 +302,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             CatalogQuery catalog = new CatalogQuery()
             {
                 CommandType = CommandType.Catalog,
-                DeviceID = deviceId,
+                DeviceID = RemoteSIPId,
                 SN = new Random().Next(9999)
             };
             string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);

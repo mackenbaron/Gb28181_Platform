@@ -34,6 +34,9 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         private TaskTiming _byeTask;
         private SIPRequest _realReqSession;
         private int[] _mediaPort;
+        private string _okTag;
+        private SIPContactHeader _contact;
+        private SIPViaSet _via;
 
         /// <summary>
         /// sip服务状态
@@ -57,16 +60,16 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         private void _rtpChannel_OnFrameReady(RTPFrame frame)
         {
             byte[] buffer = frame.GetFramePayload();
-            //if (OnStreamReady != null)
-            //{
-            //    OnStreamReady(buffer);
-            //}
-            //Write(buffer);
-            if (this.m_fs == null)
+            if (OnStreamReady != null)
             {
-                this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+                OnStreamReady(buffer);
             }
-            m_fs.Write(buffer, 0, buffer.Length);
+            //Write(buffer);
+            //if (this.m_fs == null)
+            //{
+            //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+            //}
+            //m_fs.Write(buffer, 0, buffer.Length);
         }
 
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
@@ -146,6 +149,9 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             header.UserAgent = _msgCore.UserAgent;
             header.Allow = null;
             ackReq.Header = header;
+            _okTag = response.Header.To.ToTag;
+            _contact = header.Contact.FirstOrDefault();
+            _via = header.Vias;
             return ackReq;
         }
 
@@ -275,13 +281,16 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             SIPURI localUri = new SIPURI(_msgCore.LocalSIPId, _msgCore.LocalEndPoint.ToHost(), "");
             SIPURI remoteUri = new SIPURI(_deviceId, _msgCore.RemoteEndPoint.ToHost(), "");
             SIPFromHeader from = new SIPFromHeader(null, localUri, _realReqSession.Header.From.FromTag);
-            SIPToHeader to = new SIPToHeader(null, remoteUri, _realReqSession.Header.To.ToTag);
+            SIPToHeader to = new SIPToHeader(null, remoteUri, _okTag);
             SIPRequest byeReq = _msgCore.Transport.GetRequest(SIPMethodsEnum.BYE, remoteUri);
             SIPHeader header = new SIPHeader(from, to, _realReqSession.Header.CSeq, _realReqSession.Header.CallId);
             header.CSeqMethod = byeReq.Header.CSeqMethod;
-            header.Vias = byeReq.Header.Vias;
+            header.Vias = _via;
             header.MaxForwards = byeReq.Header.MaxForwards;
             header.UserAgent = _msgCore.UserAgent;
+            header.Contact = _realReqSession.Header.Contact;
+            header.Contact.Clear();
+            header.Contact.Add(_contact);
             byeReq.Header.From = from;
             byeReq.Header = header;
             this.Stop();
@@ -500,8 +509,5 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             videoPESList.Clear();
         }
         #endregion
-
-
-        
     }
 }

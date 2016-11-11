@@ -31,7 +31,7 @@ namespace SIPSorcery.GB28181.Sys.XML
             XmlSerializer s = new XmlSerializer(t.GetType());
             var xns = new XmlSerializerNamespaces();
             xns.Add("", "");
-            XmlWriter w = XmlWriter.Create("c:\\catalog.xml",settings);
+            XmlWriter w = XmlWriter.Create("c:\\catalog.xml", settings);
             s.Serialize(w, t, xns);
             w.Close();
             TextReader r = new StreamReader("c:\\catalog.xml");
@@ -40,20 +40,35 @@ namespace SIPSorcery.GB28181.Sys.XML
 
         public string Serialize<T>(T obj)
         {
-            XmlSerializer xs = new XmlSerializer(typeof(T));
-            MemoryStream stream = new MemoryStream();
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.Encoding = Encoding.GetEncoding("GB2312");
-            settings.NewLineOnAttributes = true;
-            settings.OmitXmlDeclaration = false;
-            using (XmlWriter writer = XmlWriter.Create(stream, settings))
+            var stream = new MemoryStream();
+            var xml = new XmlSerializer(typeof(T));
+            try
             {
                 var xns = new XmlSerializerNamespaces();
-                xns.Add(string.Empty, string.Empty);
-                //去除默认命名空间
-                xs.Serialize(writer, obj, xns);
+                xns.Add("", "");
+                //序列化对象
+                xml.Serialize(stream, obj, xns);
             }
+            catch (Exception ex)
+            {
+                logger.Error("序列化对象为xml字符串出错" + ex);
+            }
+            //XmlSerializer xs = new XmlSerializer(typeof(T));
+            //MemoryStream stream = new MemoryStream();
+            //XmlWriterSettings settings = new XmlWriterSettings();
+            ////settings.Indent = true;
+            ////settings.Encoding = Encoding.GetEncoding("GB2312");
+            ////settings.Encoding = new UTF8Encoding(false);
+            ////settings.NewLineOnAttributes = true;
+            ////settings.OmitXmlDeclaration = false;
+            //using (XmlWriter writer = XmlWriter.Create(stream, settings))
+            //{
+            //    var xns = new XmlSerializerNamespaces();
+                
+            //    xns.Add(string.Empty, string.Empty);
+            //    //去除默认命名空间
+            //    xs.Serialize(writer, obj, xns);
+            //}
             return Encoding.UTF8.GetString(stream.ToArray()).Replace("\r", "");
         }
 
@@ -64,7 +79,7 @@ namespace SIPSorcery.GB28181.Sys.XML
         //{
         //    string xmlString = string.Empty;
         //    XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-            
+
         //    using (MemoryStream ms = new MemoryStream())
         //    {
         //        xmlSerializer.Serialize(ms, obj);

@@ -96,7 +96,7 @@
             this.txtDeviceId.Name = "txtDeviceId";
             this.txtDeviceId.Size = new System.Drawing.Size(137, 21);
             this.txtDeviceId.TabIndex = 4;
-            this.txtDeviceId.Text = "161025051823746120";
+            this.txtDeviceId.Text = "66240000012001000001";
             // 
             // label1
             // 
@@ -154,7 +154,7 @@
             // devName
             // 
             this.devName.Text = "设备名称";
-            this.devName.Width = 300;
+            this.devName.Width = 260;
             // 
             // devId
             // 

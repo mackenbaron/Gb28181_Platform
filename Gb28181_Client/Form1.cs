@@ -47,9 +47,14 @@ namespace Gb28181_Client
 
         private void Initialize()
         {
+            string path = AppDomain.CurrentDomain.BaseDirectory + "Config\\";
             m_sipRegistrarStorageType = (AppState.GetConfigSetting(m_storageTypeKey) != null) ? StorageTypesConverter.GetStorageType(AppState.GetConfigSetting(m_storageTypeKey)) : StorageTypes.Unknown;
             m_sipRegistrarStorageConnStr = AppState.GetConfigSetting(m_connStrKey);
+            if (m_sipRegistrarStorageType == StorageTypes.SQLite)
+            {
+                m_sipRegistrarStorageConnStr = string.Format(m_sipRegistrarStorageConnStr, path);
 
+            }
             if (m_sipRegistrarStorageType == StorageTypes.Unknown || m_sipRegistrarStorageConnStr.IsNullOrBlank())
             {
                 throw new ApplicationException("The SIP Registrar cannot start with no persistence settings.");
@@ -95,7 +100,8 @@ namespace Gb28181_Client
 
         private void btnCatalog_Click(object sender, EventArgs e)
         {
-            _messageDaemon.MessageCore.DeviceCatalogQuery(txtDeviceId.Text.Trim());
+            // _messageDaemon.MessageCore.DeviceCatalogQuery(txtDeviceId.Text.Trim());
+            _messageDaemon.MessageCore.DeviceCatalogQuery();
         }
 
         private void m_msgCore_OnCatalogReceived(Catalog cata)
@@ -216,6 +222,14 @@ namespace Gb28181_Client
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string s = "ss" + SIPSorcery.GB28181.Sys.XML.CommandType.Playback;
+            CatalogQuery query = new CatalogQuery()
+            {
+                CommandType = SIPSorcery.GB28181.Sys.XML.CommandType.Catalog,
+                DeviceID = "34020000001320000001",
+                SN = 1109
+            };
+            string xml = CatalogQuery.Instance.Save<CatalogQuery>(query);
             DateTime date = new DateTime(2016, 11, 1, 10, 0, 0);
 
             uint startTime = TimeConvert.DateToTimeStamp(date);

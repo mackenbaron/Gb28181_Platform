@@ -1170,7 +1170,7 @@
             <param name="remoteEndPoint">远程终结点</param>
             <param name="response">sip响应</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.DeviceCatalogQuery(System.String)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.DeviceCatalogQuery">
             <summary>
             设备目录查询
             </summary>

@@ -43,7 +43,11 @@ namespace SIPSorcery.GB28181.Persistence {
                 string methodName = ((MethodCallExpression)expression).Method.Name;
                 bool isIQueryable = (expression.Type.FullName.StartsWith("System.Linq.IQueryable") || expression.Type.FullName.StartsWith("System.Linq.IOrderedQueryable"));
                 string queryString = String.Format(this.Translate(expression), m_tableName);
-    
+
+                if (m_tableName == "sipaccounts")
+                {
+                    Console.WriteLine();
+                }
                 if (!OrderBy.IsNullOrBlank()) {
                     queryString += " order by " + OrderBy;
                 }

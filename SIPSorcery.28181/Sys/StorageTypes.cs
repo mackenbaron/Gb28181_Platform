@@ -21,6 +21,7 @@ namespace SIPSorcery.GB28181.Sys
         SQLLinqPostgresql,
         SQLLinqMSSQL,
         SQLLinqOracle,
+        SQLite
     }
 
     public class StorageTypesConverter

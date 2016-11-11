@@ -68,7 +68,7 @@ namespace SIPSorcery.GB28181.SIP
         public static int CreateNewCSeq()
         {
             Random r = new Random();
-            return r.Next(int.MinValue, int.MaxValue);
+            return r.Next(1, ushort.MaxValue);
         }
 
 		/// <summary>
