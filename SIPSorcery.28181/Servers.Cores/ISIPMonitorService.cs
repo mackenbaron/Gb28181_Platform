@@ -35,6 +35,7 @@ namespace SIPSorcery.GB28181.Servers
         /// 确认接收实时视频请求
         /// </summary>
         /// <param name="response">sip响应</param>
+        /// <param name="cmdType">视频类型(直播/点播)</param>
         /// <returns>sip请求</returns>
         void AckRequest(SIPResponse response,CommandType cmdType);
 
@@ -52,38 +53,13 @@ namespace SIPSorcery.GB28181.Servers
         /// 失败的请求
         /// </summary>
         /// <param name="response">失败消息</param>
+        /// <param name="callId">呼叫编号</param>
         /// <returns></returns>
-        void BadRequest(string msg);
+        void BadRequest(string msg,string callId);
 
         /// <summary>
         /// 视频流回调完成
         /// </summary>
         event Action<byte[]> OnStreamReady;
-    }
-
-    /// <summary>
-    /// 监控通道
-    /// </summary>
-    public class MonitorChannel
-    {
-        private string _devId;
-
-        public MonitorChannel(string devId)
-        {
-            _devId = devId;
-        }
-
-        public string DevId
-        {
-            get
-            {
-                return _devId;
-            }
-            set
-            {
-                _devId = value;
-            }
-        }
-        public CommandType CmdType { get; set; }
     }
 }

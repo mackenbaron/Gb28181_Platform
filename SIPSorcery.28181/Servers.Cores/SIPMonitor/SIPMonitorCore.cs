@@ -195,9 +195,13 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// 失败的请求
         /// </summary>
         /// <param name="msg">失败消息内容</param>
-        public void BadRequest(string msg)
+        /// <param name="callId">呼叫编号</param>
+        public void BadRequest(string msg, string callId)
         {
-            this.Stop();
+            if (_realReqSession.Header.CallId == callId)
+            {
+                this.Stop();
+            }
         }
 
         /// <summary>
@@ -363,7 +367,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             media.AddFormatParameterAttribute(h264Format.FormatID, h264Format.Name);
             media.Port = mediaPort[0];
 
-
             sdp.Media.Add(media);
 
             return sdp.ToString();
@@ -373,7 +376,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// 设置媒体参数请求(回放)
         /// </summary>
         /// <param name="localIp">本地ip</param>
-        /// <param name="mediaPort">rtp/rtcp媒体端口(10000/10001)</param>
+        /// <param name="mediaPort">rtp/rtcp媒体端口(10002/10003)</param>
         /// <param name="startTime">录像开始时间</param>
         /// <param name="stopTime">录像结束数据</param>
         /// <returns></returns>

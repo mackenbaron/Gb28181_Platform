@@ -54,7 +54,7 @@
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "Start";
+            this.btnStart.Text = "启动";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
@@ -64,7 +64,7 @@
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 1;
-            this.btnStop.Text = "Stop";
+            this.btnStop.Text = "停止";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
@@ -84,7 +84,7 @@
             this.btnCatalog.Name = "btnCatalog";
             this.btnCatalog.Size = new System.Drawing.Size(75, 23);
             this.btnCatalog.TabIndex = 3;
-            this.btnCatalog.Text = "Catalog";
+            this.btnCatalog.Text = "目录查询";
             this.btnCatalog.UseVisualStyleBackColor = true;
             this.btnCatalog.Click += new System.EventHandler(this.btnCatalog_Click);
             // 
@@ -112,7 +112,7 @@
             this.btnReal.Name = "btnReal";
             this.btnReal.Size = new System.Drawing.Size(75, 23);
             this.btnReal.TabIndex = 8;
-            this.btnReal.Text = "Real";
+            this.btnReal.Text = "直播视频";
             this.btnReal.UseVisualStyleBackColor = true;
             this.btnReal.Click += new System.EventHandler(this.btnReal_Click);
             // 
@@ -132,7 +132,7 @@
             this.btnBye.Name = "btnBye";
             this.btnBye.Size = new System.Drawing.Size(75, 23);
             this.btnBye.TabIndex = 10;
-            this.btnBye.Text = "Bye";
+            this.btnBye.Text = "终止直播";
             this.btnBye.UseVisualStyleBackColor = true;
             this.btnBye.Click += new System.EventHandler(this.btnBye_Click);
             // 
@@ -166,7 +166,7 @@
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(75, 23);
             this.btnRecord.TabIndex = 12;
-            this.btnRecord.Text = "Record";
+            this.btnRecord.Text = "录像点播";
             this.btnRecord.UseVisualStyleBackColor = true;
             this.btnRecord.Click += new System.EventHandler(this.btnRecord_Click);
             // 
@@ -176,7 +176,7 @@
             this.btnStopRecord.Name = "btnStopRecord";
             this.btnStopRecord.Size = new System.Drawing.Size(75, 23);
             this.btnStopRecord.TabIndex = 13;
-            this.btnStopRecord.Text = "StopRecord";
+            this.btnStopRecord.Text = "终止点播";
             this.btnStopRecord.UseVisualStyleBackColor = true;
             this.btnStopRecord.Click += new System.EventHandler(this.btnStopRecord_Click);
             // 

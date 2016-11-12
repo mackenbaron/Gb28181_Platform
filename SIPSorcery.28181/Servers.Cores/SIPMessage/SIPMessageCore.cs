@@ -242,7 +242,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 {
                     msg += response.Header.Warning;
                 }
-                MonitorService[response.Header.To.ToURI.User].BadRequest(msg);
+                BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
             }
             else if (response.Status == SIPResponseStatusCodesEnum.InternalServerError) //服务器内部错误
             {
@@ -252,7 +252,41 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 {
                     msg += response.Header.ErrorInfo;
                 }
-                MonitorService[response.Header.To.ToURI.User].BadRequest(msg);
+                BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
+            }
+            else if (response.Status == SIPResponseStatusCodesEnum.RequestTerminated)   //请求终止
+            {
+                string msg = "RealVideo 487 " + response.Status;
+                logger.Debug(msg);
+                if (response.Header.ErrorInfo != null)
+                {
+                    msg += response.Header.ErrorInfo;
+                }
+                BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
+            }
+        }
+
+        /// <summary>
+        /// 失败的请求
+        /// </summary>
+        /// <param name="msg">错误消息</param>
+        /// <param name="user">设备编码</param>
+        /// <param name="callId">呼叫编号</param>
+        private void BadRequest(string msg, string user, string callId)
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                CommandType cmdType = CommandType.Unknown;
+                if (i == 0)
+                {
+                    cmdType = CommandType.Play;
+                }
+                else
+                {
+                    cmdType = CommandType.Playback;
+                }
+                string key = user + cmdType;
+                MonitorService[key].BadRequest(msg, callId);
             }
         }
 
