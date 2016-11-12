@@ -22,7 +22,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
     public class SIPMonitorCore : ISIPMonitorService
     {
         private static ILog logger = AppState.logger;
-
+        private CommandType _cmdType;
         private SIPMessageCore _msgCore;
         /// <summary>
         /// rtp数据通道
@@ -48,11 +48,12 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// </summary>
         public event Action<byte[]> OnStreamReady;
 
-        public SIPMonitorCore(SIPMessageCore msgCore, string deviceId, string name)
+        public SIPMonitorCore(SIPMessageCore msgCore, string deviceId, string name, CommandType cmdType)
         {
             _msgCore = msgCore;
             _deviceId = deviceId;
             _deviceName = name;
+            _cmdType = cmdType;
         }
 
         private FileStream m_fs = null;
@@ -67,7 +68,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             //Write(buffer);
             //if (this.m_fs == null)
             //{
-            //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+            //    this.m_fs = new FileStream("D:\\" + _deviceId+_cmdType + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
             //}
             //m_fs.Write(buffer, 0, buffer.Length);
         }
@@ -99,9 +100,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             if (_mediaPort == null)
             {
                 _mediaPort = _msgCore.SetMediaPort();
-
             }
-
 
             string localIp = _msgCore.LocalEndPoint.Address.ToString();
             string fromTag = CallProperties.CreateNewTag();
@@ -126,8 +125,12 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// </summary>
         /// <param name="response">响应消息</param>
         /// <returns></returns>
-        public SIPRequest AckRequest(SIPResponse response)
+        public void AckRequest(SIPResponse response, CommandType cmdType)
         {
+            if (_cmdType != cmdType)
+            {
+                return;
+            }
             _rtpChannel = new RTPChannel(_msgCore.RemoteEndPoint.GetIPEndPoint(), _mediaPort[0], _mediaPort[1], FrameTypesEnum.H264);
             _rtpChannel.OnFrameReady += _rtpChannel_OnFrameReady;
             _rtpChannel.Start();
@@ -152,10 +155,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             _okTag = response.Header.To.ToTag;
             _contact = header.Contact.FirstOrDefault();
             _via = header.Vias;
-            return ackReq;
+            _msgCore.Transport.SendRequest(_msgCore.RemoteEndPoint, ackReq);
         }
 
-      
+
         /// <summary>
         /// 录像点播视频请求
         /// </summary>
@@ -171,7 +174,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             if (_mediaPort == null)
             {
                 _mediaPort = _msgCore.SetMediaPort();
-
             }
             uint startTime = TimeConvert.DateToTimeStamp(beginTime);
             uint stopTime = TimeConvert.DateToTimeStamp(endTime);
@@ -180,13 +182,13 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             int cSeq = CallProperties.CreateNewCSeq();
             string callId = CallProperties.CreateNewCallId();
 
-            //this.Stop();
-            SIPRequest realReq = BackVideoReq(localIp, _mediaPort,startTime,stopTime, fromTag, cSeq, callId);
+            this.Stop();
+            SIPRequest realReq = BackVideoReq(localIp, _mediaPort, startTime, stopTime, fromTag, cSeq, callId);
             _msgCore.Transport.SendRequest(_msgCore.RemoteEndPoint, realReq);
-            //_realTask = new TaskTiming(realReq, _msgCore.Transport);
-            //_msgCore.SendRequestTimeout += _realTask.MessageSendRequestTimeout;
-            //_realTask.OnCloseRTPChannel += Task_OnCloseRTPChannel;
-            //_realTask.Start();
+            _realTask = new TaskTiming(realReq, _msgCore.Transport);
+            _msgCore.SendRequestTimeout += _realTask.MessageSendRequestTimeout;
+            _realTask.OnCloseRTPChannel += Task_OnCloseRTPChannel;
+            _realTask.Start();
         }
 
         /// <summary>
@@ -271,8 +273,12 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// <summary>
         /// 结束实时视频请求
         /// </summary>
-        public void ByeVideoReq()
+        public void ByeVideoReq(CommandType cmdType)
         {
+            if (_cmdType != cmdType)
+            {
+                return;
+            }
             if (_realReqSession == null)
             {
                 OnSIPServiceChange(_deviceName + "-" + _deviceId, SipServiceStatus.Wait);
@@ -356,7 +362,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             media.AddFormatParameterAttribute(psFormat.FormatID, psFormat.Name);
             media.AddFormatParameterAttribute(h264Format.FormatID, h264Format.Name);
             media.Port = mediaPort[0];
-            
+
 
             sdp.Media.Add(media);
 

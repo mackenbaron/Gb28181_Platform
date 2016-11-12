@@ -110,9 +110,22 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
             foreach (var item in devList)
             {
-                ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value);
-                monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
-                MonitorService.Add(item.Key, monitor);
+                for (int i = 0; i < 2; i++)
+                {
+                    CommandType cmdType = CommandType.Unknown;
+                    if (i == 0)
+                    {
+                        cmdType = CommandType.Play;
+                    }
+                    else
+                    {
+                        cmdType = CommandType.Playback;
+                    }
+                    string key = item.Key + cmdType;
+                    ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value, cmdType);
+                    monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
+                    MonitorService.Add(key, monitor);
+                }
             }
         }
 
@@ -154,13 +167,27 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                     {
                         foreach (var cata in catalog.DeviceList.Items)
                         {
-                            lock (MonitorService)
+                            for (int i = 0; i < 2; i++)
                             {
-                                if (!MonitorService.ContainsKey(cata.DeviceID))
+                                CommandType cmdType = CommandType.Unknown;
+                                if (i == 0)
                                 {
-                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name);
+                                    cmdType = CommandType.Play;
+                                }
+                                else
+                                {
+                                    cmdType = CommandType.Playback;
+                                }
+                                string key = cata.DeviceID + cmdType;
+                                lock (MonitorService)
+                                {
+                                    if (MonitorService.ContainsKey(key))
+                                    {
+                                        continue;
+                                    }
+                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name, cmdType);
                                     monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
-                                    MonitorService.Add(cata.DeviceID, monitor);
+                                    MonitorService.Add(key, monitor);
                                 }
                             }
                         }
@@ -198,8 +225,14 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             {
                 if (response.Header.ContentType.ToLower() == "application/sdp")
                 {
-                    SIPRequest ackReq = MonitorService[response.Header.To.ToURI.User].AckRequest(response);
-                    Transport.SendRequest(RemoteEndPoint, ackReq);
+                    CommandType cmdType = CommandType.Unknown;
+                    SDP sdp = SDP.ParseSDPDescription(response.Body);
+                    if (sdp != null)
+                    {
+                        Enum.TryParse<CommandType>(sdp.SessionName, out cmdType);
+                    }
+                    string key = response.Header.To.ToURI.User + cmdType;
+                    MonitorService[key].AckRequest(response, cmdType);
                 }
             }
             else if (response.Status == SIPResponseStatusCodesEnum.BadRequest)  //请求失败

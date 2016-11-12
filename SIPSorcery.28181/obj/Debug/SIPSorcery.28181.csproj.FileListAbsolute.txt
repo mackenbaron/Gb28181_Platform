@@ -9,6 +9,5 @@ F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\log4net.xm
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\Npgsql.xml
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.dll
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.pdb
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.csprojResolveAssemblyReference.cache
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\System.Data.SQLite.dll
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\System.Data.SQLite.xml

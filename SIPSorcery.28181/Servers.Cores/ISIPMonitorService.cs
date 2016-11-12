@@ -1,5 +1,6 @@
 ﻿using SIPSorcery.GB28181.Servers.SIPMessage;
 using SIPSorcery.GB28181.SIP;
+using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace SIPSorcery.GB28181.Servers
         /// <summary>
         /// 取消实时视频请求
         /// </summary>
-        void ByeVideoReq();
+        void ByeVideoReq(CommandType cmdType);
 
         /// <summary>
         /// 录像点播视频请求
@@ -35,7 +36,7 @@ namespace SIPSorcery.GB28181.Servers
         /// </summary>
         /// <param name="response">sip响应</param>
         /// <returns>sip请求</returns>
-        SIPRequest AckRequest(SIPResponse response);
+        void AckRequest(SIPResponse response,CommandType cmdType);
 
         /// <summary>
         /// sip服务状态
@@ -58,5 +59,31 @@ namespace SIPSorcery.GB28181.Servers
         /// 视频流回调完成
         /// </summary>
         event Action<byte[]> OnStreamReady;
+    }
+
+    /// <summary>
+    /// 监控通道
+    /// </summary>
+    public class MonitorChannel
+    {
+        private string _devId;
+
+        public MonitorChannel(string devId)
+        {
+            _devId = devId;
+        }
+
+        public string DevId
+        {
+            get
+            {
+                return _devId;
+            }
+            set
+            {
+                _devId = value;
+            }
+        }
+        public CommandType CmdType { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using log4net;
 using SIPSorcery.GB28181.Net;
 using SIPSorcery.GB28181.Persistence;
+using SIPSorcery.GB28181.Servers;
 using SIPSorcery.GB28181.Servers.SIPMessage;
 using SIPSorcery.GB28181.SIP;
 using SIPSorcery.GB28181.SIP.App;
@@ -182,11 +183,12 @@ namespace Gb28181_Client
             {
                 devItem = item;
             }
-            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
+            string key = devItem.ImageKey + SIPSorcery.GB28181.Sys.XML.CommandType.Play;
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(key))
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].RealVideoReq();
+            _messageDaemon.MessageCore.MonitorService[key].RealVideoReq();
         }
 
         private void btnBye_Click(object sender, EventArgs e)
@@ -196,11 +198,12 @@ namespace Gb28181_Client
             {
                 devItem = item;
             }
-            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
+            string key = devItem.ImageKey + SIPSorcery.GB28181.Sys.XML.CommandType.Play;
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(key))
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].ByeVideoReq();
+            _messageDaemon.MessageCore.MonitorService[key].ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType.Play);
         }
 
         private void btnRecord_Click(object sender, EventArgs e)
@@ -210,14 +213,30 @@ namespace Gb28181_Client
             {
                 devItem = item;
             }
-            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(devItem.ImageKey))
+            string key = devItem.ImageKey + SIPSorcery.GB28181.Sys.XML.CommandType.Playback;
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(key))
             {
                 return;
             }
 
             DateTime startTime = DateTime.Parse(txtStartTime.Text.Trim());
             DateTime stopTime = DateTime.Parse(txtStopTime.Text.Trim());
-            _messageDaemon.MessageCore.MonitorService[devItem.ImageKey].BackVideoReq(startTime, stopTime);
+            _messageDaemon.MessageCore.MonitorService[key].BackVideoReq(startTime, stopTime);
+        }
+
+        private void btnStopRecord_Click(object sender, EventArgs e)
+        {
+            ListViewItem devItem = new ListViewItem();
+            foreach (var item in lvDev.SelectedItems.Cast<ListViewItem>())
+            {
+                devItem = item;
+            }
+            string key = devItem.ImageKey + SIPSorcery.GB28181.Sys.XML.CommandType.Playback;
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(key))
+            {
+                return;
+            }
+            _messageDaemon.MessageCore.MonitorService[key].ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType.Playback);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -267,8 +286,6 @@ namespace Gb28181_Client
             string sdpBody = sdp.ToString();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-        }
+
     }
 }

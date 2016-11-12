@@ -956,7 +956,7 @@
             实时视频请求
             </summary>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.ByeVideoReq">
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType)">
             <summary>
             取消实时视频请求
             </summary>
@@ -968,7 +968,7 @@
             <param name="beginTime">开始时间</param>
             <param name="endTime">结束时间</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse)">
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse,SIPSorcery.GB28181.Sys.XML.CommandType)">
             <summary>
             确认接收实时视频请求
             </summary>
@@ -995,6 +995,11 @@
         <member name="E:SIPSorcery.GB28181.Servers.ISIPMonitorService.OnStreamReady">
             <summary>
             视频流回调完成
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Servers.MonitorChannel">
+            <summary>
+            监控通道
             </summary>
         </member>
         <member name="F:SIPSorcery.GB28181.Servers.Cores.Packet.MediaFrame.nEx">
@@ -1219,7 +1224,7 @@
             </summary>
             <param name="deviceId">设备编码</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse,SIPSorcery.GB28181.Sys.XML.CommandType)">
             <summary>
             确认接收视频请求
             </summary>
@@ -1263,7 +1268,7 @@
             <param name="callId">呼叫编号</param>
             <returns></returns>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.ByeVideoReq">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType)">
             <summary>
             结束实时视频请求
             </summary>
