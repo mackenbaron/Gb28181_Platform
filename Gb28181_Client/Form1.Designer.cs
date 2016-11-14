@@ -32,8 +32,6 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnCatalog = new System.Windows.Forms.Button();
-            this.txtDeviceId = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnReal = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.btnBye = new System.Windows.Forms.Button();
@@ -46,6 +44,7 @@
             this.txtStopTime = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnRecordGet = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnStart
@@ -80,7 +79,7 @@
             // 
             // btnCatalog
             // 
-            this.btnCatalog.Location = new System.Drawing.Point(485, 117);
+            this.btnCatalog.Location = new System.Drawing.Point(485, 75);
             this.btnCatalog.Name = "btnCatalog";
             this.btnCatalog.Size = new System.Drawing.Size(75, 23);
             this.btnCatalog.TabIndex = 3;
@@ -88,27 +87,9 @@
             this.btnCatalog.UseVisualStyleBackColor = true;
             this.btnCatalog.Click += new System.EventHandler(this.btnCatalog_Click);
             // 
-            // txtDeviceId
-            // 
-            this.txtDeviceId.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.txtDeviceId.Location = new System.Drawing.Point(91, 82);
-            this.txtDeviceId.Name = "txtDeviceId";
-            this.txtDeviceId.Size = new System.Drawing.Size(137, 21);
-            this.txtDeviceId.TabIndex = 4;
-            this.txtDeviceId.Text = "66240000012001000001";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 86);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 12);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "远程SIP编码";
-            // 
             // btnReal
             // 
-            this.btnReal.Location = new System.Drawing.Point(485, 164);
+            this.btnReal.Location = new System.Drawing.Point(485, 118);
             this.btnReal.Name = "btnReal";
             this.btnReal.Size = new System.Drawing.Size(75, 23);
             this.btnReal.TabIndex = 8;
@@ -118,7 +99,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(484, 257);
+            this.button1.Location = new System.Drawing.Point(484, 204);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 9;
@@ -128,7 +109,7 @@
             // 
             // btnBye
             // 
-            this.btnBye.Location = new System.Drawing.Point(484, 209);
+            this.btnBye.Location = new System.Drawing.Point(484, 161);
             this.btnBye.Name = "btnBye";
             this.btnBye.Size = new System.Drawing.Size(75, 23);
             this.btnBye.TabIndex = 10;
@@ -142,7 +123,7 @@
             this.devName,
             this.devId});
             this.lvDev.FullRowSelect = true;
-            this.lvDev.Location = new System.Drawing.Point(12, 117);
+            this.lvDev.Location = new System.Drawing.Point(12, 75);
             this.lvDev.MultiSelect = false;
             this.lvDev.Name = "lvDev";
             this.lvDev.Size = new System.Drawing.Size(458, 296);
@@ -162,7 +143,7 @@
             // 
             // btnRecord
             // 
-            this.btnRecord.Location = new System.Drawing.Point(234, 417);
+            this.btnRecord.Location = new System.Drawing.Point(485, 247);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(75, 23);
             this.btnRecord.TabIndex = 12;
@@ -172,7 +153,7 @@
             // 
             // btnStopRecord
             // 
-            this.btnStopRecord.Location = new System.Drawing.Point(234, 457);
+            this.btnStopRecord.Location = new System.Drawing.Point(484, 290);
             this.btnStopRecord.Name = "btnStopRecord";
             this.btnStopRecord.Size = new System.Drawing.Size(75, 23);
             this.btnStopRecord.TabIndex = 13;
@@ -182,7 +163,7 @@
             // 
             // txtStartTime
             // 
-            this.txtStartTime.Location = new System.Drawing.Point(91, 419);
+            this.txtStartTime.Location = new System.Drawing.Point(672, 14);
             this.txtStartTime.Name = "txtStartTime";
             this.txtStartTime.Size = new System.Drawing.Size(137, 21);
             this.txtStartTime.TabIndex = 14;
@@ -190,7 +171,7 @@
             // 
             // txtStopTime
             // 
-            this.txtStopTime.Location = new System.Drawing.Point(91, 457);
+            this.txtStopTime.Location = new System.Drawing.Point(672, 49);
             this.txtStopTime.Name = "txtStopTime";
             this.txtStopTime.Size = new System.Drawing.Size(137, 21);
             this.txtStopTime.TabIndex = 15;
@@ -199,7 +180,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 424);
+            this.label2.Location = new System.Drawing.Point(589, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 12);
             this.label2.TabIndex = 16;
@@ -208,17 +189,28 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 461);
+            this.label3.Location = new System.Drawing.Point(589, 53);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 12);
             this.label3.TabIndex = 17;
             this.label3.Text = "录像结束时间";
             // 
+            // btnRecordGet
+            // 
+            this.btnRecordGet.Location = new System.Drawing.Point(484, 333);
+            this.btnRecordGet.Name = "btnRecordGet";
+            this.btnRecordGet.Size = new System.Drawing.Size(75, 23);
+            this.btnRecordGet.TabIndex = 18;
+            this.btnRecordGet.Text = "录像检索";
+            this.btnRecordGet.UseVisualStyleBackColor = true;
+            this.btnRecordGet.Click += new System.EventHandler(this.btnRecordGet_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(570, 488);
+            this.ClientSize = new System.Drawing.Size(823, 384);
+            this.Controls.Add(this.btnRecordGet);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtStopTime);
@@ -229,8 +221,6 @@
             this.Controls.Add(this.btnBye);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnReal);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.txtDeviceId);
             this.Controls.Add(this.btnCatalog);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnStop);
@@ -251,8 +241,6 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnCatalog;
-        private System.Windows.Forms.TextBox txtDeviceId;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnReal;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnBye;
@@ -265,6 +253,7 @@
         private System.Windows.Forms.TextBox txtStopTime;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnRecordGet;
     }
 }
 

@@ -101,7 +101,6 @@ namespace Gb28181_Client
 
         private void btnCatalog_Click(object sender, EventArgs e)
         {
-            // _messageDaemon.MessageCore.DeviceCatalogQuery(txtDeviceId.Text.Trim());
             _messageDaemon.MessageCore.DeviceCatalogQuery();
         }
 
@@ -286,6 +285,21 @@ namespace Gb28181_Client
             string sdpBody = sdp.ToString();
         }
 
-
+        private void btnRecordGet_Click(object sender, EventArgs e)
+        {
+            DateTime startTime = DateTime.Parse(txtStartTime.Text.Trim());
+            DateTime stopTime = DateTime.Parse(txtStopTime.Text.Trim());
+            ListViewItem devItem = new ListViewItem();
+            foreach (var item in lvDev.SelectedItems.Cast<ListViewItem>())
+            {
+                devItem = item;
+            }
+            string key = devItem.ImageKey + SIPSorcery.GB28181.Sys.XML.CommandType.Playback;
+            if (!_messageDaemon.MessageCore.MonitorService.ContainsKey(key))
+            {
+                return;
+            }
+            _messageDaemon.MessageCore.MonitorService[key].RecordQuery(startTime, stopTime);
+        }
     }
 }

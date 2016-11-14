@@ -225,11 +225,20 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             {
                 if (response.Header.ContentType.ToLower() == "application/sdp")
                 {
-                    CommandType cmdType = CommandType.Unknown;
-                    SDP sdp = SDP.ParseSDPDescription(response.Body);
-                    if (sdp != null)
+                    //CommandType cmdType = CommandType.Unknown;
+                    //logger.Debug(response.Body);
+                    //SDP sdp = SDP.ParseSDPDescription(response.Body);
+
+                    //if (sdp != null)
+                    //{
+                    //    Enum.TryParse<CommandType>(sdp.SessionName, out cmdType);
+                    //}
+
+                    CommandType cmdType = CommandType.Play;
+                    string sessionName = GetSessionName(response.Body);
+                    if (sessionName != null)
                     {
-                        Enum.TryParse<CommandType>(sdp.SessionName, out cmdType);
+                        Enum.TryParse<CommandType>(sessionName, out cmdType);
                     }
                     string key = response.Header.To.ToURI.User + cmdType;
                     MonitorService[key].AckRequest(response, cmdType);
@@ -238,6 +247,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             else if (response.Status == SIPResponseStatusCodesEnum.BadRequest)  //请求失败
             {
                 string msg = "RealVideo 400 " + response.Status;
+                logger.Debug(msg);
                 if (response.Header.Warning != null)
                 {
                     msg += response.Header.Warning;
@@ -264,6 +274,20 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 }
                 BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
             }
+        }
+
+        private string GetSessionName(string body)
+        {
+            string[] text = body.Split('\n');
+            foreach (string item in text)
+            {
+                string[] values = item.Split('=');
+                if (values.Contains("s"))
+                {
+                    return values[1];
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -370,7 +394,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             {
                 CommandType = CommandType.Catalog,
                 DeviceID = RemoteSIPId,
-                SN = new Random().Next(9999)
+                SN = new Random().Next(1,ushort.MaxValue)
             };
             string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
             catalogReq.Body = xmlBody;

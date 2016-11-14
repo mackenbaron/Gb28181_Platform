@@ -300,6 +300,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             header.UserAgent = _msgCore.UserAgent;
             header.Contact = _realReqSession.Header.Contact;
             header.Contact.Clear();
+            header.CSeq = _realReqSession.Header.CSeq + 1;
             header.Contact.Add(_contact);
             byeReq.Header.From = from;
             byeReq.Header = header;
@@ -518,5 +519,53 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             videoPESList.Clear();
         }
         #endregion
+
+
+        public void RecordQuery(DateTime startTime, DateTime endTime)
+        {
+            if (_msgCore.LocalEndPoint == null)
+            {
+                OnSIPServiceChange(_deviceName + "-" + _deviceId, SipServiceStatus.Wait);
+                return;
+            }
+
+
+            this.Stop();
+
+            SIPURI remoteUri = new SIPURI(_deviceId, _msgCore.RemoteEndPoint.ToHost(), "");
+            SIPURI localUri = new SIPURI(_msgCore.LocalSIPId, _msgCore.LocalEndPoint.ToHost(), "");
+            SIPFromHeader from = new SIPFromHeader(null, localUri, CallProperties.CreateNewTag());
+            SIPToHeader to = new SIPToHeader(null, remoteUri, CallProperties.CreateNewTag());
+            SIPRequest recordSearchReq = _msgCore.Transport.GetRequest(SIPMethodsEnum.MESSAGE, remoteUri);
+            SIPContactHeader contactHeader = new SIPContactHeader(null, localUri);
+            recordSearchReq.Header.Contact.Clear();
+            recordSearchReq.Header.Contact.Add(contactHeader);
+
+            recordSearchReq.Header.Allow = null;
+            recordSearchReq.Header.From = from;
+            recordSearchReq.Header.To = to;
+            recordSearchReq.Header.UserAgent = _msgCore.UserAgent;
+            recordSearchReq.Header.CSeq = CallProperties.CreateNewCSeq();
+            recordSearchReq.Header.CallId = CallProperties.CreateNewCallId();
+            recordSearchReq.Header.ContentType = "application/MANSCDP+xml";
+
+            string bTime = startTime.ToString("yyyy-MM-ddTHH:mm:ss");
+            string eTime = endTime.ToString("yyyy-MM-ddTHH:mm:ss");
+            RecordInfoReq record = new RecordInfoReq()
+            {
+                DeviceID = _deviceId,
+                SN = 17403,
+                //new Random().Next(1, ushort.MaxValue),
+                CmdType = CommandType.RecordInfo,
+                Secrecy = 0,
+                StartTime = bTime,
+                EndTime = eTime,
+                Type = "time"
+            };
+
+            string xmlBody = RecordInfoReq.Instance.Save<RecordInfoReq>(record);
+            recordSearchReq.Body = xmlBody;
+            _msgCore.Transport.SendRequest(_msgCore.RemoteEndPoint, recordSearchReq);
+        }
     }
 }

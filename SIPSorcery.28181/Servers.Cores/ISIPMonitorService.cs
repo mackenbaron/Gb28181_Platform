@@ -61,5 +61,12 @@ namespace SIPSorcery.GB28181.Servers
         /// 视频流回调完成
         /// </summary>
         event Action<byte[]> OnStreamReady;
+
+        /// <summary>
+        /// 录像文件检索
+        /// <param name="beginTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        /// </summary>
+        void RecordQuery(DateTime beginTime,DateTime endTime);
     }
 }
