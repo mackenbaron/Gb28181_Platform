@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -45,6 +47,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnRecordGet = new System.Windows.Forms.Button();
+            this.lvRecord = new System.Windows.Forms.ListView();
+            this.columnHeader0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Seq = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // btnStart
@@ -79,7 +88,7 @@
             // 
             // btnCatalog
             // 
-            this.btnCatalog.Location = new System.Drawing.Point(485, 75);
+            this.btnCatalog.Location = new System.Drawing.Point(494, 75);
             this.btnCatalog.Name = "btnCatalog";
             this.btnCatalog.Size = new System.Drawing.Size(75, 23);
             this.btnCatalog.TabIndex = 3;
@@ -89,7 +98,7 @@
             // 
             // btnReal
             // 
-            this.btnReal.Location = new System.Drawing.Point(485, 118);
+            this.btnReal.Location = new System.Drawing.Point(494, 118);
             this.btnReal.Name = "btnReal";
             this.btnReal.Size = new System.Drawing.Size(75, 23);
             this.btnReal.TabIndex = 8;
@@ -99,7 +108,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(484, 204);
+            this.button1.Location = new System.Drawing.Point(493, 204);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 9;
@@ -109,7 +118,7 @@
             // 
             // btnBye
             // 
-            this.btnBye.Location = new System.Drawing.Point(484, 161);
+            this.btnBye.Location = new System.Drawing.Point(493, 161);
             this.btnBye.Name = "btnBye";
             this.btnBye.Size = new System.Drawing.Size(75, 23);
             this.btnBye.TabIndex = 10;
@@ -120,13 +129,14 @@
             // lvDev
             // 
             this.lvDev.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Seq,
             this.devName,
             this.devId});
             this.lvDev.FullRowSelect = true;
             this.lvDev.Location = new System.Drawing.Point(12, 75);
             this.lvDev.MultiSelect = false;
             this.lvDev.Name = "lvDev";
-            this.lvDev.Size = new System.Drawing.Size(458, 296);
+            this.lvDev.Size = new System.Drawing.Size(475, 334);
             this.lvDev.TabIndex = 11;
             this.lvDev.UseCompatibleStateImageBehavior = false;
             this.lvDev.View = System.Windows.Forms.View.Details;
@@ -134,7 +144,7 @@
             // devName
             // 
             this.devName.Text = "设备名称";
-            this.devName.Width = 260;
+            this.devName.Width = 230;
             // 
             // devId
             // 
@@ -143,7 +153,7 @@
             // 
             // btnRecord
             // 
-            this.btnRecord.Location = new System.Drawing.Point(485, 247);
+            this.btnRecord.Location = new System.Drawing.Point(598, 161);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(75, 23);
             this.btnRecord.TabIndex = 12;
@@ -153,7 +163,7 @@
             // 
             // btnStopRecord
             // 
-            this.btnStopRecord.Location = new System.Drawing.Point(484, 290);
+            this.btnStopRecord.Location = new System.Drawing.Point(598, 204);
             this.btnStopRecord.Name = "btnStopRecord";
             this.btnStopRecord.Size = new System.Drawing.Size(75, 23);
             this.btnStopRecord.TabIndex = 13;
@@ -163,24 +173,24 @@
             // 
             // txtStartTime
             // 
-            this.txtStartTime.Location = new System.Drawing.Point(672, 14);
+            this.txtStartTime.Location = new System.Drawing.Point(536, 12);
             this.txtStartTime.Name = "txtStartTime";
             this.txtStartTime.Size = new System.Drawing.Size(137, 21);
             this.txtStartTime.TabIndex = 14;
-            this.txtStartTime.Text = "2016-11-4 8:00:00";
+            this.txtStartTime.Text = "2016-11-15 8:00:00";
             // 
             // txtStopTime
             // 
-            this.txtStopTime.Location = new System.Drawing.Point(672, 49);
+            this.txtStopTime.Location = new System.Drawing.Point(536, 47);
             this.txtStopTime.Name = "txtStopTime";
             this.txtStopTime.Size = new System.Drawing.Size(137, 21);
             this.txtStopTime.TabIndex = 15;
-            this.txtStopTime.Text = "2016-11-4 10:00:00";
+            this.txtStopTime.Text = "2016-11-15 12:00:00";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(589, 19);
+            this.label2.Location = new System.Drawing.Point(453, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 12);
             this.label2.TabIndex = 16;
@@ -189,7 +199,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(589, 53);
+            this.label3.Location = new System.Drawing.Point(453, 51);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 12);
             this.label3.TabIndex = 17;
@@ -197,7 +207,7 @@
             // 
             // btnRecordGet
             // 
-            this.btnRecordGet.Location = new System.Drawing.Point(484, 333);
+            this.btnRecordGet.Location = new System.Drawing.Point(598, 118);
             this.btnRecordGet.Name = "btnRecordGet";
             this.btnRecordGet.Size = new System.Drawing.Size(75, 23);
             this.btnRecordGet.TabIndex = 18;
@@ -205,11 +215,63 @@
             this.btnRecordGet.UseVisualStyleBackColor = true;
             this.btnRecordGet.Click += new System.EventHandler(this.btnRecordGet_Click);
             // 
+            // lvRecord
+            // 
+            this.lvRecord.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.lvRecord.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader0,
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.lvRecord.FullRowSelect = true;
+            this.lvRecord.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem7,
+            listViewItem8});
+            this.lvRecord.Location = new System.Drawing.Point(5, 415);
+            this.lvRecord.MultiSelect = false;
+            this.lvRecord.Name = "lvRecord";
+            this.lvRecord.Size = new System.Drawing.Size(668, 113);
+            this.lvRecord.TabIndex = 19;
+            this.lvRecord.UseCompatibleStateImageBehavior = false;
+            this.lvRecord.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader0
+            // 
+            this.columnHeader0.Text = "序号";
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Tag = "";
+            this.columnHeader1.Text = "设备名称";
+            this.columnHeader1.Width = 200;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "设备编码";
+            this.columnHeader2.Width = 140;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "录像开始时间";
+            this.columnHeader3.Width = 130;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "录像结束时间";
+            this.columnHeader4.Width = 130;
+            // 
+            // Seq
+            // 
+            this.Seq.Text = "序号";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(823, 384);
+            this.ClientSize = new System.Drawing.Size(681, 538);
+            this.Controls.Add(this.lvRecord);
             this.Controls.Add(this.btnRecordGet);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -254,6 +316,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnRecordGet;
+        private System.Windows.Forms.ListView lvRecord;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.ColumnHeader columnHeader0;
+        private System.Windows.Forms.ColumnHeader Seq;
     }
 }
 

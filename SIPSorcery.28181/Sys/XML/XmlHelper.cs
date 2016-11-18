@@ -38,7 +38,7 @@ namespace SIPSorcery.GB28181.Sys.XML
             string xmlBody = r.ReadToEnd();
         }
 
-        public string Serialize<T>(T obj)
+        public virtual string Serialize<T>(T obj)
         {
             var stream = new MemoryStream();
             var xml = new XmlSerializer(typeof(T));

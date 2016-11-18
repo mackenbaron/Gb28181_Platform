@@ -1,4 +1,4 @@
-﻿ //-----------------------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // Filename: RTPFrame.cs
 //
 // Description: Represents a series of RTP packets that combine together to make a single media frame.
@@ -104,9 +104,7 @@ namespace SIPSorcery.GB28181.Net
 
         public void AddRTPPacket(RTPPacket rtpPacket)
         {
-            lock (_packets) {
-                _packets.Add(rtpPacket);
-            }
+            _packets.Add(rtpPacket);
 
             //if (HasMarker && FramePayload == null)
             //{
@@ -114,18 +112,18 @@ namespace SIPSorcery.GB28181.Net
             //}
         }
 
-        public bool IsComplete()
+        public bool IsComplete
         {
-            if(!HasMarker)
+            get
             {
-                return false;
-            }
+                if (!HasMarker)
+                {
+                    return false;
+                }
 
-            // The frame has the marker bit set. Check that there are no missing sequence numbers.
-            uint previousSeqNum = 0;
+                // The frame has the marker bit set. Check that there are no missing sequence numbers.
+                uint previousSeqNum = 0;
 
-            try
-            {
                 foreach (var rtpPacket in _packets.OrderBy(x => x.Header.SequenceNumber))
                 {
                     if (previousSeqNum == 0)
@@ -146,17 +144,12 @@ namespace SIPSorcery.GB28181.Net
                         //payloadPackets.Add(rtpPacket);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                
-               // throw;
-            }
 
-            //return payload.ToArray();
+                //return payload.ToArray();
 
-            //return Mjpeg.ProcessMjpegFrame(payloadPackets);
-            return true;
+                //return Mjpeg.ProcessMjpegFrame(payloadPackets);
+                return true;
+            }
         }
 
         public byte[] GetFramePayload()

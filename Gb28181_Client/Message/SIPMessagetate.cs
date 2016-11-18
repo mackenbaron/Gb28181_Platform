@@ -49,7 +49,7 @@ namespace Gb28181_Client.Message
     /// <summary>
     /// Retrieves application conifguration settings from App.Config.
     /// </summary>
-    public class SIPMessageState:IConfigurationSectionHandler
+    public class SIPMessageState : IConfigurationSectionHandler
     {
         private const string LOGGER_NAME = "siprergistrar";
 
@@ -98,6 +98,11 @@ namespace Gb28181_Client.Message
                 {
                     m_sipRegistrarNode = (XmlNode)AppState.GetSection(SIPREGISTRAR_CONFIGNODE_NAME);
                 }
+
+                //XmlDocument doc = new XmlDocument();
+                //string xml = AppDomain.CurrentDomain.BaseDirectory + "Config\\SipSocket.xml";
+                //doc.Load(xml);
+                //m_sipRegistrarNode = doc.SelectNodes("sipServer")[0];
 
                 if (m_sipRegistrarNode == null)
                 {

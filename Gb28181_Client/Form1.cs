@@ -26,6 +26,7 @@ namespace Gb28181_Client
 {
     public delegate void SetSIPServiceText(string msg, SipServiceStatus state);
     public delegate void SetCatalogText(Catalog cata);
+    public delegate void SetRecordText(RecordInfo record);
 
     public partial class Form1 : Form
     {
@@ -41,9 +42,17 @@ namespace Gb28181_Client
         private static string m_sipRegistrarStorageConnStr;
         private SIPMessageDaemon _messageDaemon;
 
+        event Action<Packet> OnPacketReady;
+
         public Form1()
         {
             InitializeComponent();
+            this.OnPacketReady += Form1_OnPacketReady;
+        }
+
+        void Form1_OnPacketReady(Packet packet)
+        {
+            logger.Debug(packet.TimeStamp + "\t" + packet.SeqNumber + "\t" + packet.Length);
         }
 
         private void Initialize()
@@ -66,8 +75,8 @@ namespace Gb28181_Client
             SIPAssetPersistor<SIPRegistrarBinding> sipRegistrarBindingPersistor = SIPAssetPersistorFactory<SIPRegistrarBinding>.CreateSIPAssetPersistor(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr, m_sipRegistrarBindingsXMLFilename);
 
             Dictionary<string, string> devList = new Dictionary<string, string>();
-            devList.Add("34020000001320000011", "大华151");
-            devList.Add("34020000001320000012", "大华20");
+            //devList.Add("34020000001320000011", "大华151");
+            //devList.Add("34020000001320000012", "大华20");
 
             foreach (var item in devList)
             {
@@ -85,9 +94,12 @@ namespace Gb28181_Client
             _messageDaemon.Start();
             _messageDaemon.MessageCore.OnSIPServiceChanged += m_msgCore_SIPInitHandle;
             _messageDaemon.MessageCore.OnCatalogReceived += m_msgCore_OnCatalogReceived;
+            _messageDaemon.MessageCore.OnRecordInfoReceived += MessageCore_OnRecordInfoReceived;
             lblStatus.Text = "sip服务已启动。。。";
             lblStatus.ForeColor = Color.FromArgb(0, 192, 0);
         }
+
+
 
         private void btnStop_Click(object sender, EventArgs e)
         {
@@ -101,6 +113,8 @@ namespace Gb28181_Client
 
         private void btnCatalog_Click(object sender, EventArgs e)
         {
+            _devSN = 1;
+            lvDev.Items.Clear();
             _messageDaemon.MessageCore.DeviceCatalogQuery();
         }
 
@@ -117,6 +131,35 @@ namespace Gb28181_Client
             }
         }
 
+        private void MessageCore_OnRecordInfoReceived(RecordInfo record)
+        {
+            if (lvRecord.InvokeRequired)
+            {
+                SetRecordText recordText = new SetRecordText(SetRecord);
+                this.Invoke(recordText, record);
+            }
+            else
+            {
+                SetRecord(record);
+            }
+        }
+
+        int _recordSN = 1;
+        int _devSN = 1;
+        /// <summary>
+        /// 设置录像文件
+        /// </summary>
+        /// <param name="record"></param>
+        private void SetRecord(RecordInfo record)
+        {
+            foreach (var item in record.RecordItems.Items)
+            {
+                ListViewItem lvItem = new ListViewItem(new string[] { _recordSN.ToString(), record.Name, item.DeviceID, item.StartTime, item.EndTime });
+                lvRecord.Items.Add(lvItem);
+                _recordSN++;
+            }
+        }
+
         /// <summary>
         /// 设置设备目录
         /// </summary>
@@ -125,7 +168,7 @@ namespace Gb28181_Client
         {
             foreach (Catalog.Item item in cata.DeviceList.Items)
             {
-                ListViewItem lvItem = new ListViewItem(new string[] { item.Name, item.DeviceID });
+                ListViewItem lvItem = new ListViewItem(new string[] { _devSN.ToString(), item.Name, item.DeviceID });
                 lvItem.ImageKey = item.DeviceID;
                 int lvTotal = 0;
                 foreach (var v in lvDev.Items.Cast<ListViewItem>())
@@ -140,6 +183,7 @@ namespace Gb28181_Client
                 {
                     continue;
                 }
+                _devSN++;
                 lvDev.Items.Add(lvItem);
             }
         }
@@ -202,7 +246,7 @@ namespace Gb28181_Client
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[key].ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType.Play);
+            _messageDaemon.MessageCore.MonitorService[key].ByeVideoReq();
         }
 
         private void btnRecord_Click(object sender, EventArgs e)
@@ -235,58 +279,66 @@ namespace Gb28181_Client
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[key].ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType.Playback);
+            _messageDaemon.MessageCore.MonitorService[key].ByeVideoReq();
         }
+
+        List<Packet> _firstPackets = new List<Packet>();
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string s = "ss" + SIPSorcery.GB28181.Sys.XML.CommandType.Playback;
-            CatalogQuery query = new CatalogQuery()
+            Queue<Packet> packets = new Queue<Packet>();
+            FileInfo file = new FileInfo("D:\\test.txt");
+            FileStream fStream = file.OpenRead();
+            byte[] buffer = new byte[fStream.Length];
+            fStream.Read(buffer, 0, buffer.Length);
+            string fileText = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+            string[] lineText = fileText.Split('\n');
+            foreach (var line in lineText)
             {
-                CommandType = SIPSorcery.GB28181.Sys.XML.CommandType.Catalog,
-                DeviceID = "34020000001320000001",
-                SN = 1109
-            };
-            string xml = CatalogQuery.Instance.Save<CatalogQuery>(query);
-            DateTime date = new DateTime(2016, 11, 1, 10, 0, 0);
-
-            uint startTime = TimeConvert.DateToTimeStamp(date);
-            uint stopTime = TimeConvert.DateToTimeStamp(date.AddHours(2));
-            string localIp = "192.168.10.156";
-
-            SDPConnectionInformation sdpConn = new SDPConnectionInformation(localIp);
-
-            SDP sdp = new SDP();
-            sdp.Version = 0;
-            sdp.SessionId = "0";
-            sdp.Username = "34010000002000000001";
-            sdp.SessionName = SIPSorcery.GB28181.Sys.XML.CommandType.Playback.ToString();
-            sdp.Connection = sdpConn;
-            sdp.Timing = startTime + " " + stopTime;
-            sdp.Address = localIp;
-
-            SDPMediaFormat psFormat = new SDPMediaFormat(SDPMediaFormatsEnum.PS);
-            psFormat.IsStandardAttribute = false;
-            SDPMediaFormat h264Format = new SDPMediaFormat(SDPMediaFormatsEnum.H264);
-            h264Format.IsStandardAttribute = false;
-            SDPMediaAnnouncement media = new SDPMediaAnnouncement();
-
-            media.Media = SDPMediaTypesEnum.video;
-
-            media.MediaFormats.Add(psFormat);
-            media.MediaFormats.Add(h264Format);
-            media.AddExtra("a=recvonly");
-            media.AddFormatParameterAttribute(psFormat.FormatID, psFormat.Name);
-            media.AddFormatParameterAttribute(h264Format.FormatID, h264Format.Name);
-            media.Port = 10000;
-
-            sdp.Media.Add(media);
-
-            string sdpBody = sdp.ToString();
+                string[] text = line.Split('\t');
+                if (text.Length == 1)
+                {
+                    break;
+                }
+                Packet pack = new Packet()
+                {
+                    TimeStamp = uint.Parse(text[0]),
+                    SeqNumber = int.Parse(text[1]),
+                    Length = int.Parse(text[2])
+                };
+                packets.Enqueue(pack);
+            }
+            while (packets.Count > 0)
+            {
+                Packet packet = null;
+                lock (packets)
+                {
+                    packet = packets.Dequeue();
+                }
+                if (packet != null)
+                {
+                    lock (_firstPackets)
+                    {
+                        _firstPackets.Add(packet);
+                        _firstPackets = _firstPackets.OrderBy(d => d.SeqNumber).ToList();
+                    }
+                }
+                if (_firstPackets.Count > 30)
+                {
+                    lock (_firstPackets)
+                    {
+                        Packet pack = _firstPackets.FirstOrDefault();
+                        _firstPackets.Remove(pack);
+                        OnPacketReady(pack);
+                    }
+                }
+                Thread.Sleep(1);
+            }
         }
-
         private void btnRecordGet_Click(object sender, EventArgs e)
         {
+            _recordSN = 1;
+            lvRecord.Items.Clear();
             DateTime startTime = DateTime.Parse(txtStartTime.Text.Trim());
             DateTime stopTime = DateTime.Parse(txtStopTime.Text.Trim());
             ListViewItem devItem = new ListViewItem();
@@ -299,7 +351,21 @@ namespace Gb28181_Client
             {
                 return;
             }
-            _messageDaemon.MessageCore.MonitorService[key].RecordQuery(startTime, stopTime);
+            _messageDaemon.MessageCore.MonitorService[key].RecordFileQuery(startTime, stopTime);
         }
+    }
+
+    public class Packet
+    {
+        public uint TimeStamp
+        {
+            get;
+            set;
+        }
+
+        public int SeqNumber { get; set; }
+
+        public int Length { get; set; }
+
     }
 }

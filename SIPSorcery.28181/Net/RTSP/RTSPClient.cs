@@ -438,7 +438,7 @@ namespace SIPSorcery.GB28181.Net
                                     frame.AddRTPPacket(rtpPacket);
                                 }
 
-                                if (frame.IsComplete())
+                                if (frame.IsComplete)
                                 {
                                     // The frame is ready for handing over to the UI.
                                     byte[] imageBytes = frame.GetFramePayload();

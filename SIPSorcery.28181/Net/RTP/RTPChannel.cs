@@ -63,7 +63,7 @@ namespace SIPSorcery.GB28181.Net
         private const int RTP_TIMEOUT_SECONDS = 60;             // If no RTP pakcets are received during this interval then assume the connection has failed.
 
         private const int RFC_2435_FREQUENCY_BASELINE = 90000;
-        private const int RTP_MAX_PAYLOAD = 1400; //1452;
+        private const int RTP_MAX_PAYLOAD = 1500; //1452;
         private const int RECEIVE_BUFFER_SIZE = 2048;
         private const int MEDIA_PORT_START = 10000;             // Arbitrary port number to start allocating RTP and control ports from.
         private const int MEDIA_PORT_END = 40000;               // Arbitrary port number that RTP and control ports won't be allocated above.
@@ -186,6 +186,7 @@ namespace SIPSorcery.GB28181.Net
         public event Action<byte[], Socket> OnControlDataReceived;
         public event Action OnControlSocketDisconnected;
         public event Action<RTPFrame> OnFrameReady;
+        public event Action<RTPPacket> OnPacketReady;
 
         public RTPChannel()
         {
@@ -330,7 +331,7 @@ namespace SIPSorcery.GB28181.Net
             }
         }
 
-        
+
 
         private void RTCPReceive()
         {
@@ -416,7 +417,7 @@ namespace SIPSorcery.GB28181.Net
             {
                 Thread.CurrentThread.Name = "rtpchanrecv-" + _rtpPort;
 
-                byte[] buffer = new byte[2048];
+                byte[] buffer = new byte[2048 * 4];
 
                 while (!_isClosed)
                 {
@@ -578,6 +579,8 @@ namespace SIPSorcery.GB28181.Net
             }
         }
 
+        List<RTPPacket> _seqnumberPackets = new List<RTPPacket>();
+
         private void ProcessRTPPackets()
         {
             try
@@ -647,6 +650,22 @@ namespace SIPSorcery.GB28181.Net
                             }
                             else
                             {
+                                lock (_seqnumberPackets)
+                                {
+                                    _seqnumberPackets.Add(rtpPacket);
+                                    _seqnumberPackets = _seqnumberPackets.OrderBy(p => p.Header.SequenceNumber).ToList();
+
+                                    if (_seqnumberPackets.Count > 100)
+                                    {
+                                        RTPPacket packet = _seqnumberPackets.FirstOrDefault();
+                                        //logger.Debug(packet.Header.Timestamp + "\t" + packet.Header.SequenceNumber + "\t" + packet.Payload.Length);
+                                        if (OnPacketReady != null)
+                                        {
+                                            OnPacketReady(packet);
+                                            _seqnumberPackets.Remove(packet);
+                                        }
+                                    }
+                                }
                                 //while (_frames.Count > MAX_FRAMES_QUEUE_LENGTH)
                                 //{
                                 //    var oldestFrame = _frames.OrderBy(x => x.Timestamp).First();
@@ -663,55 +682,55 @@ namespace SIPSorcery.GB28181.Net
                                 //    // For a VP8 packet only the Payload descriptor part of the header is not part of the encoded bit stream.
                                 //    frameHeaderLength = vp8Header.PayloadDescriptorLength;
                                 //}
-                                lock (_frames)
-                                {
-                                    var frame = _frames.Where(x => x.Timestamp == rtpPacket.Header.Timestamp).FirstOrDefault();
+                                //lock (_frames)
+                                //{
+                                //    var frame = _frames.Where(x => x.Timestamp == rtpPacket.Header.Timestamp).FirstOrDefault();
 
-                                    if (frame == null)
-                                    {
-                                        frame = new RTPFrame() { Timestamp = rtpPacket.Header.Timestamp, HasMarker = rtpPacket.Header.MarkerBit == 1, FrameType = _frameType };
-                                        frame.AddRTPPacket(rtpPacket);
-                                        _frames.Add(frame);
-                                    }
-                                    else
-                                    {
-                                        frame.HasMarker = rtpPacket.Header.MarkerBit == 1;
-                                        frame.AddRTPPacket(rtpPacket);
-                                    }
+                                //    if (frame == null)
+                                //    {
+                                //        frame = new RTPFrame() { Timestamp = rtpPacket.Header.Timestamp, HasMarker = rtpPacket.Header.MarkerBit == 1, FrameType = _frameType };
+                                //        frame.AddRTPPacket(rtpPacket);
+                                //        _frames.Add(frame);
+                                //    }
+                                //    else
+                                //    {
+                                //        frame.HasMarker = rtpPacket.Header.MarkerBit == 1;
+                                //        frame.AddRTPPacket(rtpPacket);
+                                //    }
 
-                                    if (frame.IsComplete())
-                                    {
-                                        // The frame is ready for handing over to the UI.
-                                        byte[] imageBytes = frame.GetFramePayload();
+                                //    if (frame.IsComplete)
+                                //    {
+                                //        // The frame is ready for handing over to the UI.
+                                //        byte[] imageBytes = frame.GetFramePayload();
 
-                                        _lastFrameSize = imageBytes.Length;
-                                        _framesSinceLastCalc++;
+                                //        _lastFrameSize = imageBytes.Length;
+                                //        _framesSinceLastCalc++;
 
-                                        _lastCompleteFrameTimestamp = rtpPacket.Header.Timestamp;
-                                        //System.Diagnostics.Debug.WriteLine("Frame ready " + frame.Timestamp + ", sequence numbers " + frame.StartSequenceNumber + " to " + frame.EndSequenceNumber + ",  payload length " + imageBytes.Length + ".");
-                                        _frames.Remove(frame);
+                                //        _lastCompleteFrameTimestamp = rtpPacket.Header.Timestamp;
+                                //        //System.Diagnostics.Debug.WriteLine("Frame ready " + frame.Timestamp + ", sequence numbers " + frame.StartSequenceNumber + " to " + frame.EndSequenceNumber + ",  payload length " + imageBytes.Length + ".");
+                                //        _frames.Remove(frame);
 
-                                        // Also remove any earlier frames as we don't care about anything that's earlier than the current complete frame.
-                                        foreach (var oldFrame in _frames.Where(x => x.Timestamp <= rtpPacket.Header.Timestamp).ToList())
-                                        {
-                                            System.Diagnostics.Debug.WriteLine("Discarding old frame for timestamp " + oldFrame.Timestamp + ".");
-                                            _frames.Remove(oldFrame);
-                                        }
+                                //        // Also remove any earlier frames as we don't care about anything that's earlier than the current complete frame.
+                                //        foreach (var oldFrame in _frames.Where(x => x.Timestamp <= rtpPacket.Header.Timestamp).ToList())
+                                //        {
+                                //            System.Diagnostics.Debug.WriteLine("Discarding old frame for timestamp " + oldFrame.Timestamp + ".");
+                                //            _frames.Remove(oldFrame);
+                                //        }
 
-                                        if (OnFrameReady != null)
-                                        {
-                                            try
-                                            {
-                                                //System.Diagnostics.Debug.WriteLine("RTP frame ready for timestamp " + frame.Timestamp + ".");
-                                                OnFrameReady(frame);
-                                            }
-                                            catch (Exception frameReadyExcp)
-                                            {
-                                                logger.Error("Exception RTPChannel.ProcessRTPPackets OnFrameReady. " + frameReadyExcp);
-                                            }
-                                        }
-                                    }
-                                }
+                                //        if (OnFrameReady != null)
+                                //        {
+                                //            try
+                                //            {
+                                //                //System.Diagnostics.Debug.WriteLine("RTP frame ready for timestamp " + frame.Timestamp + ".");
+                                //                OnFrameReady(frame);
+                                //            }
+                                //            catch (Exception frameReadyExcp)
+                                //            {
+                                //                logger.Error("Exception RTPChannel.ProcessRTPPackets OnFrameReady. " + frameReadyExcp);
+                                //            }
+                                //        }
+                                //    }
+                                //}
                             }
                         }
                     }

@@ -50,10 +50,10 @@
 // Aaron Clauson
 //-----------------------------------------------------------------------------
 
+using SIPSorcery.GB28181.Sys;
 using System;
 using System.Collections;
 using System.Net;
-using SIPSorcery.GB28181.Sys;
 
 namespace SIPSorcery.GB28181.Net
 {

@@ -19,8 +19,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using SIPSorcery.GB28181.Sys;
 using log4net;
+using SIPSorcery.GB28181.Sys;
 
 #if UNITTEST
 using NUnit.Framework;

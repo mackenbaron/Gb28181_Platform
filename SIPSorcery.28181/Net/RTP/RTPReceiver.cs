@@ -12,31 +12,30 @@
 
 using System;
 using System.Net;
-using BlueFace.VoIP.Net;
 
 #if UNITTEST
 using NUnit.Framework;
 #endif
 
-namespace BlueFace.VoIP.Net.RTP
+namespace SIPSorcery.GB28181.Net
 {
-	public class RTPReceiver
-	{
-		public RTPSink RTPDestSink = null;
-		public IPEndPoint RTPDestEndPoint = null;
+    //public class RTPReceiver
+    //{
+    //    public RTPSink RTPDestSink = null;
+    //    public IPEndPoint RTPDestEndPoint = null;
 		
-		public RTPReceiver(RTPSink rtpSink, IPEndPoint dstEndPoint)
-		{
-			RTPDestSink = rtpSink;
-			RTPDestEndPoint = dstEndPoint;
-		}
+    //    public RTPReceiver(RTPSink rtpSink, IPEndPoint dstEndPoint)
+    //    {
+    //        RTPDestSink = rtpSink;
+    //        RTPDestEndPoint = dstEndPoint;
+    //    }
 
-		public void Receive(byte[] buffer)
-		{
-			if(RTPDestSink != null && RTPDestEndPoint != null)
-			{
-				RTPDestSink.Send(RTPDestEndPoint, buffer);
-			}
-		}
-	}
+    //    public void Receive(byte[] buffer)
+    //    {
+    //        if(RTPDestSink != null && RTPDestEndPoint != null)
+    //        {
+    //            RTPDestSink.Send(RTPDestEndPoint, buffer);
+    //        }
+    //    }
+    //}
 }

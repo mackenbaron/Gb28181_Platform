@@ -110,6 +110,7 @@
     <Compile Include="Net\RTP\RTPHeader.cs" />
     <Compile Include="Net\RTP\RTPPacket.cs" />
     <Compile Include="Net\RTP\RTPPayloadTypes.cs" />
+    <Compile Include="Net\RTP\RTPReceiver.cs" />
     <Compile Include="Net\RTP\RTPSink.cs" />
     <Compile Include="Net\RTP\RTPVP8Header.cs" />
     <Compile Include="Net\RTSP\AssemblyStreamState.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Sys\XML\CommandType.cs" />
     <Compile Include="Sys\XML\KeepAlive.cs" />
     <Compile Include="Sys\XML\RecordInfo.cs" />
+    <Compile Include="Sys\XML\SipSocket.cs" />
     <Compile Include="Sys\XML\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup />

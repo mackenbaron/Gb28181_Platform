@@ -11,20 +11,20 @@ namespace SIPSorcery.GB28181.Sys.XML
     /// 录像文件查询
     /// </summary>
     [XmlRoot("Query")]
-    public class RecordInfoReq : XmlHelper<RecordInfoReq>
+    public class RecordQuery : XmlHelper<RecordQuery>
     {
-        private static RecordInfoReq _instance;
+        private static RecordQuery _instance;
 
         /// <summary>
         /// 以单例模式访问
         /// </summary>
-        public static RecordInfoReq Instance
+        public static RecordQuery Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new RecordInfoReq();
+                    _instance = new RecordQuery();
                 }
                 return _instance;
             }
@@ -92,23 +92,23 @@ namespace SIPSorcery.GB28181.Sys.XML
     }
 
     /// <summary>
-    /// 
+    /// 录像信息
     /// </summary>
     [XmlRoot("Response")]
-    public class RecordInfoRes : XmlHelper<RecordInfoRes>
+    public class RecordInfo : XmlHelper<RecordInfo>
     {
-        private static RecordInfoRes _instance;
+        private static RecordInfo _instance;
 
         /// <summary>
         /// 以单例模式访问
         /// </summary>
-        public static RecordInfoRes Instance
+        public static RecordInfo Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new RecordInfoRes();
+                    _instance = new RecordInfo();
                 }
                 return _instance;
             }

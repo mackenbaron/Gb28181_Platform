@@ -19,8 +19,8 @@ namespace SIPSorcery.GB28181.Sys
         /// <returns></returns>
         public static uint DateToTimeStamp(DateTime date)
         {
-            //DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
-            DateTime startTime = new DateTime(1970, 1, 1);
+            DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+            //DateTime startTime = new DateTime(1970, 1, 1);
             return (uint)(date - startTime).TotalSeconds;
         }
 
@@ -32,7 +32,8 @@ namespace SIPSorcery.GB28181.Sys
         /// <returns></returns>
         public static DateTime TimeStampToDate(uint timestamp)
         {
-            return new DateTime(1970, 1, 1).AddSeconds(timestamp);
+            return TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1)).AddSeconds(timestamp);
+            //return new DateTime(1970, 1, 1).AddSeconds(timestamp);
         }
     }
 }

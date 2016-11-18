@@ -22,22 +22,14 @@ namespace SIPSorcery.GB28181.Servers
         /// <summary>
         /// 取消实时视频请求
         /// </summary>
-        void ByeVideoReq(CommandType cmdType);
-
-        /// <summary>
-        /// 录像点播视频请求
-        /// </summary>
-        /// <param name="beginTime">开始时间</param>
-        /// <param name="endTime">结束时间</param>
-        void BackVideoReq(DateTime beginTime, DateTime endTime);
+        void ByeVideoReq();
 
         /// <summary>
         /// 确认接收实时视频请求
         /// </summary>
         /// <param name="response">sip响应</param>
-        /// <param name="cmdType">视频类型(直播/点播)</param>
         /// <returns>sip请求</returns>
-        void AckRequest(SIPResponse response,CommandType cmdType);
+        void AckRequest(SIPResponse response);
 
         /// <summary>
         /// sip服务状态
@@ -52,7 +44,7 @@ namespace SIPSorcery.GB28181.Servers
         /// <summary>
         /// 失败的请求
         /// </summary>
-        /// <param name="response">失败消息</param>
+        /// <param name="msg">失败消息</param>
         /// <param name="callId">呼叫编号</param>
         /// <returns></returns>
         void BadRequest(string msg,string callId);
@@ -67,6 +59,33 @@ namespace SIPSorcery.GB28181.Servers
         /// <param name="beginTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
         /// </summary>
-        void RecordQuery(DateTime beginTime,DateTime endTime);
+        void RecordFileQuery(DateTime beginTime,DateTime endTime);
+
+        /// <summary>
+        /// 录像点播视频请求
+        /// </summary>
+        /// <param name="beginTime">开始时间</param>
+        /// <param name="endTime">结束时间</param>
+        void BackVideoReq(DateTime beginTime, DateTime endTime);
+        /// <summary>
+        /// 录像点播视频播放速度控制请求
+        /// </summary>
+        /// <param name="scale">播放快进比例</param>
+        /// <param name="range">视频播放时间段</param>
+        void BackVideoPlaySpeedControlReq(string scale, DateTime range);
+        /// <summary>
+        /// 录像点播视频继续播放控制请求
+        /// </summary>
+        void BackVideoContinuePlayingControlReq();
+        /// <summary>
+        /// 录像点播视频暂停控制请求
+        /// </summary>
+        void BackVideoPauseControlReq();
+        /// <summary>
+        /// 录像点播视频停止播放控制请求
+        /// </summary>
+        void BackVideoStopPlayingControlReq();
+
+        event Action OnBadRequest;
     }
 }

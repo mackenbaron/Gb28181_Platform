@@ -85,6 +85,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// </summary>
         public event Action<Catalog> OnCatalogReceived;
         /// <summary>
+        /// 录像文件接收
+        /// </summary>
+        public event Action<RecordInfo> OnRecordInfoReceived;
+        /// <summary>
         /// 消息发送超时
         /// </summary>
         public event Action<SIPResponse> SendRequestTimeout;
@@ -122,7 +126,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                         cmdType = CommandType.Playback;
                     }
                     string key = item.Key + cmdType;
-                    ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value, cmdType);
+                    ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value);
                     monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
                     MonitorService.Add(key, monitor);
                 }
@@ -146,7 +150,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             else if (request.Method == SIPMethodsEnum.MESSAGE)
             {
                 KeepAlive keepAlive = KeepAlive.Instance.Read(request.Body);
-                if (keepAlive != null)  //心跳
+                if (keepAlive != null && keepAlive.CmdType == CommandType.Keepalive)  //心跳
                 {
                     if (!_initSIP)
                     {
@@ -160,10 +164,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
                     OnSIPServiceChange(RemoteSIPId, SipServiceStatus.Complete);
                 }
-                else   //目录检索
+                else
                 {
                     Catalog catalog = Catalog.Instance.Read(request.Body);
-                    if (catalog != null)
+                    if (catalog != null && catalog.CmdType == CommandType.Catalog)  //设备目录
                     {
                         foreach (var cata in catalog.DeviceList.Items)
                         {
@@ -185,13 +189,24 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                                     {
                                         continue;
                                     }
-                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name, cmdType);
+                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name);
                                     monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
                                     MonitorService.Add(key, monitor);
                                 }
                             }
                         }
-                        OnCatalogReceive(catalog);
+                        if (OnCatalogReceived != null)
+                        {
+                            OnCatalogReceived(catalog);
+                        }
+                    }
+                    RecordInfo record = RecordInfo.Instance.Read(request.Body);
+                    if (record != null && record.CmdType == CommandType.RecordInfo)  //录像检索
+                    {
+                        if (OnRecordInfoReceived != null)
+                        {
+                            OnRecordInfoReceived(record);
+                        }
                     }
                 }
                 SIPResponse msgRes = GetResponse(localSIPEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
@@ -241,7 +256,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                         Enum.TryParse<CommandType>(sessionName, out cmdType);
                     }
                     string key = response.Header.To.ToURI.User + cmdType;
-                    MonitorService[key].AckRequest(response, cmdType);
+                    MonitorService[key].AckRequest(response);
                 }
             }
             else if (response.Status == SIPResponseStatusCodesEnum.BadRequest)  //请求失败
@@ -332,18 +347,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             }
         }
 
-        public void OnCatalogReceive(Catalog cata)
-        {
-            Action<Catalog> action = OnCatalogReceived;
-            if (action == null) return;
-
-            foreach (Action<Catalog> handler in action.GetInvocationList())
-            {
-                try { handler(cata); }
-                catch { continue; }
-            }
-        }
-
         private SIPResponse GetResponse(SIPEndPoint localSIPEndPoint, SIPEndPoint remoteEndPoint, SIPResponseStatusCodesEnum responseCode, string reasonPhrase, SIPRequest request)
         {
             try
@@ -394,7 +397,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             {
                 CommandType = CommandType.Catalog,
                 DeviceID = RemoteSIPId,
-                SN = new Random().Next(1,ushort.MaxValue)
+                SN = new Random().Next(1, ushort.MaxValue)
             };
             string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
             catalogReq.Body = xmlBody;

@@ -956,24 +956,16 @@
             实时视频请求
             </summary>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType)">
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.ByeVideoReq">
             <summary>
             取消实时视频请求
             </summary>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.BackVideoReq(System.DateTime,System.DateTime)">
-            <summary>
-            录像点播视频请求
-            </summary>
-            <param name="beginTime">开始时间</param>
-            <param name="endTime">结束时间</param>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse,SIPSorcery.GB28181.Sys.XML.CommandType)">
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse)">
             <summary>
             确认接收实时视频请求
             </summary>
             <param name="response">sip响应</param>
-            <param name="cmdType">视频类型(直播/点播)</param>
             <returns>sip请求</returns>
         </member>
         <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.Stop">
@@ -985,15 +977,44 @@
             <summary>
             失败的请求
             </summary>
-            <param name="response">失败消息</param>
+            <param name="msg">失败消息</param>
             <param name="callId">呼叫编号</param>
             <returns></returns>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.RecordQuery(System.DateTime,System.DateTime)">
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.RecordFileQuery(System.DateTime,System.DateTime)">
             <summary>
             录像文件检索
             <param name="beginTime">开始时间</param>
             <param name="endTime">结束时间</param>
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.BackVideoReq(System.DateTime,System.DateTime)">
+            <summary>
+            录像点播视频请求
+            </summary>
+            <param name="beginTime">开始时间</param>
+            <param name="endTime">结束时间</param>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.BackVideoPlaySpeedControlReq(System.String,System.DateTime)">
+            <summary>
+            录像点播视频播放速度控制请求
+            </summary>
+            <param name="scale">播放快进比例</param>
+            <param name="range">视频播放时间段</param>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.BackVideoContinuePlayingControlReq">
+            <summary>
+            录像点播视频继续播放控制请求
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.BackVideoPauseControlReq">
+            <summary>
+            录像点播视频暂停控制请求
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.BackVideoStopPlayingControlReq">
+            <summary>
+            录像点播视频停止播放控制请求
             </summary>
         </member>
         <member name="E:SIPSorcery.GB28181.Servers.ISIPMonitorService.OnSIPServiceChanged">
@@ -1215,6 +1236,11 @@
             设备目录接收
             </summary>
         </member>
+        <member name="E:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.OnRecordInfoReceived">
+            <summary>
+            录像文件接收
+            </summary>
+        </member>
         <member name="E:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.SendRequestTimeout">
             <summary>
             消息发送超时
@@ -1236,19 +1262,12 @@
             </summary>
             <param name="deviceId">设备编码</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse,SIPSorcery.GB28181.Sys.XML.CommandType)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.AckRequest(SIPSorcery.GB28181.SIP.SIPResponse)">
             <summary>
             确认接收视频请求
             </summary>
             <param name="response">响应消息</param>
             <returns></returns>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.DateTime,System.DateTime)">
-            <summary>
-            录像点播视频请求
-            </summary>
-            <param name="beginTime">开始时间</param>
-            <param name="endTime">结束时间</param>
         </member>
         <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BadRequest(System.String,System.String)">
             <summary>
@@ -1268,20 +1287,7 @@
             <param name="callId">呼叫编号</param>
             <returns></returns>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.String,System.Int32[],System.UInt32,System.UInt32,System.String,System.Int32,System.String)">
-            <summary>
-            录像点播请求
-            </summary>
-            <param name="localIp">本地ip</param>
-            <param name="mediaPort">端口号</param>
-            <param name="startTime">开始时间</param>
-            <param name="stopTime">结束时间</param>
-            <param name="fromTag">from tag</param>
-            <param name="cSeq">序号</param>
-            <param name="callId">呼叫编号</param>
-            <returns></returns>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.ByeVideoReq(SIPSorcery.GB28181.Sys.XML.CommandType)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.ByeVideoReq">
             <summary>
             结束实时视频请求
             </summary>
@@ -1299,19 +1305,119 @@
             <param name="mediaPort">rtp/rtcp媒体端口(10000/10001)</param>
             <returns></returns>
         </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.SetSubject">
+            <summary>
+            设置sip主题
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.DateTime,System.DateTime)">
+            <summary>
+            录像点播视频请求
+            </summary>
+            <param name="beginTime">开始时间</param>
+            <param name="endTime">结束时间</param>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.String,System.Int32[],System.UInt32,System.UInt32,System.String,System.Int32,System.String)">
+            <summary>
+            录像点播请求
+            </summary>
+            <param name="localIp">本地ip</param>
+            <param name="mediaPort">端口号</param>
+            <param name="startTime">开始时间</param>
+            <param name="stopTime">结束时间</param>
+            <param name="fromTag">from tag</param>
+            <param name="cSeq">序号</param>
+            <param name="callId">呼叫编号</param>
+            <returns></returns>
+        </member>
         <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.SetMediaReq(System.String,System.Int32[],System.UInt32,System.UInt32)">
             <summary>
             设置媒体参数请求(回放)
             </summary>
             <param name="localIp">本地ip</param>
-            <param name="mediaPort">rtp/rtcp媒体端口(10002/10003)</param>
+            <param name="mediaPort">rtp/rtcp媒体端口(10000/10001)</param>
             <param name="startTime">录像开始时间</param>
             <param name="stopTime">录像结束数据</param>
             <returns></returns>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.SetSubject">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoStopPlayingControlReq">
             <summary>
-            设置sip主题
+            结束录像点播视频请求
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoPlaySpeedControlReq(System.String,System.DateTime)">
+            <summary>
+            控制录像点播播放速度
+            </summary>
+            <param name="scale">播放速度</param>
+            <param name="range">时间范围</param>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoPlaySpeedControlReq(System.String,System.Int32[],System.String,System.UInt32,System.String,System.Int32,System.String)">
+            <summary>
+            控制录像点播播放速度
+            </summary>
+            <param name="localIp">本地ip</param>
+            <param name="mediaPort">端口号</param>
+            <param name="scale">播放速率</param>
+            <param name="Time">时间范围</param>
+            <param name="fromTag">from tag</param>
+            <param name="cSeq">序号</param>
+            <param name="callId">呼叫编号</param>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.SetMediaReq(System.String,System.Int32[],System.String,System.UInt32)">
+            <summary>
+            设置媒体参数请求(回放 播放速率)
+            </summary>
+            <param name="localIp">本地ip</param>
+            <param name="mediaPort">rtp/rtcp媒体端口(10000/10001)</param>
+            <param name="scale">播放速率</param>
+            <param name="Time">时间范围</param>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoContinuePlayingControlReq">
+            <summary>
+            恢复录像播放
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoContinuePlayingControlReq(System.String,System.Int32[],System.String,System.Int32,System.String)">
+            <summary>
+            恢复录像播放
+            </summary>
+            <param name="localIp">本地ip</param>
+            <param name="mediaPort">端口号</param>
+            <param name="fromTag">from tag</param>
+            <param name="cSeq">序号</param>
+            <param name="callId">呼叫编号</param>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.SetMediaResumeReq">
+            <summary>
+            设置录像恢复播放包体信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoPauseControlReq">
+            <summary>
+            暂停录像播放
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoPauseControlReq(System.String,System.Int32[],System.String,System.Int32,System.String)">
+            <summary>
+            暂停录像播放
+            </summary>
+            <param name="localIp">本地ip</param>
+            <param name="mediaPort">端口号</param>
+            <param name="fromTag">from tag</param>
+            <param name="cSeq">序号</param>
+            <param name="callId">呼叫编号</param>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.SetMediaPauseReq">
+            <summary>
+            设置录像暂停包体信息
             </summary>
             <returns></returns>
         </member>
@@ -2844,157 +2950,157 @@
             状态
             </summary>
         </member>
-        <member name="T:SIPSorcery.GB28181.Sys.XML.RecordInfoReq">
+        <member name="T:SIPSorcery.GB28181.Sys.XML.RecordQuery">
             <summary>
             录像文件查询
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.Instance">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.Instance">
             <summary>
             以单例模式访问
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.CmdType">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.CmdType">
             <summary>
             指令类型
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.SN">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.SN">
             <summary>
             序号
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.DeviceID">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.DeviceID">
             <summary>
             设备编码
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.StartTime">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.StartTime">
             <summary>
             开始时间
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.EndTime">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.EndTime">
             <summary>
             结束时间
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.FilePath">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.FilePath">
             <summary>
             文件路径
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.Address">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.Address">
             <summary>
             录像地址
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.Secrecy">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.Secrecy">
             <summary>
             保密属性 0不涉密 1涉密
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.Type">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.Type">
             <summary>
             录像产生类型 time alarm manual all
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoReq.RecorderID">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordQuery.RecorderID">
             <summary>
             录像产生者ID
             </summary>
         </member>
-        <member name="T:SIPSorcery.GB28181.Sys.XML.RecordInfoRes">
+        <member name="T:SIPSorcery.GB28181.Sys.XML.RecordInfo">
             <summary>
-            
+            录像信息
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Instance">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Instance">
             <summary>
             以单例模式访问
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.CmdType">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.CmdType">
             <summary>
             指令类型
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.SN">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.SN">
             <summary>
             序号
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.DeviceID">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.DeviceID">
             <summary>
             设备编码
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Name">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Name">
             <summary>
             设备名称
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.SumNum">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.SumNum">
             <summary>
             录像总条数
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.RecordItems">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.RecordItems">
             <summary>
             录像列表
             </summary>
         </member>
-        <member name="T:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.RecordList">
+        <member name="T:SIPSorcery.GB28181.Sys.XML.RecordInfo.RecordList">
             <summary>
             录像列表信息
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.RecordList.Items">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.RecordList.Items">
             <summary>
             设备项
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.DeviceID">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.DeviceID">
             <summary>
             设备编码
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.Name">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.Name">
             <summary>
             录像名称
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.FilePath">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.FilePath">
             <summary>
             文件路径
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.Address">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.Address">
             <summary>
             录像地址
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.StartTime">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.StartTime">
             <summary>
             开始时间
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.EndTime">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.EndTime">
             <summary>
             结束时间
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.Secrecy">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.Secrecy">
             <summary>
             保密属性 0不涉密 1涉密
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.Type">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.Type">
             <summary>
             录像产生类型 time alarm manual all
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfoRes.Item.RecorderID">
+        <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.RecorderID">
             <summary>
             录像产生者ID
             </summary>

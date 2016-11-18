@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<sipServer>
+  <MonitorLoopbackPort value="10001" />
+  <MaximumAccountBindings value="10" />
+  <NATKeepAliveRelaySocket value="127.0.0.1:9001" />
+  <SwitchboardUserAgentPrefix value="sipsorcery-switchboard" />
+  <sipsockets>
+    <sipsocket>192.168.10.245:5060</sipsocket>
+  </sipsockets>
+  <useragentconfigs>
+    <useragent expiry="3600" contactlists="true">VisionVera/1.0</useragent>
+    <useragent expiry="3600" contactlists="false">fring</useragent>
+    <useragent expiry="3600" contactlists="false">Nokia</useragent>
+    <useragent expiry="60" contactlists="false">Cisco-CP7960G/8.0</useragent>
+    <useragent expiry="113">.*</useragent>
+  </useragentconfigs>
+</sipServer>
