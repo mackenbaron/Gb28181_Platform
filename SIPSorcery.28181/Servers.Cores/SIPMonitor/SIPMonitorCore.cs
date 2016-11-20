@@ -161,6 +161,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             {
                 OnStreamReady(buffer);
             }
+            //Write(buffer);
             //if (this.m_fs == null)
             //{
             //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);

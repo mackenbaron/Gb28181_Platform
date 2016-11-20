@@ -50,7 +50,7 @@ namespace Gb28181_Client
             this.OnPacketReady += Form1_OnPacketReady;
         }
 
-        void Form1_OnPacketReady(Packet packet)
+        private void Form1_OnPacketReady(Packet packet)
         {
             logger.Debug(packet.TimeStamp + "\t" + packet.SeqNumber + "\t" + packet.Length);
         }
@@ -283,11 +283,11 @@ namespace Gb28181_Client
         }
 
         List<Packet> _firstPackets = new List<Packet>();
+        Queue<Packet> _packets = new Queue<Packet>();
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Queue<Packet> packets = new Queue<Packet>();
-            FileInfo file = new FileInfo("D:\\test.txt");
+            FileInfo file = new FileInfo("D:\\error.log");
             FileStream fStream = file.OpenRead();
             byte[] buffer = new byte[fStream.Length];
             fStream.Read(buffer, 0, buffer.Length);
@@ -295,7 +295,12 @@ namespace Gb28181_Client
             string[] lineText = fileText.Split('\n');
             foreach (var line in lineText)
             {
-                string[] text = line.Split('\t');
+                if (line.Length == 0)
+                {
+                    break;
+                }
+                string rtpInfo = line.Substring(72, line.Length - 72);
+                string[] text = rtpInfo.Split('\t');
                 if (text.Length == 1)
                 {
                     break;
@@ -306,14 +311,20 @@ namespace Gb28181_Client
                     SeqNumber = int.Parse(text[1]),
                     Length = int.Parse(text[2])
                 };
-                packets.Enqueue(pack);
+                _packets.Enqueue(pack);
             }
-            while (packets.Count > 0)
+            Thread threadSeq = new Thread(new ThreadStart(ProcessSeqNumber));
+            threadSeq.Start();
+        }
+
+        private void ProcessSeqNumber()
+        {
+            while (_packets.Count > 0)
             {
                 Packet packet = null;
-                lock (packets)
+                lock (_packets)
                 {
-                    packet = packets.Dequeue();
+                    packet = _packets.Dequeue();
                 }
                 if (packet != null)
                 {
