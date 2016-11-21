@@ -32,13 +32,13 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
                 try
                 {
                     _MediaFrame = value;
-                    if (_MediaFrame == null)
-                        throw new Exception();
+                    //if (_MediaFrame == null)
+                    //    throw new Exception();
 
                 }
                 catch (Exception e)
                 {
-                    throw;
+                    //throw;
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
             PES_Packet_Length = (ushort)IPAddress.NetworkToHostOrder(br.ReadInt16());
             if (PES_Packet_Length == 0 && false)
             {
-                throw new Exception("PES_Packet_Length error");
+                //throw new Exception("PES_Packet_Length error");
             }
             PES_Header_Flags = br.ReadBytes(2);
             PES_Header_Length = br.ReadByte();
@@ -177,7 +177,7 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
                 PES_Packet_Data = br.ReadBytes(PES_Packet_Length - 3 - PES_Header_Length);
                 if (PES_Packet_Data.Length < PES_Packet_Length - 3 - PES_Header_Length)
                 {
-                    Console.WriteLine("@@@@@@@@@@@@@@@" + PES_Packet_Length);
+                    //Console.WriteLine("@@@@@@@@@@@@@@@" + PES_Packet_Length);
                 }
             }
             else

@@ -286,6 +286,8 @@ namespace Gb28181_Client
 
         private void button1_Click(object sender, EventArgs e)
         {
+            string id = Guid.NewGuid().ToString();
+            return;
             Queue<Packet> packets = new Queue<Packet>();
             FileInfo file = new FileInfo("D:\\test.txt");
             FileStream fStream = file.OpenRead();
