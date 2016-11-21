@@ -43,8 +43,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         private static ILog logger = AppState.logger;
 
         private bool _initSIP = false;
-        private int MEDIA_PORT_START = 10000;
-        private int MEDIA_PORT_END = 20000;
+        private int MEDIA_PORT_START = 30000;
+        private int MEDIA_PORT_END = 32000;
         private RegistrarCore m_registrarCore;
         private TaskTiming _catalogTask;
 
@@ -145,6 +145,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             if (request.Method == SIPMethodsEnum.REGISTER)
             {
                 m_registrarCore.AddRegisterRequest(localSIPEndPoint, remoteEndPoint, request);
+                logger.Debug("Local:" + localSIPEndPoint.ToString() + "-----Remote:" + remoteEndPoint.ToString());
             }
             //消息请求
             else if (request.Method == SIPMethodsEnum.MESSAGE)

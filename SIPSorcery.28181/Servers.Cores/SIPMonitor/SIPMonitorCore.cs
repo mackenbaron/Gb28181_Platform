@@ -96,11 +96,12 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 OnSIPServiceChange(_deviceName + "-" + _deviceId, SipServiceStatus.Wait);
                 return;
             }
-            if (_mediaPort == null)
-            {
-                _mediaPort = _msgCore.SetMediaPort();
-            }
+            //if (_mediaPort == null)
+            //{
+            //    _mediaPort = _msgCore.SetMediaPort();
+            //}
 
+            _mediaPort = _msgCore.SetMediaPort();
             string localIp = _msgCore.LocalEndPoint.Address.ToString();
             string fromTag = CallProperties.CreateNewTag();
             int cSeq = CallProperties.CreateNewCSeq();

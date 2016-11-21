@@ -1,1 +1,27 @@
+<<<<<<< HEAD
+2016-11-21 16:28:38,487 [10] DEBUG sipsorcery [(null)] - SIP Registrar daemon starting...
+2016-11-21 16:28:38,577 [10] DEBUG sipsorcery [(null)] - Creating SIP Channel for <sipsocket>192.168.10.245:5060</sipsocket>.
+2016-11-21 16:28:38,577 [10] DEBUG sipsorcery [(null)] -  attempting to create SIP UDP channel for 192.168.10.245:5060.
+2016-11-21 16:28:38,587 [10] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel listener created 192.168.10.245:5060.
+2016-11-21 16:28:38,587 [sipchanneludp-AIDF] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.245:5060 listening started.
+2016-11-21 16:28:38,597 [10] DEBUG sipsorcery [(null)] - Added useragent config, useragent=VisionVera/1.0, expiry=3600s, contact lists=True.
+2016-11-21 16:28:38,597 [10] DEBUG sipsorcery [(null)] - Added useragent config, useragent=fring, expiry=3600s, contact lists=False.
+2016-11-21 16:28:38,597 [10] DEBUG sipsorcery [(null)] - Added useragent config, useragent=Nokia, expiry=3600s, contact lists=False.
+2016-11-21 16:28:38,597 [10] DEBUG sipsorcery [(null)] - Added useragent config, useragent=Cisco-CP7960G/8.0, expiry=60s, contact lists=False.
+2016-11-21 16:28:38,597 [10] DEBUG sipsorcery [(null)] - Added useragent config, useragent=.*, expiry=113s, contact lists=True.
+2016-11-21 16:28:38,607 [10] DEBUG sipregistrar [(null)] - SIPRegistrarCore thread started with 1 threads.
+2016-11-21 16:28:38,627 [10] DEBUG sipsorcery [(null)] - SIP Registrar successfully started.
+2016-11-21 16:28:39,257 [sipchanneludp-AIDF] DEBUG sipsorcery [(null)] - Transport Init:-----Local:udp:192.168.10.245:5060=====Remote:udp:192.168.10.158:5060
+2016-11-21 16:28:39,627 [sipchanneludp-AIDF] DEBUG sipsorcery [(null)] - Transport Init:-----Local:udp:192.168.10.245:5060=====Remote:udp:192.168.10.221:5060
+2016-11-21 16:29:59,427 [10] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopping...
+2016-11-21 16:29:59,427 [10] DEBUG sipsorcery [(null)] - Shutting down Registrar Bindings Manager.
+2016-11-21 16:29:59,427 [10] DEBUG sipsorcery [(null)] - Shutting down SIP Transport.
+2016-11-21 16:29:59,427 [10] DEBUG sipsorcery.sip [(null)] - Closing SIP UDP Channel udp:192.168.10.245:5060.
+2016-11-21 16:29:59,437 [10] DEBUG sipsorcery.sip [(null)] - SIPTransport Shutdown Complete.
+2016-11-21 16:29:59,437 [10] DEBUG sipsorcery [(null)] - sip message service stopped.
+2016-11-21 16:29:59,447 [sipchanneludp-AIDF] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.245:5060 listening halted.
+2016-11-21 16:29:59,447 [10] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopped.
+2016-11-21 16:29:59,677 [sipregistrar-expirebindings] WARN  sipregistrar [(null)] - Thread sipregistrar-expirebindings stopped!
+=======
 2016-11-20 12:14:45,709 [9] DEBUG sipsorcery [(null)] - Logging initialised.
+>>>>>>> 894f8f10cf0f6f081c5e2e7bfe1f1bb817846281

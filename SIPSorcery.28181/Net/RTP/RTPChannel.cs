@@ -67,7 +67,7 @@ namespace SIPSorcery.GB28181.Net
         private const int RECEIVE_BUFFER_SIZE = 2048;
         private const int MEDIA_PORT_START = 10000;             // Arbitrary port number to start allocating RTP and control ports from.
         private const int MEDIA_PORT_END = 40000;               // Arbitrary port number that RTP and control ports won't be allocated above.
-        private const int RTP_PACKETS_MAX_QUEUE_LENGTH = 1000;   // The maximum number of RTP packets that will be queued.
+        private const int RTP_PACKETS_MAX_QUEUE_LENGTH = 5000;   // The maximum number of RTP packets that will be queued.
         private const int RTP_RECEIVE_BUFFER_SIZE = 100000000;
         private const int RTP_SEND_BUFFER_SIZE = 100000000;
         private const int SRTP_SIGNATURE_LENGTH = 10;           // If SRTP is being used this many extra bytes need to be added to the RTP payload to hold the authentication signature.
@@ -655,7 +655,7 @@ namespace SIPSorcery.GB28181.Net
                                     _seqnumberPackets.Add(rtpPacket);
                                     _seqnumberPackets = _seqnumberPackets.OrderBy(p => p.Header.SequenceNumber).ToList();
 
-                                    if (_seqnumberPackets.Count > 100)
+                                    if (_seqnumberPackets.Count > 300)
                                     {
                                         RTPPacket packet = _seqnumberPackets.FirstOrDefault();
                                         //logger.Debug(packet.Header.Timestamp + "\t" + packet.Header.SequenceNumber + "\t" + packet.Payload.Length);
