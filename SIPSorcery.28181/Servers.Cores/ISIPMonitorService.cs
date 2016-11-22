@@ -86,6 +86,9 @@ namespace SIPSorcery.GB28181.Servers
         /// </summary>
         void BackVideoStopPlayingControlReq();
 
+        /// <summary>
+        /// 失败的请求事件
+        /// </summary>
         event Action OnBadRequest;
     }
 }

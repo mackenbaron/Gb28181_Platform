@@ -65,6 +65,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// </summary>
         internal SIPTransport Transport;
         /// <summary>
+        /// 远程sip传输集合
+        /// </summary>
+        internal Dictionary<string, string> RemoteTrans;
+        /// <summary>
         /// 本地sip编码
         /// </summary>
         internal string LocalSIPId;
@@ -98,6 +102,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         {
             Transport = transport;
             UserAgent = userAgent;
+            RemoteTrans = new Dictionary<string, string>();
         }
 
         public void Initialize(string switchboarduserAgentPrefix,
@@ -112,23 +117,41 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             m_registrarCore.Start(1);
             MonitorService = new Dictionary<string, ISIPMonitorService>();
 
-            foreach (var item in devList)
+            //foreach (var item in devList)
+            //{
+            //    for (int i = 0; i < 2; i++)
+            //    {
+            //        CommandType cmdType = CommandType.Unknown;
+            //        if (i == 0)
+            //        {
+            //            cmdType = CommandType.Play;
+            //        }
+            //        else
+            //        {
+            //            cmdType = CommandType.Playback;
+            //        }
+            //        string key = item.Key + cmdType;
+            //        ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value,remoteEndPoint);
+            //        monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
+            //        MonitorService.Add(key, monitor);
+            //    }
+            //}
+        }
+
+        /// <summary>
+        /// 初始化远程sip
+        /// </summary>
+        /// <param name="localEndPoint">本地终结点</param>
+        /// <param name="remoteEndPoint">远程终结点</param>
+        /// <param name="request">sip请求</param>
+        private void SIPTransportInit(SIPEndPoint localEndPoint, SIPEndPoint remoteEndPoint, SIPRequest request)
+        {
+            lock (RemoteTrans)
             {
-                for (int i = 0; i < 2; i++)
+                if (!RemoteTrans.ContainsKey(remoteEndPoint.ToString()))
                 {
-                    CommandType cmdType = CommandType.Unknown;
-                    if (i == 0)
-                    {
-                        cmdType = CommandType.Play;
-                    }
-                    else
-                    {
-                        cmdType = CommandType.Playback;
-                    }
-                    string key = item.Key + cmdType;
-                    ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value);
-                    monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
-                    MonitorService.Add(key, monitor);
+                    RemoteTrans.Add(remoteEndPoint.ToString(), request.Header.From.FromURI.User);
+                    logger.Debug("RemoteTrans Init Local:" + localEndPoint.ToString() + "-----Remote:" + remoteEndPoint.ToString() + "-----User:" + request.Header.From.FromURI.User);
                 }
             }
         }
@@ -136,20 +159,21 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// <summary>
         /// sip请求消息
         /// </summary>
-        /// <param name="localSIPEndPoint">本地终结点</param>
+        /// <param name="localEndPoint">本地终结点</param>
         /// <param name="remoteEndPoint">远程终结点</param>
         /// <param name="request">sip请求</param>
-        public void AddMessageRequest(SIPEndPoint localSIPEndPoint, SIPEndPoint remoteEndPoint, SIPRequest request)
+        public void AddMessageRequest(SIPEndPoint localEndPoint, SIPEndPoint remoteEndPoint, SIPRequest request)
         {
             //注册请求
             if (request.Method == SIPMethodsEnum.REGISTER)
             {
-                m_registrarCore.AddRegisterRequest(localSIPEndPoint, remoteEndPoint, request);
-                logger.Debug("Local:" + localSIPEndPoint.ToString() + "-----Remote:" + remoteEndPoint.ToString());
+                m_registrarCore.AddRegisterRequest(localEndPoint, remoteEndPoint, request);
+                SIPTransportInit(localEndPoint, remoteEndPoint, request);
             }
             //消息请求
             else if (request.Method == SIPMethodsEnum.MESSAGE)
             {
+                SIPTransportInit(localEndPoint, remoteEndPoint, request);
                 KeepAlive keepAlive = KeepAlive.Instance.Read(request.Body);
                 if (keepAlive != null && keepAlive.CmdType == CommandType.Keepalive)  //心跳
                 {
@@ -190,7 +214,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                                     {
                                         continue;
                                     }
-                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name);
+                                    ISIPMonitorService monitor = new SIPMonitorCore(this, cata.DeviceID, cata.Name, remoteEndPoint);
                                     monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
                                     MonitorService.Add(key, monitor);
                                 }
@@ -204,19 +228,19 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                     RecordInfo record = RecordInfo.Instance.Read(request.Body);
                     if (record != null && record.CmdType == CommandType.RecordInfo)  //录像检索
                     {
-                        if (OnRecordInfoReceived != null)
+                        if (OnRecordInfoReceived != null && record.RecordItems != null)
                         {
                             OnRecordInfoReceived(record);
                         }
                     }
                 }
-                SIPResponse msgRes = GetResponse(localSIPEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
+                SIPResponse msgRes = GetResponse(localEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
                 Transport.SendResponse(msgRes);
             }
             //停止播放请求
             else if (request.Method == SIPMethodsEnum.BYE)
             {
-                SIPResponse byeRes = GetResponse(localSIPEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
+                SIPResponse byeRes = GetResponse(localEndPoint, remoteEndPoint, SIPResponseStatusCodesEnum.Ok, "", request);
                 Transport.SendResponse(byeRes);
             }
         }
@@ -292,6 +316,11 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             }
         }
 
+        /// <summary>
+        /// 获取SDP协议中SessionName字段值
+        /// </summary>
+        /// <param name="body">SDP文本</param>
+        /// <returns></returns>
         private string GetSessionName(string body)
         {
             string[] text = body.Split('\n');
@@ -389,32 +418,39 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 OnSIPServiceChange(RemoteSIPId, SipServiceStatus.Wait);
                 return;
             }
-            string fromTag = CallProperties.CreateNewTag();
-            string toTag = CallProperties.CreateNewTag();
-            int cSeq = CallProperties.CreateNewCSeq();
-            string callId = CallProperties.CreateNewCallId();
-            SIPRequest catalogReq = QueryItems(fromTag, toTag, cSeq, callId);
-            CatalogQuery catalog = new CatalogQuery()
+            foreach (var trans in RemoteTrans)
             {
-                CommandType = CommandType.Catalog,
-                DeviceID = RemoteSIPId,
-                SN = new Random().Next(1, ushort.MaxValue)
-            };
-            string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
-            catalogReq.Body = xmlBody;
-            Transport.SendRequest(RemoteEndPoint, catalogReq);
-            _catalogTask = new TaskTiming(catalogReq, Transport);
-            this.SendRequestTimeout += _catalogTask.MessageSendRequestTimeout;
-            _catalogTask.Start();
+                SIPEndPoint remoteEndPoint = SIPEndPoint.ParseSIPEndPoint(trans.Key);
+
+                SIPRequest catalogReq = QueryItems(remoteEndPoint, trans.Value);
+                CatalogQuery catalog = new CatalogQuery()
+                {
+                    CommandType = CommandType.Catalog,
+                    DeviceID = trans.Value,
+                    SN = new Random().Next(1, ushort.MaxValue)
+                };
+                string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
+                catalogReq.Body = xmlBody;
+                Transport.SendRequest(remoteEndPoint, catalogReq);
+            }
+
+            //_catalogTask = new TaskTiming(catalogReq, Transport);
+            //this.SendRequestTimeout += _catalogTask.MessageSendRequestTimeout;
+            //_catalogTask.Start();
         }
 
         /// <summary>
         /// 查询设备目录请求
         /// </summary>
         /// <returns></returns>
-        private SIPRequest QueryItems(string fromTag, string toTag, int cSeq, string callId)
+        private SIPRequest QueryItems(SIPEndPoint remoteEndPoint, string remoteSIPId)
         {
-            SIPURI remoteUri = new SIPURI(RemoteSIPId, RemoteEndPoint.ToHost(), "");
+            string fromTag = CallProperties.CreateNewTag();
+            string toTag = CallProperties.CreateNewTag();
+            int cSeq = CallProperties.CreateNewCSeq();
+            string callId = CallProperties.CreateNewCallId();
+
+            SIPURI remoteUri = new SIPURI(remoteSIPId, remoteEndPoint.ToHost(), "");
             SIPURI localUri = new SIPURI(LocalSIPId, LocalEndPoint.ToHost(), "");
             SIPFromHeader from = new SIPFromHeader(null, localUri, fromTag);
             SIPToHeader to = new SIPToHeader(null, remoteUri, toTag);
@@ -427,6 +463,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             catalogReq.Header.CSeq = cSeq;
             catalogReq.Header.CallId = callId;
             catalogReq.Header.ContentType = "application/MANSCDP+xml";
+
             return catalogReq;
         }
 
