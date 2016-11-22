@@ -1027,6 +1027,11 @@
             视频流回调完成
             </summary>
         </member>
+        <member name="E:SIPSorcery.GB28181.Servers.ISIPMonitorService.OnBadRequest">
+            <summary>
+            失败的请求事件
+            </summary>
+        </member>
         <member name="F:SIPSorcery.GB28181.Servers.Cores.Packet.MediaFrame.nEx">
             <summary>
             扩展字段，默认为1 
@@ -1169,6 +1174,11 @@
             sip传输请求
             </summary>
         </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.RemoteTrans">
+            <summary>
+            远程sip传输集合
+            </summary>
+        </member>
         <member name="F:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.LocalSIPId">
             <summary>
             本地sip编码
@@ -1184,11 +1194,19 @@
             监控服务
             </summary>
         </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.SIPTransportInit(SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPRequest)">
+            <summary>
+            初始化远程sip
+            </summary>
+            <param name="localEndPoint">本地终结点</param>
+            <param name="remoteEndPoint">远程终结点</param>
+            <param name="request">sip请求</param>
+        </member>
         <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.AddMessageRequest(SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPRequest)">
             <summary>
             sip请求消息
             </summary>
-            <param name="localSIPEndPoint">本地终结点</param>
+            <param name="localEndPoint">本地终结点</param>
             <param name="remoteEndPoint">远程终结点</param>
             <param name="request">sip请求</param>
         </member>
@@ -1199,6 +1217,13 @@
             <param name="localSIPEndPoint">本地终结点</param>
             <param name="remoteEndPoint">远程终结点</param>
             <param name="response">sip响应</param>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.GetSessionName(System.String)">
+            <summary>
+            获取SDP协议中SessionName字段值
+            </summary>
+            <param name="body">SDP文本</param>
+            <returns></returns>
         </member>
         <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.BadRequest(System.String,System.String,System.String)">
             <summary>
@@ -1214,7 +1239,7 @@
             </summary>
             <param name="deviceId">目的设备编码</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.QueryItems(System.String,System.String,System.Int32,System.String)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.QueryItems(SIPSorcery.GB28181.SIP.SIPEndPoint,System.String)">
             <summary>
             查询设备目录请求
             </summary>
@@ -1251,6 +1276,11 @@
             sip监控核心处理
             </summary>
         </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore._remoteEndPoint">
+            <summary>
+            远程终结点
+            </summary>
+        </member>
         <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore._rtpChannel">
             <summary>
             rtp数据通道
@@ -1276,7 +1306,7 @@
             <param name="msg">失败消息内容</param>
             <param name="callId">呼叫编号</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.RealVideoReq(System.String,System.Int32[],System.String,System.Int32,System.String)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.RealVideoReq(System.Int32[])">
             <summary>
             实时视频请求
             </summary>
@@ -1311,6 +1341,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.RecordFileQuery(System.DateTime,System.DateTime)">
+            <summary>
+            录像文件查询
+            </summary>
+            <param name="startTime">开始时间</param>
+            <param name="endTime">结束时间</param>
+        </member>
         <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.DateTime,System.DateTime)">
             <summary>
             录像点播视频请求
@@ -1318,7 +1355,7 @@
             <param name="beginTime">开始时间</param>
             <param name="endTime">结束时间</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.String,System.Int32[],System.UInt32,System.UInt32,System.String,System.Int32,System.String)">
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.BackVideoReq(System.Int32[],System.UInt32,System.UInt32)">
             <summary>
             录像点播请求
             </summary>
