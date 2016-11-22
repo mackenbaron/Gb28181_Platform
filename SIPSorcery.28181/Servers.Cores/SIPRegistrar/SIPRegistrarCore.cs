@@ -334,31 +334,31 @@ namespace SIPSorcery.GB28181.Servers
                     return RegisterResultEnum.DomainNotServiced;
                 }
 
-                //SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser && s.SIPDomain == canonicalDomain);
-                SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser);
+                SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser && s.SIPDomain == canonicalDomain);
+                //SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser);
                 SIPRequestAuthenticationResult authenticationResult = SIPRequestAuthenticator_External(registerTransaction.LocalSIPEndPoint, registerTransaction.RemoteEndPoint, sipRequest, sipAccount, FireProxyLogEvent);
-                if (1== 2)
-                {
-                    
-                }
-                //if (!authenticationResult.Authenticated)
+                //if (1== 2)
                 //{
-                //    // 401 Response with a fresh nonce needs to be sent.
-                //    SIPResponse authReqdResponse = SIPTransport.GetResponse(sipRequest, authenticationResult.ErrorResponse, null);
-                //    authReqdResponse.Header.AuthenticationHeader = authenticationResult.AuthenticationRequiredHeader;
-                //    registerTransaction.SendFinalResponse(authReqdResponse);
-
-                //    if (authenticationResult.ErrorResponse == SIPResponseStatusCodesEnum.Forbidden)
-                //    {
-                //        FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.Warn, "Forbidden " + toUser + "@" + canonicalDomain + " does not exist, " + sipRequest.Header.ProxyReceivedFrom + ", " + sipRequest.Header.UserAgent + ".", null));
-                //        return RegisterResultEnum.Forbidden;
-                //    }
-                //    else
-                //    {
-                //        FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.Registrar, "Authentication required for " + toUser + "@" + canonicalDomain + " from " + sipRequest.Header.ProxyReceivedFrom + ".", toUser));
-                //        return RegisterResultEnum.AuthenticationRequired;
-                //    }
+                    
                 //}
+                if (!authenticationResult.Authenticated)
+                {
+                    // 401 Response with a fresh nonce needs to be sent.
+                    SIPResponse authReqdResponse = SIPTransport.GetResponse(sipRequest, authenticationResult.ErrorResponse, null);
+                    authReqdResponse.Header.AuthenticationHeader = authenticationResult.AuthenticationRequiredHeader;
+                    registerTransaction.SendFinalResponse(authReqdResponse);
+
+                    if (authenticationResult.ErrorResponse == SIPResponseStatusCodesEnum.Forbidden)
+                    {
+                        FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.Warn, "Forbidden " + toUser + "@" + canonicalDomain + " does not exist, " + sipRequest.Header.ProxyReceivedFrom + ", " + sipRequest.Header.UserAgent + ".", null));
+                        return RegisterResultEnum.Forbidden;
+                    }
+                    else
+                    {
+                        FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.Registrar, "Authentication required for " + toUser + "@" + canonicalDomain + " from " + sipRequest.Header.ProxyReceivedFrom + ".", toUser));
+                        return RegisterResultEnum.AuthenticationRequired;
+                    }
+                }
                 else
                 {
                     // Authenticated.

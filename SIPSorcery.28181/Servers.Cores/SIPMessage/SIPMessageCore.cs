@@ -187,7 +187,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
                     _initSIP = true;
 
-                    OnSIPServiceChange(RemoteSIPId, SipServiceStatus.Complete);
+                    OnSIPServiceChange(remoteEndPoint.ToString(), SipServiceStatus.Complete);
                 }
                 else
                 {
