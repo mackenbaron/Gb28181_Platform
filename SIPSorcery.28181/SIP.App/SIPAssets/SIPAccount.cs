@@ -594,12 +594,5 @@ namespace SIPSorcery.GB28181.SIP.App
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-
-        public System.Collections.Generic.Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
-        {
-            return null;
-             //return SIPAssetXMLPersistor<SIPAccount>.LoadAssetsFromXMLRecordSet(dom);
-        }
     }
 }

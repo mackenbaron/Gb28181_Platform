@@ -201,6 +201,8 @@
     <Compile Include="SIP.App\SIPAssets\SIPProvider.cs" />
     <Compile Include="SIP.App\SIPAssets\SIPProviderBinding.cs" />
     <Compile Include="SIP.App\SIPAssets\SIPRegistrarBinding.cs" />
+    <Compile Include="SIP.App\SIPAssets\SvrCamera.cs" />
+    <Compile Include="SIP.App\SIPAssets\SvrDevice.cs" />
     <Compile Include="SIP.App\SIPDNS\SIPDNSManager.cs" />
     <Compile Include="SIP.App\SIPNotifications\SIPDialogEventSubscription.cs" />
     <Compile Include="SIP.App\SIPNotifications\SIPEventSubscription.cs" />

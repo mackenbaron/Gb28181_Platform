@@ -151,7 +151,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 if (!RemoteTrans.ContainsKey(remoteEndPoint.ToString()))
                 {
                     RemoteTrans.Add(remoteEndPoint.ToString(), request.Header.From.FromURI.User);
-                    logger.Debug("RemoteTrans Init Local:" + localEndPoint.ToString() + "-----Remote:" + remoteEndPoint.ToString() + "-----User:" + request.Header.From.FromURI.User);
+                    logger.Debug("RemoteTrans Init:Remote:" + remoteEndPoint.ToString() + "-----User:" + request.Header.From.FromURI.User);
                 }
             }
         }
@@ -160,7 +160,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// sip请求消息
         /// </summary>
         /// <param name="localEndPoint">本地终结点</param>
-        /// <param name="remoteEndPoint">远程终结点</param>
+        /// <param name="remoteEndPoint"b>远程终结点</param>
         /// <param name="request">sip请求</param>
         public void AddMessageRequest(SIPEndPoint localEndPoint, SIPEndPoint remoteEndPoint, SIPRequest request)
         {

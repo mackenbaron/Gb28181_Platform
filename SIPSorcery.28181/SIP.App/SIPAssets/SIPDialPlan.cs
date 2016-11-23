@@ -354,11 +354,5 @@ namespace SIPSorcery.GB28181.SIP.App
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-
-        public Dictionary<Guid, object> Load(XmlDocument dom)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

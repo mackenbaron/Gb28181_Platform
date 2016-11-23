@@ -245,11 +245,5 @@ namespace SIPSorcery.GB28181.SIP.App
 
             return aliasList;
         }
-
-
-        public Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

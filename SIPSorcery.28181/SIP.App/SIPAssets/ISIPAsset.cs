@@ -10,10 +10,9 @@ namespace SIPSorcery.GB28181.SIP.App
 
 #if !SILVERLIGHT
         void Load(System.Data.DataRow row);
-        Dictionary<Guid, object> Load(XmlDocument dom);
+        //Dictionary<Guid, object> Load(XmlDocument dom);
         System.Data.DataTable GetTable();
 #endif
-
         string ToXML();
         string ToXMLNoParent();
         string GetXMLElementName();

@@ -132,6 +132,11 @@ namespace SIPSorcery.GB28181.Persistence
             throw new NotImplementedException("Method " + System.Reflection.MethodBase.GetCurrentMethod().Name + " in " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString() + " not implemented.");
         }
 
+        public virtual List<T> Get()
+        {
+            throw new NotImplementedException("Method " + System.Reflection.MethodBase.GetCurrentMethod().Name + " in " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString() + " not implemented.");
+        }
+
 #if !SILVERLIGHT
 
         protected DbParameter GetParameter(DbProviderFactory dbProviderFactory, MetaDataMember member, object parameterValue, string parameterName)

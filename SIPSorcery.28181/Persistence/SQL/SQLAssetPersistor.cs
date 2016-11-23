@@ -396,6 +396,26 @@ namespace SIPSorcery.GB28181.Persistence
                 throw;
             }
         }
+
+        public override List<T> Get()
+        {
+            try
+            {
+                SQLQueryProvider sqlQueryProvider = new SQLQueryProvider(m_dbProviderFactory, m_dbConnectionStr, m_objectMapper.TableName, m_objectMapper.SetValue);
+                Query<T> assetList = new Query<T>(sqlQueryProvider);
+                //IQueryable<T> getList = from asset in assetList.Where(whereClause) orderby orderByField select asset;
+                IQueryable<T> getList = null;
+                getList = from asset in assetList select asset;
+
+
+                return getList.ToList() ?? new List<T>();
+            }
+            catch (Exception excp)
+            {
+                logger.Error("Exception SQLAssetPersistor Get (list) (for " + excp.Message);
+                throw;
+            }
+        }
     }
 
     #region Unit testing.
