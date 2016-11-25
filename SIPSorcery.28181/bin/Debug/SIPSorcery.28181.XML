@@ -1617,6 +1617,215 @@
              Encapsulate and manage state for a single connection from a client 
             </summary>
         </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable">
+            <summary>
+            设备列表
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.#cctor">
+            <summary>
+            初始化设备列表信息
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Get(System.String)">
+            <summary>
+            获取设备列表项
+            </summary>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.CreatGuid">
+            <summary>
+            创建设备ID
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.CreatNvrId">
+            <summary>
+            创建设备id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Read">
+            <summary>
+            加载设备信息
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Save">
+            <summary>
+            保存设备信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Instance">
+            <summary>
+            以单例模式访问
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Streamselect">
+            <summary>
+            码流类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Items">
+            <summary>
+            设备列表
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem">
+            <summary>
+            设备列表信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.NvrID">
+            <summary>
+            唯一标识
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.NvrName">
+            <summary>
+            设备/平台名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamID">
+            <summary>
+            设备/平台id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamIP">
+            <summary>
+            设备/平台ip
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamPort">
+            <summary>
+            设备/平台端口
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamUser">
+            <summary>
+            设备/平台用户
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamPassword">
+            <summary>
+            设备/平台密码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.DevType">
+            <summary>
+            设备/平台类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.OnvifAddress">
+            <summary>
+            onvif地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.IsAnalyzer">
+            <summary>
+            标准化码流
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.IsBackRecord">
+            <summary>
+            是/否有录像
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalID">
+            <summary>
+            本地平台Id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalIP">
+            <summary>
+            本地平台ip
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalPort">
+            <summary>
+            本地平台端口
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem">
+            <summary>
+            通道信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Guid">
+            <summary>
+            通道id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.NvrID">
+            <summary>
+            设备/平台id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Channel">
+            <summary>
+            通道编码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.ChannelName">
+            <summary>
+            通道名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.FrameRate">
+            <summary>
+            帧率
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.StreamFormat">
+            <summary>
+            码流格式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.AudioFormat">
+            <summary>
+            音频格式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Rtsp1">
+            <summary>
+            rtsp地址1
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Rtsp2">
+            <summary>
+            rtsp地址2
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.MainResolution">
+            <summary>
+            主码流分辨率
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.SubResolution">
+            <summary>
+            子码流分辨率
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.StreamType">
+            <summary>
+            码流类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.CameraID">
+            <summary>
+            摄像机id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.AreaName">
+            <summary>
+            所属区域名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.IsBackRecord">
+            <summary>
+            是/否有录像
+            </summary>
+        </member>
         <member name="T:SIPSorcery.GB28181.SIP.App.SIPAccount">
             <remarks>
             SIP account usernames can be treated by some SIP Sorcery server agents as domain name like structures where a username of
@@ -2835,215 +3044,6 @@
         <member name="F:SIPSorcery.GB28181.Sys.Config.StreamType.adaptiveMode">
             <summary>
             自适应模式
-            </summary>
-        </member>
-        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable">
-            <summary>
-            设备列表
-            </summary>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.#cctor">
-            <summary>
-            初始化设备列表信息
-            </summary>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Get(System.String)">
-            <summary>
-            获取设备列表项
-            </summary>
-            <param name="ip"></param>
-            <returns></returns>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.CreatGuid">
-            <summary>
-            创建设备ID
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.CreatNvrId">
-            <summary>
-            创建设备id
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Read">
-            <summary>
-            加载设备信息
-            </summary>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Save">
-            <summary>
-            保存设备信息
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Instance">
-            <summary>
-            以单例模式访问
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Streamselect">
-            <summary>
-            码流类型
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Items">
-            <summary>
-            设备列表
-            </summary>
-        </member>
-        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem">
-            <summary>
-            设备列表信息
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.NvrID">
-            <summary>
-            唯一标识
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.NvrName">
-            <summary>
-            设备/平台名称
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamID">
-            <summary>
-            设备/平台id
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamIP">
-            <summary>
-            设备/平台ip
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamPort">
-            <summary>
-            设备/平台端口
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamUser">
-            <summary>
-            设备/平台用户
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamPassword">
-            <summary>
-            设备/平台密码
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.DevType">
-            <summary>
-            设备/平台类型
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.OnvifAddress">
-            <summary>
-            onvif地址
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.IsAnalyzer">
-            <summary>
-            标准化码流
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.IsBackRecord">
-            <summary>
-            是/否有录像
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalID">
-            <summary>
-            本地平台Id
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalIP">
-            <summary>
-            本地平台ip
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalPort">
-            <summary>
-            本地平台端口
-            </summary>
-        </member>
-        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem">
-            <summary>
-            通道信息
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Guid">
-            <summary>
-            通道id
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.NvrID">
-            <summary>
-            设备/平台id
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Channel">
-            <summary>
-            通道编码
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.ChannelName">
-            <summary>
-            通道名称
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.FrameRate">
-            <summary>
-            帧率
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.StreamFormat">
-            <summary>
-            码流格式
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.AudioFormat">
-            <summary>
-            音频格式
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Rtsp1">
-            <summary>
-            rtsp地址1
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Rtsp2">
-            <summary>
-            rtsp地址2
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.MainResolution">
-            <summary>
-            主码流分辨率
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.SubResolution">
-            <summary>
-            子码流分辨率
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.StreamType">
-            <summary>
-            码流类型
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.CameraID">
-            <summary>
-            摄像机id
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.AreaName">
-            <summary>
-            所属区域名称
-            </summary>
-        </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.IsBackRecord">
-            <summary>
-            是/否有录像
             </summary>
         </member>
         <member name="T:SIPSorcery.GB28181.Sys.Config.PlatformConfig">

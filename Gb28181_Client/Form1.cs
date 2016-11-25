@@ -29,8 +29,6 @@ namespace Gb28181_Client
     public delegate void SetCatalogText(Catalog cata);
     public delegate void SetRecordText(RecordInfo record);
 
-
-
     public partial class Form1 : Form
     {
         private static readonly string m_storageTypeKey = SIPSorceryConfiguration.PERSISTENCE_STORAGETYPE_KEY;
@@ -75,8 +73,51 @@ namespace Gb28181_Client
 
             SIPSqlite.Instance.Read();
 
-            //NvrTable.Instance.Read();
-            //var v = NvrTable.Instance.Items;
+            NvrTable.Instance.Read();
+
+            NvrTable.NvrItem item = new NvrTable.NvrItem()
+            {
+                Id = Guid.NewGuid(),
+                NvrID = 1,
+                NvrName = "Hik137",
+                CamID = "",
+                CamIP = "192.168.10.137",
+                CamPort = 5060,
+                CamUser = "admin",
+                CamPassword = "12345",
+                DevType = "Hik",
+                OnvifAddress = "",
+                IsAnalyzer = true,
+                IsBackRecord = 0,
+                LocalID = "",
+                LocalIP = "",
+                LocalPort = 5060
+            };
+
+            NvrTable.Instance.NvrItems.Add(item);
+
+            NvrTable.ChannelItem channel = new NvrTable.ChannelItem()
+            {
+                Id = Guid.NewGuid(),
+                Guid = 1,
+                NvrID = 1,
+                Channel = 1,
+                ChannelName = "gb28181_Hik151",
+                FrameRate = 25,
+                StreamFormat = "ES",
+                AudioFormat = "",
+                Rtsp1 = "",
+                Rtsp2 = "",
+                MainResolution = ImageResolution.R_Undefined,
+                SubResolution = ImageResolution.R_Undefined,
+                StreamType = StreamType.mainStream,
+                CameraID = "",
+                AreaName = "",
+                IsBackRecord = 0
+            };
+            NvrTable.Instance.ChannelItems.Add(channel);
+
+
             SIPAssetPersistor<SIPAccount> sipAccountsPersistor = SIPSqlite.Instance.SipAccount;
 
             Dictionary<string, PlatformConfig> platformList = new Dictionary<string, PlatformConfig>();

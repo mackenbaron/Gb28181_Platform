@@ -21,23 +21,6 @@ namespace SIPSorcery.GB28181.Sys.Config
 
         private SIPAssetPersistor<SIPAccount> _sipAccount;
 
-        private SIPAssetPersistor<SIPDomain> _sipDomain;
-
-       
-        private SIPAssetPersistor<SIPRegistrarBinding> _sipRegistrarBiding;
-
-        public SIPAssetPersistor<SIPRegistrarBinding> SipRegistrarBiding
-        {
-            get { return _sipRegistrarBiding; }
-            set { _sipRegistrarBiding = value; }
-        }
-
-        public SIPAssetPersistor<SIPDomain> SipDomain
-        {
-            get { return _sipDomain; }
-            set { _sipDomain = value; }
-        }
-
         public SIPAssetPersistor<SIPAccount> SipAccount
         {
             get { return _sipAccount; }
@@ -74,15 +57,8 @@ namespace SIPSorcery.GB28181.Sys.Config
 
         public void Read()
         {
-
             SIPAssetPersistor<SIPAccount> account = SIPAssetPersistorFactory<SIPAccount>.CreateSIPAssetPersistor(m_storageType, m_connStr, m_XMLFilename);
             _sipAccount = account;
-
-            SIPAssetPersistor<SIPDomain> domain = SIPAssetPersistorFactory<SIPDomain>.CreateSIPAssetPersistor(m_storageType, m_connStr, m_XMLFilename);
-            _sipDomain = domain;
-
-            SIPAssetPersistor<SIPRegistrarBinding> registrarBinding = SIPAssetPersistorFactory<SIPRegistrarBinding>.CreateSIPAssetPersistor(m_storageType, m_connStr, m_XMLFilename);
-            _sipRegistrarBiding = registrarBinding;
         }
     }
 }
