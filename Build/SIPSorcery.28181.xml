@@ -1202,14 +1202,7 @@
             <param name="remoteEndPoint">远程终结点</param>
             <param name="request">sip请求</param>
         </member>
-        <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.AddMessageRequest(SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPRequest)">
-            <summary>
-            sip请求消息
-            </summary>
-            <param name="localEndPoint">本地终结点</param>
-            <param name="remoteEndPoint">远程终结点</param>
-            <param name="request">sip请求</param>
-        </member>
+        <!-- 对于成员“M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.AddMessageRequest(SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPRequest)”忽略有格式错误的 XML 注释 -->
         <member name="M:SIPSorcery.GB28181.Servers.SIPMessage.SIPMessageCore.AddMessageResponse(SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPResponse)">
             <summary>
             sip响应消息
@@ -1657,6 +1650,316 @@
         <member name="M:SIPSorcery.GB28181.SIP.App.SIPRegistrarBinding.RefreshBinding(System.Int32,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,System.Boolean)">
             <summary>
             Refreshes a binding when the remote network information of the remote or proxy end point has changed.
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.SIP.App.SvrCamera">
+            <summary>
+            通道信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.Id">
+            <summary>
+            主键标识
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.ChannelGuid">
+            <summary>
+            通道唯一标识
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.ChannelID">
+            <summary>
+            通道编号
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.GBID">
+            <summary>
+            国标ID
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.Name">
+            <summary>
+            通道名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.DeviceID">
+            <summary>
+            设备ID
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.VideoStatus">
+            <summary>
+            视频状态
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.RecordStatus">
+            <summary>
+            录像状态
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.AudioFormat">
+            <summary>
+            音频格式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.VideoFormat">
+            <summary>
+            视频格式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.RtspURIFirst">
+            <summary>
+            rtsp地址1
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.RtspURISecond">
+            <summary>
+            rtsp地址2
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.RealStreamType">
+            <summary>
+            码流类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.Longitude">
+            <summary>
+            经度
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.Latitude">
+            <summary>
+            纬度
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.EndTime">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.CreateTime">
+            <summary>
+            接入时间
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrCamera.UpdateTime">
+            <summary>
+            更新时间
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.SIP.App.SvrDevice">
+            <summary>
+            设备信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Id">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.DeviceID">
+            <summary>
+            编号(设备/下级平台)
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Manufacture">
+            <summary>
+            厂商
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.DevType">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Model">
+            <summary>
+            型号
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Owner">
+            <summary>
+            所有者
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.CvilCode">
+            <summary>
+            城市码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.PlatformId">
+            <summary>
+            平台ID
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.IP">
+            <summary>
+            IP地址(设备/下级平台)
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Port">
+            <summary>
+            端口号(设备/下级平台)
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.ONVIFAddress">
+            <summary>
+            onvif地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.ONVIFVersion">
+            <summary>
+            onvif版本
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.IsAnalyzer">
+            <summary>
+            标准化(码流分析)
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.IsBackRecord">
+            <summary>
+            是/否有录像
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.LocalIP">
+            <summary>
+            本地IP
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.LocalPort">
+            <summary>
+            本地端口
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.LocalID">
+            <summary>
+            本地编码(国标ID)
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.MacAddress">
+            <summary>
+            mac地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Firmware">
+            <summary>
+            固件版本
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.ChannelNum">
+            <summary>
+            通道数量
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Reason">
+            <summary>
+            原因
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.DeviceTime">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Parental">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.ParentID">
+            <summary>
+            上级ID
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Block">
+            <summary>
+            锁定
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.RegisterWay">
+            <summary>
+            注册认证
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Secrecy">
+            <summary>
+            安全模式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.ErrCode">
+            <summary>
+            错误码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.URI">
+            <summary>
+            web地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.WebPort">
+            <summary>
+            web端口
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Latitude">
+            <summary>
+            纬度
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.Longitude">
+            <summary>
+            经度
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.CreateTime">
+            <summary>
+            接入时间
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.SIP.App.SvrDevice.UpdateTime">
+            <summary>
+            修改时间
             </summary>
         </member>
         <member name="T:SIPSorcery.GB28181.SIP.App.SIPDNSManager">
@@ -2457,6 +2760,310 @@
         <member name="M:SIPSorcery.GB28181.Sys.AppState.Create(System.Object,System.Object,System.Xml.XmlNode)">
             <summary>
             Handler for processing the App.Config file and retrieving a custom XML node.
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.ImageResolution">
+            <summary>
+            图像分辨率
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_Undefined">
+            <summary>
+            未设置
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_1280_720">
+            <summary>
+            720
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_1280_960">
+            <summary>
+            960
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_1920_1080">
+            <summary>
+            1080
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_704_576">
+            <summary>
+            D1
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_720_576">
+            <summary>
+            4CIF
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_352_288">
+            <summary>
+            CIF
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.ImageResolution.R_640_480">
+            <summary>
+            VGA
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.StreamType">
+            <summary>
+            码流类型
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.StreamType.mainStream">
+            <summary>
+            主码流
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.StreamType.childStream">
+            <summary>
+            子码流
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.StreamType.dounlechildStream">
+            <summary>
+            双子码流
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.StreamType.doubleMode">
+            <summary>
+            双流模式
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Sys.Config.StreamType.adaptiveMode">
+            <summary>
+            自适应模式
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable">
+            <summary>
+            设备列表
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.#cctor">
+            <summary>
+            初始化设备列表信息
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Get(System.String)">
+            <summary>
+            获取设备列表项
+            </summary>
+            <param name="ip"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.CreatGuid">
+            <summary>
+            创建设备ID
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.CreatNvrId">
+            <summary>
+            创建设备id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Read">
+            <summary>
+            加载设备信息
+            </summary>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Sys.Config.NvrTable.Save">
+            <summary>
+            保存设备信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Instance">
+            <summary>
+            以单例模式访问
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Streamselect">
+            <summary>
+            码流类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.Items">
+            <summary>
+            设备列表
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem">
+            <summary>
+            设备列表信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.NvrID">
+            <summary>
+            唯一标识
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.NvrName">
+            <summary>
+            设备/平台名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamID">
+            <summary>
+            设备/平台id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamIP">
+            <summary>
+            设备/平台ip
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamPort">
+            <summary>
+            设备/平台端口
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamUser">
+            <summary>
+            设备/平台用户
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.CamPassword">
+            <summary>
+            设备/平台密码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.DevType">
+            <summary>
+            设备/平台类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.OnvifAddress">
+            <summary>
+            onvif地址
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.IsAnalyzer">
+            <summary>
+            标准化码流
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.IsBackRecord">
+            <summary>
+            是/否有录像
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalID">
+            <summary>
+            本地平台Id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalIP">
+            <summary>
+            本地平台ip
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.NvrItem.LocalPort">
+            <summary>
+            本地平台端口
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem">
+            <summary>
+            通道信息
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Guid">
+            <summary>
+            通道id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.NvrID">
+            <summary>
+            设备/平台id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Channel">
+            <summary>
+            通道编码
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.ChannelName">
+            <summary>
+            通道名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.FrameRate">
+            <summary>
+            帧率
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.StreamFormat">
+            <summary>
+            码流格式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.AudioFormat">
+            <summary>
+            音频格式
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Rtsp1">
+            <summary>
+            rtsp地址1
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Rtsp2">
+            <summary>
+            rtsp地址2
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.MainResolution">
+            <summary>
+            主码流分辨率
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.SubResolution">
+            <summary>
+            子码流分辨率
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.StreamType">
+            <summary>
+            码流类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.CameraID">
+            <summary>
+            摄像机id
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.AreaName">
+            <summary>
+            所属区域名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.IsBackRecord">
+            <summary>
+            是/否有录像
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.Config.PlatformConfig">
+            <summary>
+            平台配置
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.PlatformConfig.ChannelName">
+            <summary>
+            通道名称
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.PlatformConfig.RemoteIP">
+            <summary>
+            远程IP
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.Config.PlatformConfig.RemotePort">
+            <summary>
+            远程端口
             </summary>
         </member>
         <member name="M:Aza.Configuration.Crypto.GetHash(System.String)">

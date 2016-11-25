@@ -115,9 +115,7 @@ namespace SIPSorcery.GB28181.Servers
         private int m_minimumBindingExpiry = SIPRegistrarBindingsManager.MINIMUM_EXPIRY_SECONDS;
 
         private SIPTransport m_sipTransport;
-        private SIPRegistrarBindingsManager m_registrarBindingsManager;
         private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
-        private GetCanonicalDomainDelegate GetCanonicalDomain_External;
         private SIPAuthenticateRequestDelegate SIPRequestAuthenticator_External;
         //private SIPAssetPersistor<Customer> CustomerPersistor_External;
 
@@ -142,9 +140,8 @@ namespace SIPSorcery.GB28181.Servers
 
         public RegistrarCore(
             SIPTransport sipTransport,
-            SIPRegistrarBindingsManager registrarBindingsManager,
+            //SIPRegistrarBindingsManager registrarBindingsManager,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
-            GetCanonicalDomainDelegate getCanonicalDomain,
             bool mangleUACContact,
             bool strictRealmHandling,
             //SIPMonitorLogDelegate proxyLogDelegate,
@@ -154,9 +151,8 @@ namespace SIPSorcery.GB28181.Servers
             //SIPAssetPersistor<Customer> customerPersistor)
         {
             m_sipTransport = sipTransport;
-            m_registrarBindingsManager = registrarBindingsManager;
+            //m_registrarBindingsManager = registrarBindingsManager;
             GetSIPAccount_External = getSIPAccount;
-            GetCanonicalDomain_External = getCanonicalDomain;
             m_mangleUACContact = mangleUACContact;
             m_strictRealmHandling = strictRealmHandling;
             //m_registrarLogEvent = proxyLogDelegate;
@@ -378,12 +374,12 @@ namespace SIPSorcery.GB28181.Servers
                     if (sipRequest.Header.Contact == null || sipRequest.Header.Contact.Count == 0)
                     {
                         // No contacts header to update bindings with, return a list of the current bindings.
-                        List<SIPRegistrarBinding> bindings = m_registrarBindingsManager.GetBindings(sipAccount.Id);
-                        //List<SIPContactHeader> contactsList = m_registrarBindingsManager.GetContactHeader(); // registration.GetContactHeader(true, null);
-                        if (bindings != null)
-                        {
-                            sipRequest.Header.Contact = GetContactHeader(bindings);
-                        }
+                        //List<SIPRegistrarBinding> bindings = m_registrarBindingsManager.GetBindings(sipAccount.Id);
+                        ////List<SIPContactHeader> contactsList = m_registrarBindingsManager.GetContactHeader(); // registration.GetContactHeader(true, null);
+                        //if (bindings != null)
+                        //{
+                        //    sipRequest.Header.Contact = GetContactHeader(bindings);
+                        //}
 
                         SIPResponse okResponse = GetOkResponse(sipRequest);
                         registerTransaction.SendFinalResponse(okResponse);
@@ -400,20 +396,20 @@ namespace SIPSorcery.GB28181.Servers
 
                         DateTime startTime = DateTime.Now;
 
-                        List<SIPRegistrarBinding> bindingsList = m_registrarBindingsManager.UpdateBindings(
-                            sipAccount,
-                            proxySIPEndPoint,
-                            uacRemoteEndPoint,
-                            registrarEndPoint,
-                            //sipRequest.Header.Contact[0].ContactURI.CopyOf(),
-                            sipRequest.Header.Contact,
-                            sipRequest.Header.CallId,
-                            sipRequest.Header.CSeq,
-                            //sipRequest.Header.Contact[0].Expires,
-                            sipRequest.Header.Expires,
-                            sipRequest.Header.UserAgent,
-                            out updateResult,
-                            out updateMessage);
+                        //List<SIPRegistrarBinding> bindingsList = m_registrarBindingsManager.UpdateBindings(
+                        //    sipAccount,
+                        //    proxySIPEndPoint,
+                        //    uacRemoteEndPoint,
+                        //    registrarEndPoint,
+                        //    //sipRequest.Header.Contact[0].ContactURI.CopyOf(),
+                        //    sipRequest.Header.Contact,
+                        //    sipRequest.Header.CallId,
+                        //    sipRequest.Header.CSeq,
+                        //    //sipRequest.Header.Contact[0].Expires,
+                        //    sipRequest.Header.Expires,
+                        //    sipRequest.Header.UserAgent,
+                        //    out updateResult,
+                        //    out updateMessage);
 
                         //int bindingExpiry = GetBindingExpiry(bindingsList, sipRequest.Header.Contact[0].ContactURI.ToString());
                         TimeSpan duration = DateTime.Now.Subtract(startTime);
@@ -424,27 +420,27 @@ namespace SIPSorcery.GB28181.Servers
                             string proxySocketStr = (proxySIPEndPoint != null) ? " (proxy=" + proxySIPEndPoint.ToString() + ")" : null;
 
                             int bindingCount = 1;
-                            foreach (SIPRegistrarBinding binding in bindingsList)
-                            {
-                                string bindingIndex = (bindingsList.Count == 1) ? String.Empty : " (" + bindingCount + ")";
-                                //FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.RegisterSuccess, "Registration successful for " + toUser + "@" + canonicalDomain + " from " + uacRemoteEndPoint + proxySocketStr + ", binding " + binding.ContactSIPURI.ToParameterlessString() + ";expiry=" + binding.Expiry + bindingIndex + ".", toUser));
-                                FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.RegisterSuccess, "Registration successful for " + toUser + "@" + canonicalDomain + " from " + uacRemoteEndPoint + ", binding " + binding.ContactSIPURI.ToParameterlessString() + ";expiry=" + binding.Expiry + bindingIndex + ".", toUser));
-                                //FireProxyLogEvent(new SIPMonitorMachineEvent(SIPMonitorMachineEventTypesEnum.SIPRegistrarBindingUpdate, toUser, uacRemoteEndPoint, sipAccount.Id.ToString()));
-                                bindingCount++;
-                            }
+                            //foreach (SIPRegistrarBinding binding in bindingsList)
+                            //{
+                            //    string bindingIndex = (bindingsList.Count == 1) ? String.Empty : " (" + bindingCount + ")";
+                            //    //FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.RegisterSuccess, "Registration successful for " + toUser + "@" + canonicalDomain + " from " + uacRemoteEndPoint + proxySocketStr + ", binding " + binding.ContactSIPURI.ToParameterlessString() + ";expiry=" + binding.Expiry + bindingIndex + ".", toUser));
+                            //    FireProxyLogEvent(new SIPMonitorConsoleEvent(SIPMonitorServerTypesEnum.Registrar, SIPMonitorEventTypesEnum.RegisterSuccess, "Registration successful for " + toUser + "@" + canonicalDomain + " from " + uacRemoteEndPoint + ", binding " + binding.ContactSIPURI.ToParameterlessString() + ";expiry=" + binding.Expiry + bindingIndex + ".", toUser));
+                            //    //FireProxyLogEvent(new SIPMonitorMachineEvent(SIPMonitorMachineEventTypesEnum.SIPRegistrarBindingUpdate, toUser, uacRemoteEndPoint, sipAccount.Id.ToString()));
+                            //    bindingCount++;
+                            //}
 
                             // The standard states that the Ok response should contain the list of current bindings but that breaks some UAs. As a 
                             // compromise the list is returned with the Contact that UAC sent as the first one in the list.
-                            bool contactListSupported = m_userAgentConfigs.GetUserAgentContactListSupport(sipRequest.Header.UserAgent);
-                            if (contactListSupported)
-                            {
-                                sipRequest.Header.Contact = GetContactHeader(bindingsList);
-                            }
-                            else
-                            {
-                                // Some user agents can't match the contact header if the expiry is added to it.
-                                sipRequest.Header.Contact[0].Expires = GetBindingExpiry(bindingsList, sipRequest.Header.Contact[0].ContactURI.ToString()); ;
-                            }
+                            //bool contactListSupported = m_userAgentConfigs.GetUserAgentContactListSupport(sipRequest.Header.UserAgent);
+                            //if (contactListSupported)
+                            //{
+                            //    sipRequest.Header.Contact = GetContactHeader(bindingsList);
+                            //}
+                            //else
+                            //{
+                            //    // Some user agents can't match the contact header if the expiry is added to it.
+                            //    sipRequest.Header.Contact[0].Expires = GetBindingExpiry(bindingsList, sipRequest.Header.Contact[0].ContactURI.ToString()); ;
+                            //}
 
                             SIPResponse okResponse = GetOkResponse(sipRequest);
 

@@ -49,6 +49,7 @@ using SIPSorcery.GB28181.Servers;
 using SIPSorcery.GB28181.Sys;
 using log4net;
 using SIPSorcery.GB28181.Servers.SIPMessage;
+using SIPSorcery.GB28181.Sys.Config;
 
 namespace Gb28181_Client.Message
 {
@@ -65,29 +66,22 @@ namespace Gb28181_Client.Message
         private int m_threadCount = SIPMessageState.ThreadCount;
 
         private SIPTransport m_sipTransport;
-        private SIPRegistrarBindingsManager m_registrarBindingsManager;
         private UdpClient m_natKeepAliveSender;
 
-        private GetCanonicalDomainDelegate GetCanonicalDomain_External;
         private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
-        private SIPAssetPersistor<SIPRegistrarBinding> m_registrarBindingsPersistor;
         private SIPAuthenticateRequestDelegate SIPAuthenticateRequest_External;
-        private Dictionary<string, string> _devList;
+        private Dictionary<string, PlatformConfig> _platformList;
 
         public SIPMessageCore MessageCore;
 
         public SIPMessageDaemon(
-            GetCanonicalDomainDelegate getDomain,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
-            SIPAssetPersistor<SIPRegistrarBinding> registrarBindingsPersistor,
             SIPAuthenticateRequestDelegate sipRequestAuthenticator,
-            Dictionary<string,string>devList)
+            Dictionary<string, PlatformConfig> platformList)
         {
-            GetCanonicalDomain_External = getDomain;
             GetSIPAccount_External = getSIPAccount;
-            m_registrarBindingsPersistor = registrarBindingsPersistor;
             SIPAuthenticateRequest_External = sipRequestAuthenticator;
-            _devList = devList;
+            _platformList = platformList;
         }
 
         public void Start()
@@ -119,11 +113,9 @@ namespace Gb28181_Client.Message
                 {
                     logger.Warn("The UserAgent config's node was missing.");
                 }
-                m_registrarBindingsManager = new SIPRegistrarBindingsManager(m_registrarBindingsPersistor, m_maximumAccountBindings, userAgentConfigManager);
-                m_registrarBindingsManager.Start();
 
                 MessageCore = new SIPMessageCore(m_sipTransport, userAgentConfigManager.DefaultUserAgent);
-                MessageCore.Initialize(m_switchboardUserAgentPrefix, SIPAuthenticateRequest_External, GetCanonicalDomain_External, GetSIPAccount_External, userAgentConfigManager, m_registrarBindingsManager, _devList);
+                MessageCore.Initialize(m_switchboardUserAgentPrefix, SIPAuthenticateRequest_External, GetSIPAccount_External, userAgentConfigManager, _platformList);
                 m_sipTransport.SIPTransportRequestReceived += MessageCore.AddMessageRequest;
                 m_sipTransport.SIPTransportResponseReceived += MessageCore.AddMessageResponse;
 
@@ -141,9 +133,6 @@ namespace Gb28181_Client.Message
             try
             {
                 logger.Debug("SIP Registrar daemon stopping...");
-
-                logger.Debug("Shutting down Registrar Bindings Manager.");
-                m_registrarBindingsManager.Stop();
 
                 logger.Debug("Shutting down SIP Transport.");
                 m_sipTransport.Shutdown();

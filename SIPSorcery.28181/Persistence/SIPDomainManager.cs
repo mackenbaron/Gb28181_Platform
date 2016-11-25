@@ -82,9 +82,10 @@ namespace SIPSorcery.GB28181.SIP.App
         //public SIPDomainManager()
         //{ }
 
-        public SIPDomainManager(StorageTypes storageType, string storageConnectionStr)
+        public SIPDomainManager(SIPAssetPersistor<SIPDomain> sipDomain)
         {
-            m_sipDomainPersistor = SIPAssetPersistorFactory<SIPDomain>.CreateSIPAssetPersistor(storageType, storageConnectionStr, m_storageFileName);
+            m_sipDomainPersistor = sipDomain;
+            //m_sipDomainPersistor = SIPAssetPersistorFactory<SIPDomain>.CreateSIPAssetPersistor(storageType, storageConnectionStr, m_storageFileName);
             //m_sipDomainPersistor.Added += new SIPAssetDelegate<SIPDomain>(d => { LoadSIPDomains(); });
             //m_sipDomainPersistor.Deleted += new SIPAssetDelegate<SIPDomain>(d => { LoadSIPDomains(); });
             //m_sipDomainPersistor.Updated += new SIPAssetDelegate<SIPDomain>(d => { LoadSIPDomains(); });

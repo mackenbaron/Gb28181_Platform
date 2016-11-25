@@ -185,11 +185,13 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         {
             if (_realReqSession.Header.CallId == callId)
             {
+
                 this.Stop();
                 if (OnBadRequest != null)
                 {
                     OnBadRequest();
                 }
+                _realReqSession = null;
             }
         }
 

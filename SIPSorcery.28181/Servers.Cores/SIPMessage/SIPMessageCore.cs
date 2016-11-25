@@ -4,6 +4,7 @@ using SIPSorcery.GB28181.Servers.SIPMonitor;
 using SIPSorcery.GB28181.SIP;
 using SIPSorcery.GB28181.SIP.App;
 using SIPSorcery.GB28181.Sys;
+using SIPSorcery.GB28181.Sys.Config;
 using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
@@ -107,35 +108,35 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
         public void Initialize(string switchboarduserAgentPrefix,
             SIPAuthenticateRequestDelegate sipRequestAuthenticator,
-            GetCanonicalDomainDelegate getCanonicalDomain,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             SIPUserAgentConfigurationManager userAgentConfigs,
-            SIPRegistrarBindingsManager registrarBindingsManager,
-            Dictionary<string, string> devList)
+            Dictionary<string, PlatformConfig> platformList)
         {
-            m_registrarCore = new RegistrarCore(Transport, registrarBindingsManager, getSIPAccount, getCanonicalDomain, true, true, userAgentConfigs, sipRequestAuthenticator, switchboarduserAgentPrefix);
+            m_registrarCore = new RegistrarCore(Transport, getSIPAccount, true, true, userAgentConfigs, sipRequestAuthenticator, switchboarduserAgentPrefix);
             m_registrarCore.Start(1);
             MonitorService = new Dictionary<string, ISIPMonitorService>();
 
-            //foreach (var item in devList)
-            //{
-            //    for (int i = 0; i < 2; i++)
-            //    {
-            //        CommandType cmdType = CommandType.Unknown;
-            //        if (i == 0)
-            //        {
-            //            cmdType = CommandType.Play;
-            //        }
-            //        else
-            //        {
-            //            cmdType = CommandType.Playback;
-            //        }
-            //        string key = item.Key + cmdType;
-            //        ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value,remoteEndPoint);
-            //        monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
-            //        MonitorService.Add(key, monitor);
-            //    }
-            //}
+            foreach (var item in platformList)
+            {
+                string sipEndPointStr = "udp:" + item.Value.RemoteIP + ":" + item.Value.RemotePort;
+                SIPEndPoint sipPoint = SIPEndPoint.ParseSIPEndPoint(sipEndPointStr);
+                for (int i = 0; i < 2; i++)
+                {
+                    CommandType cmdType = CommandType.Unknown;
+                    if (i == 0)
+                    {
+                        cmdType = CommandType.Play;
+                    }
+                    else
+                    {
+                        cmdType = CommandType.Playback;
+                    }
+                    string key = item.Key + cmdType;
+                    ISIPMonitorService monitor = new SIPMonitorCore(this, item.Key, item.Value.ChannelName, sipPoint);
+                    monitor.OnSIPServiceChanged += monitor_OnSIPServiceChanged;
+                    MonitorService.Add(key, monitor);
+                }
+            }
         }
 
         /// <summary>
@@ -286,33 +287,36 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             }
             else if (response.Status == SIPResponseStatusCodesEnum.BadRequest)  //请求失败
             {
-                string msg = "RealVideo 400 " + response.Status;
+                string toUser = response.Header.To.ToURI.User;
+                string msg = toUser + "===RealVideo 400 " + response.Status;
                 logger.Debug(msg);
                 if (response.Header.Warning != null)
                 {
                     msg += response.Header.Warning;
                 }
-                BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
+                BadRequest(msg, toUser, response.Header.CallId);
             }
             else if (response.Status == SIPResponseStatusCodesEnum.InternalServerError) //服务器内部错误
             {
-                string msg = "RealVideo 500 " + response.Status;
+                string toUser = response.Header.To.ToURI.User;
+                string msg = toUser + "===RealVideo 500 " + response.Status;
                 logger.Debug(msg);
                 if (response.Header.ErrorInfo != null)
                 {
                     msg += response.Header.ErrorInfo;
                 }
-                BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
+                BadRequest(msg, toUser, response.Header.CallId);
             }
             else if (response.Status == SIPResponseStatusCodesEnum.RequestTerminated)   //请求终止
             {
-                string msg = "RealVideo 487 " + response.Status;
+                string toUser = response.Header.To.ToURI.User;
+                string msg = toUser + "===RealVideo 487 " + response.Status;
                 logger.Debug(msg);
                 if (response.Header.ErrorInfo != null)
                 {
                     msg += response.Header.ErrorInfo;
                 }
-                BadRequest(msg, response.Header.To.ToURI.User, response.Header.CallId);
+                BadRequest(msg, toUser, response.Header.CallId);
             }
         }
 

@@ -188,10 +188,12 @@
     <Compile Include="SIP.App\Persistence\PersitenceDelegates.cs" />
     <Compile Include="SIP.App\SilverlightPolicyServer.cs" />
     <Compile Include="SIP.App\SIPAppFunctionDelegates.cs" />
+    <Compile Include="SIP.App\SIPAssets\ChannelItem.cs" />
     <Compile Include="SIP.App\SIPAssets\CustomerServiceLevels.cs" />
     <Compile Include="SIP.App\SIPAssets\ISIPAsset.cs" />
     <Compile Include="SIP.App\SIPAssets\ISIPCallManager.cs" />
     <Compile Include="SIP.App\SIPAssets\ISIPDialogueManager.cs" />
+    <Compile Include="SIP.App\SIPAssets\NvrItem.cs" />
     <Compile Include="SIP.App\SIPAssets\SIPAccount.cs" />
     <Compile Include="SIP.App\SIPAssets\SIPCDRAsset.cs" />
     <Compile Include="SIP.App\SIPAssets\SIPDialogueAsset.cs" />
@@ -266,6 +268,10 @@
     <Compile Include="Sys\Auth\ServiceAuthToken.cs" />
     <Compile Include="Sys\Auth\SIPSorcerySecurityHeader.cs" />
     <Compile Include="Sys\AzureTraceAppender.cs" />
+    <Compile Include="Sys\Config\EnumConfig.cs" />
+    <Compile Include="Sys\Config\NvrTable.cs" />
+    <Compile Include="Sys\Config\Platform.cs" />
+    <Compile Include="Sys\Config\SvrSqlite.cs" />
     <Compile Include="Sys\CRC32.cs" />
     <Compile Include="Sys\Crypto.cs" />
     <Compile Include="Sys\Crypto\Crypto.cs" />

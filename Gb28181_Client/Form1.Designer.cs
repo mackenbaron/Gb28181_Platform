@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("");
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
             this.btnStart = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
@@ -38,6 +38,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.btnBye = new System.Windows.Forms.Button();
             this.lvDev = new System.Windows.Forms.ListView();
+            this.Seq = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.devName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.devId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnRecord = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Seq = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // btnStart
@@ -136,10 +136,14 @@
             this.lvDev.Location = new System.Drawing.Point(12, 75);
             this.lvDev.MultiSelect = false;
             this.lvDev.Name = "lvDev";
-            this.lvDev.Size = new System.Drawing.Size(475, 334);
+            this.lvDev.Size = new System.Drawing.Size(475, 281);
             this.lvDev.TabIndex = 11;
             this.lvDev.UseCompatibleStateImageBehavior = false;
             this.lvDev.View = System.Windows.Forms.View.Details;
+            // 
+            // Seq
+            // 
+            this.Seq.Text = "序号";
             // 
             // devName
             // 
@@ -227,12 +231,12 @@
             this.columnHeader4});
             this.lvRecord.FullRowSelect = true;
             this.lvRecord.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8});
-            this.lvRecord.Location = new System.Drawing.Point(5, 415);
+            listViewItem1,
+            listViewItem2});
+            this.lvRecord.Location = new System.Drawing.Point(5, 362);
             this.lvRecord.MultiSelect = false;
             this.lvRecord.Name = "lvRecord";
-            this.lvRecord.Size = new System.Drawing.Size(668, 113);
+            this.lvRecord.Size = new System.Drawing.Size(668, 166);
             this.lvRecord.TabIndex = 19;
             this.lvRecord.UseCompatibleStateImageBehavior = false;
             this.lvRecord.View = System.Windows.Forms.View.Details;
@@ -261,10 +265,6 @@
             // 
             this.columnHeader4.Text = "录像结束时间";
             this.columnHeader4.Width = 130;
-            // 
-            // Seq
-            // 
-            this.Seq.Text = "序号";
             // 
             // Form1
             // 

@@ -7,6 +7,7 @@ using SIPSorcery.GB28181.Servers.SIPMessage;
 using SIPSorcery.GB28181.SIP;
 using SIPSorcery.GB28181.SIP.App;
 using SIPSorcery.GB28181.Sys;
+using SIPSorcery.GB28181.Sys.Config;
 using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace Gb28181_Client
     public delegate void SetSIPServiceText(string msg, SipServiceStatus state);
     public delegate void SetCatalogText(Catalog cata);
     public delegate void SetRecordText(RecordInfo record);
+
+
 
     public partial class Form1 : Form
     {
@@ -70,22 +73,32 @@ namespace Gb28181_Client
                 throw new ApplicationException("The SIP Registrar cannot start with no persistence settings.");
             }
 
-            SIPAssetPersistor<SIPAccount> sipAccountsPersistor = SIPAssetPersistorFactory<SIPAccount>.CreateSIPAssetPersistor(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr, m_sipAccountsXMLFilename);
-            SIPDomainManager sipDomainManager = new SIPDomainManager(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr);
-            SIPAssetPersistor<SIPRegistrarBinding> sipRegistrarBindingPersistor = SIPAssetPersistorFactory<SIPRegistrarBinding>.CreateSIPAssetPersistor(m_sipRegistrarStorageType, m_sipRegistrarStorageConnStr, m_sipRegistrarBindingsXMLFilename);
+            SIPSqlite.Instance.Read();
 
-            Dictionary<string, string> devList = new Dictionary<string, string>();
-            //devList.Add("34020000001320000011", "大华151");
-            //devList.Add("34020000001320000012", "大华20");
+            //NvrTable.Instance.Read();
+            //var v = NvrTable.Instance.Items;
+            SIPAssetPersistor<SIPAccount> sipAccountsPersistor = SIPSqlite.Instance.SipAccount;
 
-            foreach (var item in devList)
-            {
-                ListViewItem lvItem = new ListViewItem(new string[] { item.Value, item.Key });
-                lvItem.ImageKey = item.Key;
-                lvDev.Items.Add(lvItem);
-            }
+            Dictionary<string, PlatformConfig> platformList = new Dictionary<string, PlatformConfig>();
 
-            _messageDaemon = new SIPMessageDaemon(sipDomainManager.GetDomain, sipAccountsPersistor.Get, sipRegistrarBindingPersistor, SIPRequestAuthenticator.AuthenticateSIPRequest, devList);
+            //PlatformConfig config = new PlatformConfig()
+            //{
+            //    ChannelName = "大华151",
+            //    RemoteIP = "192.168.10.221",
+            //    RemotePort = 5060
+            //};
+            //platformList.Add("34020000001320000011Play", config);
+            //config.ChannelName = "大华20";
+            //platformList.Add("34020000001320000012Play", config);
+
+            //foreach (var item in devList)
+            //{
+            //    ListViewItem lvItem = new ListViewItem(new string[] { item.Value, item.Key });
+            //    lvItem.ImageKey = item.Key;
+            //    lvDev.Items.Add(lvItem);
+            //}
+
+            _messageDaemon = new SIPMessageDaemon(sipAccountsPersistor.Get, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
         }
 
         private void btnStart_Click(object sender, System.EventArgs e)
@@ -287,6 +300,7 @@ namespace Gb28181_Client
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             string id = Guid.NewGuid().ToString();
             return;
             Queue<Packet> packets = new Queue<Packet>();
