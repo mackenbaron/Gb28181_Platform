@@ -360,7 +360,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 {
                     return;
                 }
-                while (i < _publicByte.Length)
+                int bytes = _publicByte.Length-4;
+                while (i < bytes)
                 {
                     if (_publicByte[i] == 0x00 && _publicByte[i + 1] == 0x00 && _publicByte[i + 2] == 0x01 && _publicByte[i + 3] == 0xBA)
                     {
@@ -388,7 +389,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
             }
         }
 
@@ -553,7 +554,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             int cSeq = CallProperties.CreateNewCSeq();
             string callId = CallProperties.CreateNewCallId();
 
-            SIPURI remoteUri = new SIPURI(_deviceId,_remoteEndPoint.ToHost(), "");
+            SIPURI remoteUri = new SIPURI(_deviceId, _remoteEndPoint.ToHost(), "");
             SIPURI localUri = new SIPURI(_msgCore.LocalSIPId, _msgCore.LocalEndPoint.ToHost(), "");
             SIPFromHeader from = new SIPFromHeader(null, localUri, fromTag);
             SIPToHeader to = new SIPToHeader(null, remoteUri, null);

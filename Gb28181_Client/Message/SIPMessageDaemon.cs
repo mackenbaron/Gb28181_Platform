@@ -59,14 +59,8 @@ namespace Gb28181_Client.Message
 
         private XmlNode m_sipRegistrarSocketsNode = SIPMessageState.SIPRegistrarSocketsNode;
         private XmlNode m_userAgentsConfigNode = SIPMessageState.UserAgentsConfigNode;
-        private int m_monitorLoopbackPort = SIPMessageState.MonitorLoopbackPort;
-        private int m_maximumAccountBindings = SIPMessageState.MaximumAccountBindings;
-        private IPEndPoint m_natKeepAliveRelaySocket = SIPMessageState.NATKeepAliveRelaySocket;
-        private string m_switchboardUserAgentPrefix = SIPMessageState.SwitchboardUserAgentPrefix;
-        private int m_threadCount = SIPMessageState.ThreadCount;
 
         private SIPTransport m_sipTransport;
-        private UdpClient m_natKeepAliveSender;
 
         private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
         private SIPAuthenticateRequestDelegate SIPAuthenticateRequest_External;
@@ -102,12 +96,6 @@ namespace Gb28181_Client.Message
                 List<SIPChannel> sipChannels = SIPTransportConfig.ParseSIPChannelsNode(m_sipRegistrarSocketsNode);
                 m_sipTransport.AddSIPChannel(sipChannels);
 
-                // Create and configure the SIP Registrar core.
-                if (m_natKeepAliveRelaySocket != null)
-                {
-                    m_natKeepAliveSender = new UdpClient();
-                }
-
                 SIPUserAgentConfigurationManager userAgentConfigManager = new SIPUserAgentConfigurationManager(m_userAgentsConfigNode);
                 if (m_userAgentsConfigNode == null)
                 {
@@ -115,7 +103,7 @@ namespace Gb28181_Client.Message
                 }
 
                 MessageCore = new SIPMessageCore(m_sipTransport, userAgentConfigManager.DefaultUserAgent);
-                MessageCore.Initialize(m_switchboardUserAgentPrefix, SIPAuthenticateRequest_External, GetSIPAccount_External, userAgentConfigManager, _platformList);
+                MessageCore.Initialize(SIPAuthenticateRequest_External, GetSIPAccount_External, userAgentConfigManager, _platformList);
                 m_sipTransport.SIPTransportRequestReceived += MessageCore.AddMessageRequest;
                 m_sipTransport.SIPTransportResponseReceived += MessageCore.AddMessageResponse;
 

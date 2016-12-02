@@ -1766,7 +1766,7 @@
             通道编码
             </summary>
         </member>
-        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.ChannelName">
+        <member name="P:SIPSorcery.GB28181.Sys.Config.NvrTable.ChannelItem.Name">
             <summary>
             通道名称
             </summary>

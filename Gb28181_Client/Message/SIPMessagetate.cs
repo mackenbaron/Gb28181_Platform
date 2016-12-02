@@ -49,7 +49,7 @@ namespace Gb28181_Client.Message
     /// <summary>
     /// Retrieves application conifguration settings from App.Config.
     /// </summary>
-    public class SIPMessageState : IConfigurationSectionHandler
+    public class SIPMessageState 
     {
         private const string LOGGER_NAME = "siprergistrar";
 
@@ -69,12 +69,6 @@ namespace Gb28181_Client.Message
         private static readonly XmlNode m_sipRegistrarNode;
         public static readonly XmlNode SIPRegistrarSocketsNode;
         public static readonly XmlNode UserAgentsConfigNode;
-        public static readonly int MonitorLoopbackPort;
-        public static readonly int MaximumAccountBindings = 1;
-        public static IPEndPoint NATKeepAliveRelaySocket;
-        //public static readonly string SwitchboardCertificateName;
-        public static readonly string SwitchboardUserAgentPrefix;
-        public static readonly int ThreadCount = 1;
 
         static SIPMessageState()
         {
@@ -94,15 +88,15 @@ namespace Gb28181_Client.Message
 
                 #endregion
 
-                if (AppState.GetSection(SIPREGISTRAR_CONFIGNODE_NAME) != null)
-                {
-                    m_sipRegistrarNode = (XmlNode)AppState.GetSection(SIPREGISTRAR_CONFIGNODE_NAME);
-                }
+                //if (AppState.GetSection(SIPREGISTRAR_CONFIGNODE_NAME) != null)
+                //{
+                //    m_sipRegistrarNode = (XmlNode)AppState.GetSection(SIPREGISTRAR_CONFIGNODE_NAME);
+                //}
 
-                //XmlDocument doc = new XmlDocument();
-                //string xml = AppDomain.CurrentDomain.BaseDirectory + "Config\\SipSocket.xml";
-                //doc.Load(xml);
-                //m_sipRegistrarNode = doc.SelectNodes("sipServer")[0];
+                XmlDocument doc = new XmlDocument();
+                string xml = AppDomain.CurrentDomain.BaseDirectory + "Config\\SipSocket.xml";
+                doc.Load(xml);
+                m_sipRegistrarNode = doc.SelectNodes("sipServer")[0];
 
                 if (m_sipRegistrarNode == null)
                 {
@@ -118,18 +112,6 @@ namespace Gb28181_Client.Message
                     }
 
                     UserAgentsConfigNode = m_sipRegistrarNode.SelectSingleNode(USERAGENTS_CONFIGNODE_NAME);
-                    Int32.TryParse(AppState.GetConfigNodeValue(m_sipRegistrarNode, MONITOR_LOOPBACK_PORT_KEY), out MonitorLoopbackPort);
-                    Int32.TryParse(AppState.GetConfigNodeValue(m_sipRegistrarNode, MAXIMUM_ACCOUNT_BINDINGS_KEY), out MaximumAccountBindings);
-                    if (!AppState.GetConfigNodeValue(m_sipRegistrarNode, NATKEEPALIVE_RELAY_SOCKET).IsNullOrBlank())
-                    {
-                        NATKeepAliveRelaySocket = IPSocket.ParseSocketString(AppState.GetConfigNodeValue(m_sipRegistrarNode, NATKEEPALIVE_RELAY_SOCKET));
-                    }
-                    //SwitchboardCertificateName = AppState.GetConfigNodeValue(m_sipRegistrarNode, SWITCHBOARD_CERTIFICATE_NAME_KEY);
-                    SwitchboardUserAgentPrefix = AppState.GetConfigNodeValue(m_sipRegistrarNode, SWITCHBOARD_USERAGNET_PREFIX_KEY);
-                    if (!AppState.GetConfigNodeValue(m_sipRegistrarNode, THREAD_COUNT_KEY).IsNullOrBlank())
-                    {
-                        Int32.TryParse(AppState.GetConfigNodeValue(m_sipRegistrarNode, THREAD_COUNT_KEY), out ThreadCount);
-                    }
                 }
             }
             catch (Exception excp)
@@ -137,11 +119,6 @@ namespace Gb28181_Client.Message
                 logger.Error("Exception SIPRegistrarState. " + excp.Message);
                 throw;
             }
-        }
-
-        public object Create(object parent, object configContext, XmlNode section)
-        {
-            return section;
         }
     }
 }

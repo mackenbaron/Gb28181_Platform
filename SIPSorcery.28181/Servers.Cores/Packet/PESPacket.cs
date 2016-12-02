@@ -162,7 +162,10 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
             var br = new System.IO.BinaryReader(stream);
             Packet_Start_Code_Prefix = br.ReadBytes(3);
             if (Packet_Start_Code_Prefix[0] != 0 || Packet_Start_Code_Prefix[1] != 0 || Packet_Start_Code_Prefix[2] != 1)
-                throw new Exception();
+            {
+
+            }
+               // throw new Exception();
             Stream_ID = br.ReadByte();
             PES_Packet_Length = (ushort)IPAddress.NetworkToHostOrder(br.ReadInt16());
             if (PES_Packet_Length == 0 && false)

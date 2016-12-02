@@ -127,7 +127,6 @@ namespace SIPSorcery.GB28181.Servers
         private Queue<SIPNonInviteTransaction> m_registerQueue = new Queue<SIPNonInviteTransaction>();
         private AutoResetEvent m_registerARE = new AutoResetEvent(false);
         //private RSACryptoServiceProvider m_switchbboardRSAProvider; // If available this certificate can be used to sign switchboard tokens.
-        private string m_switchboarduserAgentPrefix;
 
         public event Action<double, bool> RegisterComplete;     // Event to allow hook into get notifications about the processing time for registrations. The boolean parameter is true of the request contained an authentication header.
 
@@ -140,40 +139,19 @@ namespace SIPSorcery.GB28181.Servers
 
         public RegistrarCore(
             SIPTransport sipTransport,
-            //SIPRegistrarBindingsManager registrarBindingsManager,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             bool mangleUACContact,
             bool strictRealmHandling,
-            //SIPMonitorLogDelegate proxyLogDelegate,
             SIPUserAgentConfigurationManager userAgentConfigs,
-            SIPAuthenticateRequestDelegate sipRequestAuthenticator,
-            string switchboarduserAgentPrefix)
-            //SIPAssetPersistor<Customer> customerPersistor)
+            SIPAuthenticateRequestDelegate sipRequestAuthenticator)
         {
             m_sipTransport = sipTransport;
-            //m_registrarBindingsManager = registrarBindingsManager;
             GetSIPAccount_External = getSIPAccount;
             m_mangleUACContact = mangleUACContact;
             m_strictRealmHandling = strictRealmHandling;
-            //m_registrarLogEvent = proxyLogDelegate;
             m_userAgentConfigs = userAgentConfigs;
             SIPRequestAuthenticator_External = sipRequestAuthenticator;
-            m_switchboarduserAgentPrefix = switchboarduserAgentPrefix;
             m_serverAgent = m_userAgentConfigs.DefaultUserAgent ?? SIPConstants.SIP_SERVER_STRING;
-            //CustomerPersistor_External = customerPersistor;
-            //try
-            //{
-            //    if (!switchboardCertificateName.IsNullOrBlank())
-            //    {
-            //        X509Certificate2 switchboardCertificate = AppState.LoadCertificate(StoreLocation.LocalMachine, switchboardCertificateName, false);
-            //        m_switchbboardRSAProvider = (RSACryptoServiceProvider)switchboardCertificate.PrivateKey;
-            //        logger.Debug("Switchboard RSA provider successfully loaded from " + switchboardCertificateName + " certificate.");
-            //    }
-            //}
-            //catch (Exception excp)
-            //{
-            //    logger.Error("Exception loading switchboard certificate using " + switchboardCertificateName + ". " + excp.Message);
-            //}
         }
 
         public void Start(int threadCount)

@@ -459,7 +459,7 @@ namespace SIPSorcery.GB28181.Sys.Config
             /// 通道名称
             /// </summary>
             [Column(Name = "ChannelName", DbType = "varchar(200)", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
-            public string ChannelName
+            public string Name
             {
                 get { return _channelName; }
                 set { _channelName = value; }

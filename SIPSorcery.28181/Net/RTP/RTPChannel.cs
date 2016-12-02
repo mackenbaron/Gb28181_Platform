@@ -316,8 +316,8 @@ namespace SIPSorcery.GB28181.Net
 
                 _thRTPRecv = new Thread(new ThreadStart(RTPReceive));
                 _thRTPRecv.Start();
-                _thProcRTP = new Thread(new ThreadStart(ProcessRTPPackets));
-                _thProcRTP.Start();
+                //_thProcRTP = new Thread(new ThreadStart(ProcessRTPPackets));
+                //_thProcRTP.Start();
                 //ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
                 //ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
                 _thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
@@ -387,7 +387,7 @@ namespace SIPSorcery.GB28181.Net
                     }
 
                     _thRTPRecv.Abort();
-                    _thProcRTP.Abort();
+                    //_thProcRTP.Abort();
                     _thrtcpRecv.Abort();
                 }
                 catch (ThreadAbortException ex)
@@ -418,7 +418,7 @@ namespace SIPSorcery.GB28181.Net
                 Thread.CurrentThread.Name = "rtpchanrecv-" + _rtpPort;
 
                 byte[] buffer = new byte[2048 * 4];
-
+                _rtpLastActivityAt = DateTime.Now;
                 while (!_isClosed)
                 {
                     try
@@ -504,28 +504,32 @@ namespace SIPSorcery.GB28181.Net
                                 else
                                 {
                                     RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
-
+                                    if (rtpPacket != null && OnPacketReady != null)
+                                    {
+                                        _lastRTPReceivedAt = DateTime.Now;
+                                        OnPacketReady(rtpPacket);
+                                    }
                                     //System.Diagnostics.Debug.WriteLine("RTPReceive ssrc " + rtpPacket.Header.SyncSource + ", seq num " + rtpPacket.Header.SequenceNumber + ", timestamp " + rtpPacket.Header.Timestamp + ", marker " + rtpPacket.Header.MarkerBit + ".");
 
-                                    lock (_packets)
-                                    {
-                                        if (_packets.Count > RTP_PACKETS_MAX_QUEUE_LENGTH)
-                                        {
-                                            System.Diagnostics.Debug.WriteLine("RTPChannel.RTPReceive packets queue full, clearing.");
-                                            logger.Warn("RTPChannel.RTPReceive packets queue full, clearing.");
+                                    //lock (_packets)
+                                    //{
+                                    //    if (_packets.Count > RTP_PACKETS_MAX_QUEUE_LENGTH)
+                                    //    {
+                                    //        System.Diagnostics.Debug.WriteLine("RTPChannel.RTPReceive packets queue full, clearing.");
+                                    //        logger.Warn("RTPChannel.RTPReceive packets queue full, clearing.");
 
-                                            _packets.Clear();
+                                    //        _packets.Clear();
 
-                                            if (OnRTPQueueFull != null)
-                                            {
-                                                OnRTPQueueFull();
-                                            }
-                                        }
-                                        else
-                                        {
-                                            _packets.Enqueue(rtpPacket);
-                                        }
-                                    }
+                                    //        if (OnRTPQueueFull != null)
+                                    //        {
+                                    //            OnRTPQueueFull();
+                                    //        }
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        _packets.Enqueue(rtpPacket);
+                                    //    }
+                                    //}
                                 }
                             }
                         }
@@ -533,6 +537,10 @@ namespace SIPSorcery.GB28181.Net
                         {
                             logger.Warn("Zero bytes read from RTPChannel RTP socket connected to " + _remoteEndPoint + ".");
                             //break;
+                        }
+                        if (DateTime.Now.Subtract(_lastRTPReceivedAt).TotalMilliseconds > 1)
+                        {
+                            Thread.Sleep(1);
                         }
                     }
                     catch (SocketException sockExcp)
@@ -601,6 +609,11 @@ namespace SIPSorcery.GB28181.Net
                             try
                             {
                                 rtpPacket = _packets.Dequeue();
+                                if (_packets.Count > 20)
+                                {
+                                    logger.Debug(_packets.Count);
+
+                                }
                             }
                             catch { }
                         }
@@ -652,6 +665,7 @@ namespace SIPSorcery.GB28181.Net
                             {
                                 lock (_seqnumberPackets)
                                 {
+
                                     _seqnumberPackets.Add(rtpPacket);
                                     _seqnumberPackets = _seqnumberPackets.OrderBy(p => p.Header.SequenceNumber).ToList();
 

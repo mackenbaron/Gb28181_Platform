@@ -100,16 +100,17 @@ namespace SIPSorcery.GB28181.Servers {
 
                 if (userAgentConifgNode != null && userAgentConifgNode.ChildNodes.Count != 0) {
                     foreach (XmlNode userAgentNode in userAgentConifgNode.SelectNodes("useragent")) {
-                        if (userAgentNode.InnerText != null && userAgentNode.InnerText.Trim().Length > 0) {
+                        //if (userAgentNode.InnerText != null && userAgentNode.InnerText.Trim().Length > 0) {
                             int expiry = Convert.ToInt32(userAgentNode.Attributes.GetNamedItem("expiry").Value);
                             bool contactListSupported = (userAgentNode.Attributes.GetNamedItem("contactlists") != null) ? Convert.ToBoolean(userAgentNode.Attributes.GetNamedItem("contactlists").Value) : true;
-                            SIPUserAgentConfiguration userAgentConfig = new SIPUserAgentConfiguration(expiry, contactListSupported, userAgentNode.InnerText);
+                            string userAgent = userAgentNode.Attributes.GetNamedItem("agent").Value;
+                            SIPUserAgentConfiguration userAgentConfig = new SIPUserAgentConfiguration(expiry, contactListSupported, userAgent);
 
                             if (userAgentConfig.UserAgentRegex != null && userAgentConfig.UserAgentRegex.Trim().Length > 0 && !userAgentConfigs.ContainsKey(userAgentConfig.UserAgentRegex)) {
                                 logger.Debug("Added useragent config, useragent=" + userAgentConfig.UserAgentRegex + ", expiry=" + userAgentConfig.MaxAllowedExpiryTime + "s, contact lists=" + userAgentConfig.ContactListSupported + ".");
                                 userAgentConfigs.Add(userAgentConfig.UserAgentRegex, userAgentConfig);
                             }
-                        }
+                        //}
                     }
                 }
 

@@ -31,16 +31,8 @@ namespace Gb28181_Client
 
     public partial class Form1 : Form
     {
-        private static readonly string m_storageTypeKey = SIPSorceryConfiguration.PERSISTENCE_STORAGETYPE_KEY;
-        private static readonly string m_connStrKey = SIPSorceryConfiguration.PERSISTENCE_STORAGECONNSTR_KEY;
-
-        private static readonly string m_sipAccountsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_SIPACCOUNTS_FILENAME;
-        private static readonly string m_sipRegistrarBindingsXMLFilename = SIPSorcery.GB28181.SIP.AssemblyState.XML_REGISTRAR_BINDINGS_FILENAME;
-
         private static ILog logger = AppState.logger;
 
-        private static StorageTypes m_sipRegistrarStorageType;
-        private static string m_sipRegistrarStorageConnStr;
         private SIPMessageDaemon _messageDaemon;
 
         event Action<Packet> OnPacketReady;
@@ -58,19 +50,6 @@ namespace Gb28181_Client
 
         private void Initialize()
         {
-            string path = AppDomain.CurrentDomain.BaseDirectory + "Config\\";
-            m_sipRegistrarStorageType = (AppState.GetConfigSetting(m_storageTypeKey) != null) ? StorageTypesConverter.GetStorageType(AppState.GetConfigSetting(m_storageTypeKey)) : StorageTypes.Unknown;
-            m_sipRegistrarStorageConnStr = AppState.GetConfigSetting(m_connStrKey);
-            if (m_sipRegistrarStorageType == StorageTypes.SQLite)
-            {
-                m_sipRegistrarStorageConnStr = string.Format(m_sipRegistrarStorageConnStr, path);
-
-            }
-            if (m_sipRegistrarStorageType == StorageTypes.Unknown || m_sipRegistrarStorageConnStr.IsNullOrBlank())
-            {
-                throw new ApplicationException("The SIP Registrar cannot start with no persistence settings.");
-            }
-
             SIPSqlite.Instance.Read();
 
             NvrTable.Instance.Read();
@@ -102,7 +81,7 @@ namespace Gb28181_Client
                 Guid = 1,
                 NvrID = 1,
                 Channel = 1,
-                ChannelName = "gb28181_Hik151",
+                Name = "gb28181_Hik151",
                 FrameRate = 25,
                 StreamFormat = "ES",
                 AudioFormat = "",
@@ -121,24 +100,6 @@ namespace Gb28181_Client
             SIPAssetPersistor<SIPAccount> sipAccountsPersistor = SIPSqlite.Instance.SipAccount;
 
             Dictionary<string, PlatformConfig> platformList = new Dictionary<string, PlatformConfig>();
-
-            //PlatformConfig config = new PlatformConfig()
-            //{
-            //    ChannelName = "大华151",
-            //    RemoteIP = "192.168.10.221",
-            //    RemotePort = 5060
-            //};
-            //platformList.Add("34020000001320000011Play", config);
-            //config.ChannelName = "大华20";
-            //platformList.Add("34020000001320000012Play", config);
-
-            //foreach (var item in devList)
-            //{
-            //    ListViewItem lvItem = new ListViewItem(new string[] { item.Value, item.Key });
-            //    lvItem.ImageKey = item.Key;
-            //    lvDev.Items.Add(lvItem);
-            //}
-
             _messageDaemon = new SIPMessageDaemon(sipAccountsPersistor.Get, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
         }
 
@@ -341,6 +302,26 @@ namespace Gb28181_Client
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SipServer sip = new SipServer()
+            {
+                sipsockets = new SipServer.SipSocket()
+                {
+                    sipsocket = "192.168.10.245:5060"
+                },
+                useragentconfigs = new SipServer.UserAgentConfig()
+                {
+                    useragent = new SipServer.Agent()
+                    {
+                      
+                        contactlists = true,
+                        expiry = 3600,
+                        agent = "VisionVera/1.0"
+                    }
+                }
+            };
+
+           SipServer.Instance.Save<SipServer>(sip);
+
 
             string id = Guid.NewGuid().ToString();
             return;

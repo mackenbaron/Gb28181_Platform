@@ -19,12 +19,18 @@ namespace SIPSorcery.GB28181.Sys.Config
 
         private static SIPSqlite _instance;
 
+        private List<SIPAccount> _accounts;
+
+        public List<SIPAccount> Accounts
+        {
+            get { return _accounts; }
+            set { _accounts = value; }
+        }
         private SIPAssetPersistor<SIPAccount> _sipAccount;
 
         public SIPAssetPersistor<SIPAccount> SipAccount
         {
             get { return _sipAccount; }
-            set { _sipAccount = value; }
         }
 
         public static SIPSqlite Instance
@@ -59,6 +65,20 @@ namespace SIPSorcery.GB28181.Sys.Config
         {
             SIPAssetPersistor<SIPAccount> account = SIPAssetPersistorFactory<SIPAccount>.CreateSIPAssetPersistor(m_storageType, m_connStr, m_XMLFilename);
             _sipAccount = account;
+            _accounts = account.Get();
+        }
+
+        public void Save(SIPAccount account)
+        {
+            if (_accounts.Any(d => d.SIPUsername == account.SIPUsername || d.SIPDomain == account.SIPDomain))
+            {
+                SipAccount.Update(account);
+            }
+            else
+            {
+                SipAccount.Add(account);
+                _accounts.Add(account);
+            }
         }
     }
 }

@@ -106,13 +106,12 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
             RemoteTrans = new Dictionary<string, string>();
         }
 
-        public void Initialize(string switchboarduserAgentPrefix,
-            SIPAuthenticateRequestDelegate sipRequestAuthenticator,
+        public void Initialize(SIPAuthenticateRequestDelegate sipRequestAuthenticator,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             SIPUserAgentConfigurationManager userAgentConfigs,
             Dictionary<string, PlatformConfig> platformList)
         {
-            m_registrarCore = new RegistrarCore(Transport, getSIPAccount, true, true, userAgentConfigs, sipRequestAuthenticator, switchboarduserAgentPrefix);
+            m_registrarCore = new RegistrarCore(Transport, getSIPAccount, true, true, userAgentConfigs, sipRequestAuthenticator);
             m_registrarCore.Start(1);
             MonitorService = new Dictionary<string, ISIPMonitorService>();
 

@@ -269,7 +269,7 @@
     <Compile Include="Sys\AzureTraceAppender.cs" />
     <Compile Include="Sys\Config\EnumConfig.cs" />
     <Compile Include="Sys\Config\Platform.cs" />
-    <Compile Include="Sys\Config\SvrSqlite.cs" />
+    <Compile Include="Sys\Config\SIPSqlite.cs" />
     <Compile Include="Sys\CRC32.cs" />
     <Compile Include="Sys\Crypto.cs" />
     <Compile Include="Sys\Crypto\Crypto.cs" />
@@ -297,7 +297,7 @@
     <Compile Include="Sys\XML\CommandType.cs" />
     <Compile Include="Sys\XML\KeepAlive.cs" />
     <Compile Include="Sys\XML\RecordInfo.cs" />
-    <Compile Include="Sys\XML\SipSocket.cs" />
+    <Compile Include="Sys\XML\SipServer.cs" />
     <Compile Include="Sys\XML\XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup />
