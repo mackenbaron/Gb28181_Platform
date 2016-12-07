@@ -320,10 +320,10 @@ namespace SIPSorcery.GB28181.Net
                 //_thProcRTP.Start();
                 //ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
                 //ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
-                _thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
-                _thrtcpRecv.Start();
-                //_controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
-                //_controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
+                //_thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
+                //_thrtcpRecv.Start();
+                _controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
+                _controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
             }
             else
             {
@@ -353,7 +353,7 @@ namespace SIPSorcery.GB28181.Net
                         byte[] rtcpPacket = senderReport.GetBytes();
                         _controlSocket.SendTo(rtcpPacket, 0, rtcpPacket.Length, SocketFlags.None, remoteEndPoint);
                     }
-                    Thread.Sleep(500);
+                    Thread.Sleep(5);
                 }
             }
             catch (Exception ex)
@@ -385,10 +385,6 @@ namespace SIPSorcery.GB28181.Net
                     {
                         _controlSocket.Close();
                     }
-                }
-                catch (ThreadAbortException ex)
-                {
-                    logger.Debug("Exception ThreadAbout " + ex);
                 }
                 catch (Exception excp)
                 {

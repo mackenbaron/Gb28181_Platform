@@ -154,7 +154,7 @@ namespace SIPSorcery.GB28181.Sys.XML
             }
             catch (Exception ex)
             {
-                logger.Error("反序列化错误" + ex.Message + ex.StackTrace.ToString());
+                //logger.Error("反序列化错误" + ex.Message + ex.StackTrace.ToString());
                 sr.Close();
                 return null;
             }

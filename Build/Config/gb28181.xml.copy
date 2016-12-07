@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sipaccounts>
+  <sipaccount>
+    <id>c781319b-62de-40a7-850b-64b56d3010ac</id>
+    <sipusername>34020000001320000001</sipusername>
+    <sippassword>12345678</sippassword>
+    <sipdomain>192.168.10.221:5060</sipdomain>
+    <owner>admin</owner>
+    <localID>34020000002000000001</localID>
+    <localSocket>192.168.10.60:5061</localSocket>
+  </sipaccount>
+</sipaccounts>
