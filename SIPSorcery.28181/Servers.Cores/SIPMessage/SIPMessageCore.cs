@@ -52,7 +52,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         /// <summary>
         /// 用户代理
         /// </summary>
-        internal string UserAgent;
+        internal string UserAgent = SIPConstants.SIP_USERAGENT_STRING;
         /// <summary>
         /// 本地sip终结点
         /// </summary>
@@ -102,16 +102,15 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         public SIPMessageCore(SIPTransport transport, string userAgent)
         {
             Transport = transport;
-            UserAgent = userAgent;
             RemoteTrans = new Dictionary<string, string>();
+
         }
 
         public void Initialize(SIPAuthenticateRequestDelegate sipRequestAuthenticator,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
-            SIPUserAgentConfigurationManager userAgentConfigs,
             Dictionary<string, PlatformConfig> platformList)
         {
-            m_registrarCore = new RegistrarCore(Transport, getSIPAccount, true, true, userAgentConfigs, sipRequestAuthenticator);
+            m_registrarCore = new RegistrarCore(Transport, getSIPAccount, true, true, sipRequestAuthenticator);
             m_registrarCore.Start(1);
             MonitorService = new Dictionary<string, ISIPMonitorService>();
 

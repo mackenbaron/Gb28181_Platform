@@ -511,5 +511,11 @@ namespace SIPSorcery.GB28181.SIP.App
         {
             m_sipCDR.Hungup(hangupReason);
         }
+
+
+        public System.Collections.Generic.Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

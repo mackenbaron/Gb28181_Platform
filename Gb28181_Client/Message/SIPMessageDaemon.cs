@@ -57,9 +57,6 @@ namespace Gb28181_Client.Message
     {
         private ILog logger = AppState.logger;
 
-        private XmlNode m_sipRegistrarSocketsNode = SIPMessageState.SIPRegistrarSocketsNode;
-        private XmlNode m_userAgentsConfigNode = SIPMessageState.UserAgentsConfigNode;
-
         private SIPTransport m_sipTransport;
 
         private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
@@ -84,26 +81,17 @@ namespace Gb28181_Client.Message
             {
                 logger.Debug("SIP Registrar daemon starting...");
 
-                // Pre-flight checks.
-                if (m_sipRegistrarSocketsNode == null || m_sipRegistrarSocketsNode.ChildNodes.Count == 0)
-                {
-                    throw new ApplicationException("The SIP Registrar cannot start without at least one socket specified to listen on, please check config file.");
-                }
 
                 // Configure the SIP transport layer.
                 m_sipTransport = new SIPTransport(SIPDNSManager.ResolveSIPService, new SIPTransactionEngine(), false);
                 m_sipTransport.PerformanceMonitorPrefix = SIPSorceryPerformanceMonitor.REGISTRAR_PREFIX;
-                List<SIPChannel> sipChannels = SIPTransportConfig.ParseSIPChannelsNode(m_sipRegistrarSocketsNode);
+                SIPAccount account = SIPSqlite.Instance.Accounts.FirstOrDefault();
+                List<SIPChannel> sipChannels = SIPTransportConfig.ParseSIPChannelsNode(account.LocalIP, account.LocalPort);
                 m_sipTransport.AddSIPChannel(sipChannels);
 
-                SIPUserAgentConfigurationManager userAgentConfigManager = new SIPUserAgentConfigurationManager(m_userAgentsConfigNode);
-                if (m_userAgentsConfigNode == null)
-                {
-                    logger.Warn("The UserAgent config's node was missing.");
-                }
 
-                MessageCore = new SIPMessageCore(m_sipTransport, userAgentConfigManager.DefaultUserAgent);
-                MessageCore.Initialize(SIPAuthenticateRequest_External, GetSIPAccount_External, userAgentConfigManager, _platformList);
+                MessageCore = new SIPMessageCore(m_sipTransport, SIPConstants.SIP_SERVER_STRING);
+                MessageCore.Initialize(SIPAuthenticateRequest_External, GetSIPAccount_External, _platformList);
                 m_sipTransport.SIPTransportRequestReceived += MessageCore.AddMessageRequest;
                 m_sipTransport.SIPTransportResponseReceived += MessageCore.AddMessageResponse;
 

@@ -45,6 +45,9 @@ using log4net;
 #if !SILVERLIGHT
 using System.Data;
 using System.Data.Linq.Mapping;
+using System.Collections.Generic;
+using System.Xml;
+using System.Net;
 #endif
 
 namespace SIPSorcery.GB28181.SIP.App
@@ -100,6 +103,33 @@ namespace SIPSorcery.GB28181.SIP.App
                 NotifyPropertyChanged("Owner");
             }
         }
+
+        private string m_localID;
+        [Column(Name = "LocalID", DbType = "varchar(32)", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
+        [DataMember]
+        public string LocalID
+        {
+            get { return m_localID; }
+            set { m_localID = value; }
+        }
+        private IPAddress m_localIP;
+        [Column(Name = "LocalIP", DbType = "varchar(32)", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
+        [DataMember]
+        public IPAddress LocalIP
+        {
+            get { return m_localIP; }
+            set { m_localIP = value; }
+        }
+
+        private ushort m_localPort;
+        [Column(Name = "LocalPort", DbType = "int", CanBeNull = false, UpdateCheck = UpdateCheck.Never)]
+        [DataMember]
+        public ushort LocalPort
+        {
+            get { return m_localPort; }
+            set { m_localPort = value; }
+        }
+
 
         [Column(Name = "adminmemberid", DbType = "varchar(32)", CanBeNull = true, UpdateCheck = UpdateCheck.Never)]
         public string AdminMemberId { get; set; }    // If set it designates this asset as a belonging to a user with the matching adminid.
@@ -384,31 +414,40 @@ namespace SIPSorcery.GB28181.SIP.App
             return table;
         }
 
-        public void Load(DataRow sipAccountRow)
+        public void Load(DataRow row)
         {
             try
             {
-                m_id = (sipAccountRow.Table.Columns.Contains("id") && sipAccountRow["id"].ToString().Trim().Length > 0) ? new Guid(sipAccountRow["id"] as string) : Guid.NewGuid();
-                m_sipUsername = sipAccountRow["sipusername"] as string;
-                m_sipPassword = sipAccountRow["sippassword"] as string;
-                m_sipDomain = sipAccountRow["sipdomain"] as string;
-                m_owner = (sipAccountRow.Table.Columns.Contains("owner") && sipAccountRow["owner"] != null) ? sipAccountRow["owner"] as string : SIPUsername;
-                AdminMemberId = (sipAccountRow.Table.Columns.Contains("adminmemberid") && sipAccountRow["adminmemberid"] != null) ? sipAccountRow["adminmemberid"] as string : null;
-                m_sendNATKeepAlives = (sipAccountRow.Table.Columns.Contains("sendnatkeepalives") && sipAccountRow["sendnatkeepalives"] != null && sipAccountRow["sendnatkeepalives"] != DBNull.Value) ? Convert.ToBoolean(sipAccountRow["sendnatkeepalives"]) : false;
-                m_isIncomingOnly = (sipAccountRow.Table.Columns.Contains("isincomingonly") && sipAccountRow["isincomingonly"] != null && sipAccountRow["isincomingonly"] != DBNull.Value) ? Convert.ToBoolean(sipAccountRow["isincomingonly"]) : false;
-                m_outDialPlanName = (sipAccountRow.Table.Columns.Contains("outdialplanname") && sipAccountRow["outdialplanname"] != null && sipAccountRow["outdialplanname"].ToString().Trim().Length > 0) ? sipAccountRow["outdialplanname"] as string : null;
-                m_inDialPlanName = (sipAccountRow.Table.Columns.Contains("indialplanname") && sipAccountRow["indialplanname"] != null && sipAccountRow["indialplanname"].ToString().Trim().Length > 0) ? sipAccountRow["indialplanname"] as string : null;
-                m_isUserDisabled = (sipAccountRow.Table.Columns.Contains("isuserdisabled") && sipAccountRow["isuserdisabled"] != null && sipAccountRow["isuserdisabled"] != DBNull.Value) ? Convert.ToBoolean(sipAccountRow["isuserdisabled"]) : false;
-                m_isAdminDisabled = (sipAccountRow.Table.Columns.Contains("isadmindisabled") && sipAccountRow["isadmindisabled"] != null && sipAccountRow["isadmindisabled"] != DBNull.Value) ? Convert.ToBoolean(sipAccountRow["isadmindisabled"]) : false;
-                m_adminDisabledReason = (sipAccountRow.Table.Columns.Contains("admindisabledreason") && sipAccountRow["admindisabledreason"] != null) ? sipAccountRow["admindisabledreason"] as string : null;
-                m_inserted = (sipAccountRow.Table.Columns.Contains("inserted") && sipAccountRow["inserted"] != null) ? DateTimeOffset.Parse(sipAccountRow["inserted"] as string) : DateTimeOffset.UtcNow;
-                m_networkId = (sipAccountRow.Table.Columns.Contains("networkid") && sipAccountRow["networkid"] != null) ? sipAccountRow["networkid"] as string : null;
-                m_ipAddressACL = (sipAccountRow.Table.Columns.Contains("ipaddressacl") && sipAccountRow["ipaddressacl"] != null) ? sipAccountRow["ipaddressacl"] as string : null;
-                m_isSwitchboardEnabled = (sipAccountRow.Table.Columns.Contains("isswitchboardenabled") && sipAccountRow["isswitchboardenabled"] != null && sipAccountRow["isswitchboardenabled"] != DBNull.Value) ? Convert.ToBoolean(sipAccountRow["isswitchboardenabled"]) : false;
-                m_dontMangleEnabled = (sipAccountRow.Table.Columns.Contains("dontmangleenabled") && sipAccountRow["dontmangleenabled"] != null && sipAccountRow["dontmangleenabled"] != DBNull.Value) ? Convert.ToBoolean(sipAccountRow["dontmangleenabled"]) : false;
-                m_avatarURL = (sipAccountRow.Table.Columns.Contains("avatarurl") && sipAccountRow["avatarurl"] != null) ? sipAccountRow["avatarurl"] as string : null;
-                m_accountCode = (sipAccountRow.Table.Columns.Contains("accountcode") && sipAccountRow["accountcode"] != null) ? sipAccountRow["accountcode"] as string : null;
-                m_description = (sipAccountRow.Table.Columns.Contains("description") && sipAccountRow["description"] != null) ? sipAccountRow["description"] as string : null;
+                m_id = (row.Table.Columns.Contains("id") && row["id"].ToString().Trim().Length > 0) ? new Guid(row["id"] as string) : Guid.NewGuid();
+                m_sipUsername = row["sipusername"] as string;
+                m_sipPassword = row["sippassword"] as string;
+                m_sipDomain = row["sipdomain"] as string;
+                m_owner = (row.Table.Columns.Contains("owner") && row["owner"] != null) ? row["owner"] as string : SIPUsername;
+                m_localID = (row.Table.Columns.Contains("localID") && row["localID"] != null) ? row["localID"] as string : null;
+                string endPoint = (row.Table.Columns.Contains("localSocket") && row["localSocket"] != null) ? row["localSocket"] as string : null;
+                if (endPoint != null)
+                {
+
+                    m_localIP = IPAddress.Parse(endPoint.Split(':')[0]);
+                    m_localPort = ushort.Parse(endPoint.Split(':')[1]);
+                }
+                m_owner = (row.Table.Columns.Contains("owner") && row["owner"] != null) ? row["owner"] as string : SIPUsername;
+                AdminMemberId = (row.Table.Columns.Contains("adminmemberid") && row["adminmemberid"] != null) ? row["adminmemberid"] as string : null;
+                m_sendNATKeepAlives = (row.Table.Columns.Contains("sendnatkeepalives") && row["sendnatkeepalives"] != null && row["sendnatkeepalives"] != DBNull.Value) ? Convert.ToBoolean(row["sendnatkeepalives"]) : false;
+                m_isIncomingOnly = (row.Table.Columns.Contains("isincomingonly") && row["isincomingonly"] != null && row["isincomingonly"] != DBNull.Value) ? Convert.ToBoolean(row["isincomingonly"]) : false;
+                m_outDialPlanName = (row.Table.Columns.Contains("outdialplanname") && row["outdialplanname"] != null && row["outdialplanname"].ToString().Trim().Length > 0) ? row["outdialplanname"] as string : null;
+                m_inDialPlanName = (row.Table.Columns.Contains("indialplanname") && row["indialplanname"] != null && row["indialplanname"].ToString().Trim().Length > 0) ? row["indialplanname"] as string : null;
+                m_isUserDisabled = (row.Table.Columns.Contains("isuserdisabled") && row["isuserdisabled"] != null && row["isuserdisabled"] != DBNull.Value) ? Convert.ToBoolean(row["isuserdisabled"]) : false;
+                m_isAdminDisabled = (row.Table.Columns.Contains("isadmindisabled") && row["isadmindisabled"] != null && row["isadmindisabled"] != DBNull.Value) ? Convert.ToBoolean(row["isadmindisabled"]) : false;
+                m_adminDisabledReason = (row.Table.Columns.Contains("admindisabledreason") && row["admindisabledreason"] != null) ? row["admindisabledreason"] as string : null;
+                m_inserted = (row.Table.Columns.Contains("inserted") && row["inserted"] != null) ? DateTimeOffset.Parse(row["inserted"] as string) : DateTimeOffset.UtcNow;
+                m_networkId = (row.Table.Columns.Contains("networkid") && row["networkid"] != null) ? row["networkid"] as string : null;
+                m_ipAddressACL = (row.Table.Columns.Contains("ipaddressacl") && row["ipaddressacl"] != null) ? row["ipaddressacl"] as string : null;
+                m_isSwitchboardEnabled = (row.Table.Columns.Contains("isswitchboardenabled") && row["isswitchboardenabled"] != null && row["isswitchboardenabled"] != DBNull.Value) ? Convert.ToBoolean(row["isswitchboardenabled"]) : false;
+                m_dontMangleEnabled = (row.Table.Columns.Contains("dontmangleenabled") && row["dontmangleenabled"] != null && row["dontmangleenabled"] != DBNull.Value) ? Convert.ToBoolean(row["dontmangleenabled"]) : false;
+                m_avatarURL = (row.Table.Columns.Contains("avatarurl") && row["avatarurl"] != null) ? row["avatarurl"] as string : null;
+                m_accountCode = (row.Table.Columns.Contains("accountcode") && row["accountcode"] != null) ? row["accountcode"] as string : null;
+                m_description = (row.Table.Columns.Contains("description") && row["description"] != null) ? row["description"] as string : null;
             }
             catch (Exception excp)
             {
@@ -417,9 +456,55 @@ namespace SIPSorcery.GB28181.SIP.App
             }
         }
 
-        //        public Dictionary<Guid, object> Load(XmlDocument dom) {
-        //            return SIPAssetXMLPersistor<SIPAccount>.LoadAssetsFromXMLRecordSet(dom);
-        //        }
+        public Dictionary<Guid, object> Load(XmlDocument dom)
+        {
+            return LoadAssetsFromXMLRecordSet(dom);
+        }
+
+        public Dictionary<Guid, object> LoadAssetsFromXMLRecordSet(XmlDocument dom)
+        {
+            try
+            {
+                Dictionary<Guid, object> assets = new Dictionary<Guid, object>();
+
+                DataSet sipAssetSet = new DataSet();
+                XmlTextReader xmlReader = new XmlTextReader(dom.OuterXml, XmlNodeType.Document, null);
+                sipAssetSet.ReadXml(xmlReader);
+
+                if (sipAssetSet != null && sipAssetSet.Tables != null && sipAssetSet.Tables.Count > 0)
+                {
+                    try
+                    {
+                        foreach (DataRow row in sipAssetSet.Tables[0].Rows)
+                        {
+                            SIPAccount sipAsset = new SIPAccount();
+                            sipAsset.Load(row);
+                            assets.Add(sipAsset.Id, sipAsset);
+                        }
+                    }
+                    catch (Exception excp)
+                    {
+                        logger.Error("Exception loading SIP asset record in LoadAssetsFromXMLRecordSet (" + (new SIPAccount()).GetType().ToString() + "). " + excp.Message);
+                    }
+
+                    logger.Debug(" " + assets.Count + " " + (new SIPAccount()).GetType().ToString() + " assets loaded from XML record set.");
+                }
+                else
+                {
+                    //logger.Warn("The XML supplied to LoadAssetsFromXMLRecordSet for asset type " + (new T()).GetType().ToString() + " did not contain any assets.");
+                    logger.Debug(" no " + (new SIPAccount()).GetType().ToString() + " assets loaded from XML record set.");
+                }
+
+                xmlReader.Close();
+
+                return assets;
+            }
+            catch (Exception excp)
+            {
+                logger.Error("Exception LoadAssetsFromXMLRecordSet. " + excp.Message);
+                throw;
+            }
+        }
 
 #endif
 

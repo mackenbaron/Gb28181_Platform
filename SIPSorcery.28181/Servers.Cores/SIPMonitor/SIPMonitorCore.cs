@@ -61,22 +61,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
 
         private FileStream m_fs = null;
 
-        private void _rtpChannel_OnFrameReady(RTPFrame frame)
-        {
-            //byte[] buffer = frame.GetFramePayload();
-            //if (OnStreamReady != null)
-            //{
-            //    OnStreamReady(buffer);
-            //}
-            //Write(buffer);
-
-            //if (this.m_fs == null)
-            //{
-            //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
-            //}
-            //m_fs.Write(buffer, 0, buffer.Length);
-        }
-
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
         {
             Action<string, SipServiceStatus> action = OnSIPServiceChanged;
@@ -104,10 +88,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                     return;
                 }
             }
-            //if (_mediaPort == null)
-            //{
-            //    _mediaPort = _msgCore.SetMediaPort();
-            //}
 
             _mediaPort = _msgCore.SetMediaPort();
 
@@ -134,7 +114,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         public void AckRequest(SIPResponse response)
         {
             _rtpChannel = new RTPChannel(_remoteEndPoint.GetIPEndPoint(), _mediaPort[0], _mediaPort[1], FrameTypesEnum.H264);
-            //_rtpChannel.OnFrameReady += _rtpChannel_OnFrameReady;
             _rtpChannel.OnPacketReady += _rtpChannel_OnRTPPacketReady;
             _rtpChannel.Start();
 
@@ -168,7 +147,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             {
                 OnStreamReady(buffer);
             }
-            //Write(buffer);
+            //PsToH264(buffer);
             //if (this.m_fs == null)
             //{
             //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
@@ -288,7 +267,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             }
             if (_rtpChannel != null)
             {
-                _rtpChannel.OnFrameReady -= _rtpChannel_OnFrameReady;
+                _rtpChannel.OnPacketReady -= _rtpChannel_OnRTPPacketReady;
                 _rtpChannel.Close();
             }
             if (m_fs != null)
@@ -348,48 +327,49 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         }
 
         #region 处理PS数据
+
         private byte[] _publicByte = new byte[0];
-        public void Write(byte[] buffer)
+        public void PsToH264(byte[] buffer)
         {
-            try
+            _publicByte = copybyte(_publicByte, buffer);
+            int i = 0;
+            int BANum = 0;
+            if (buffer == null || buffer.Length < 5)
             {
-                _publicByte = copybyte(_publicByte, buffer);
-                int i = 0;
-                int BANum = 0;
-                if (buffer == null || buffer.Length < 5)
+                return;
+            }
+            int bytes = _publicByte.Length - 4;
+            while (i < bytes)
+            {
+                if (_publicByte[i] == 0x00 && _publicByte[i + 1] == 0x00 && _publicByte[i + 2] == 0x01 && _publicByte[i + 3] == 0xBA)
                 {
-                    return;
-                }
-                int bytes = _publicByte.Length-4;
-                while (i < bytes)
-                {
-                    if (_publicByte[i] == 0x00 && _publicByte[i + 1] == 0x00 && _publicByte[i + 2] == 0x01 && _publicByte[i + 3] == 0xBA)
+                    BANum++;
+                    if (BANum == 2)
                     {
-                        BANum++;
-                        if (BANum == 2)
-                        {
-                            break;
-                        }
+                        break;
                     }
-                    i++;
                 }
+                i++;
+            }
 
-                if (BANum == 2)
+            if (BANum == 2)
+            {
+                byte[] psByte = new byte[i];
+                Array.Copy(_publicByte, 0, psByte, 0, i);
+
+                try
                 {
-                    byte[] psByte = new byte[i];
-                    Array.Copy(_publicByte, 0, psByte, 0, i);
-
                     //处理psByte
                     doPsByte(psByte);
-
-                    byte[] overByte = new byte[_publicByte.Length - i];
-                    Array.Copy(_publicByte, i, overByte, 0, overByte.Length);
-                    _publicByte = overByte;
                 }
-            }
-            catch (Exception ex)
-            {
-                //Console.WriteLine(ex.Message);
+                catch (Exception ex)
+                {
+                    Console.WriteLine("===============" + ex.Message + ex.StackTrace.ToString());
+                }
+
+                byte[] overByte = new byte[_publicByte.Length - i];
+                Array.Copy(_publicByte, i, overByte, 0, overByte.Length);
+                _publicByte = overByte;
             }
         }
 
@@ -434,17 +414,17 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 stream.Close();
                 return;
             }
-            var esdata = stream.ToArray();
+            long tick = videoPESList.FirstOrDefault().GetVideoTimetick();
+            var buffer = stream.ToArray();
             stream.Close();
             if (this.m_fs == null)
             {
                 this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
             }
-            m_fs.Write(esdata, 0, esdata.Length);
+            m_fs.Write(buffer, 0, buffer.Length);
             videoPESList.Clear();
         }
         #endregion
-
 
 
         #region <<<<<<demon  录像功能>>>>>

@@ -17,6 +17,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,49 +53,49 @@ namespace Gb28181_Client
         {
             SIPSqlite.Instance.Read();
 
-            NvrTable.Instance.Read();
+            //NvrTable.Instance.Read();
 
-            NvrTable.NvrItem item = new NvrTable.NvrItem()
-            {
-                Id = Guid.NewGuid(),
-                NvrID = 1,
-                NvrName = "Hik137",
-                CamID = "",
-                CamIP = "192.168.10.137",
-                CamPort = 5060,
-                CamUser = "admin",
-                CamPassword = "12345",
-                DevType = "Hik",
-                OnvifAddress = "",
-                IsAnalyzer = true,
-                IsBackRecord = 0,
-                LocalID = "",
-                LocalIP = "",
-                LocalPort = 5060
-            };
+            //NvrTable.NvrItem item = new NvrTable.NvrItem()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    NvrID = 1,
+            //    NvrName = "Hik137",
+            //    CamID = "",
+            //    CamIP = "192.168.10.137",
+            //    CamPort = 5060,
+            //    CamUser = "admin",
+            //    CamPassword = "12345",
+            //    DevType = "Hik",
+            //    OnvifAddress = "",
+            //    IsAnalyzer = true,
+            //    IsBackRecord = 0,
+            //    LocalID = "",
+            //    LocalIP = "",
+            //    LocalPort = 5060
+            //};
 
-            NvrTable.Instance.NvrItems.Add(item);
+            //NvrTable.Instance.NvrItems.Add(item);
 
-            NvrTable.ChannelItem channel = new NvrTable.ChannelItem()
-            {
-                Id = Guid.NewGuid(),
-                Guid = 1,
-                NvrID = 1,
-                Channel = 1,
-                Name = "gb28181_Hik151",
-                FrameRate = 25,
-                StreamFormat = "ES",
-                AudioFormat = "",
-                Rtsp1 = "",
-                Rtsp2 = "",
-                MainResolution = ImageResolution.R_Undefined,
-                SubResolution = ImageResolution.R_Undefined,
-                StreamType = StreamType.mainStream,
-                CameraID = "",
-                AreaName = "",
-                IsBackRecord = 0
-            };
-            NvrTable.Instance.ChannelItems.Add(channel);
+            //NvrTable.ChannelItem channel = new NvrTable.ChannelItem()
+            //{
+            //    Id = Guid.NewGuid(),
+            //    Guid = 1,
+            //    NvrID = 1,
+            //    Channel = 1,
+            //    Name = "gb28181_Hik151",
+            //    FrameRate = 25,
+            //    StreamFormat = "ES",
+            //    AudioFormat = "",
+            //    Rtsp1 = "",
+            //    Rtsp2 = "",
+            //    MainResolution = ImageResolution.R_Undefined,
+            //    SubResolution = ImageResolution.R_Undefined,
+            //    StreamType = StreamType.mainStream,
+            //    CameraID = "",
+            //    AreaName = "",
+            //    IsBackRecord = 0
+            //};
+            //NvrTable.Instance.ChannelItems.Add(channel);
 
 
             SIPAssetPersistor<SIPAccount> sipAccountsPersistor = SIPSqlite.Instance.SipAccount;
@@ -302,25 +303,26 @@ namespace Gb28181_Client
 
         private void button1_Click(object sender, EventArgs e)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            
+            SipServer.Account account = new SipServer.Account()
+            {
+                id = Guid.NewGuid(),
+                sipusername = "34020000001320000001",
+                sippassword = "12345678",
+                owner = "admin",
+                sipdomain = "192.168.10.221:5060",
+                localID = "34020000002000000001",
+                localSocket = "192.168.10.245:5061"
+            };
+            List<SipServer.Account> accounts = new List<SipServer.Account>();
+            accounts.Add(account);
             SipServer sip = new SipServer()
             {
-                sipsockets = new SipServer.SipSocket()
-                {
-                    sipsocket = "192.168.10.245:5060"
-                },
-                useragentconfigs = new SipServer.UserAgentConfig()
-                {
-                    useragent = new SipServer.Agent()
-                    {
-                      
-                        contactlists = true,
-                        expiry = 3600,
-                        agent = "VisionVera/1.0"
-                    }
-                }
+                Accounts = accounts
             };
 
-           SipServer.Instance.Save<SipServer>(sip);
+            SipServer.Instance.Save<SipServer>(sip);
 
 
             string id = Guid.NewGuid().ToString();

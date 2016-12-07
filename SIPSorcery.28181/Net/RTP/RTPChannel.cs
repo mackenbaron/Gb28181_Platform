@@ -385,10 +385,6 @@ namespace SIPSorcery.GB28181.Net
                     {
                         _controlSocket.Close();
                     }
-
-                    _thRTPRecv.Abort();
-                    //_thProcRTP.Abort();
-                    _thrtcpRecv.Abort();
                 }
                 catch (ThreadAbortException ex)
                 {
@@ -419,6 +415,7 @@ namespace SIPSorcery.GB28181.Net
 
                 byte[] buffer = new byte[2048 * 4];
                 _rtpLastActivityAt = DateTime.Now;
+
                 while (!_isClosed)
                 {
                     try
@@ -427,110 +424,37 @@ namespace SIPSorcery.GB28181.Net
 
                         if (bytesRead > 0)
                         {
-                            //_rtpSocket.SendTo(buffer, bytesRead, SocketFlags.None, _wiresharkEP);
-
                             _rtpLastActivityAt = DateTime.Now;
 
                             if (bytesRead > RTPHeader.MIN_HEADER_LEN)
                             {
-                                if ((buffer[0] & 0x80) == 0)
+                                RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
+                                if (rtpPacket != null && OnPacketReady != null)
                                 {
-                                    #region STUN Packet.
-
-                                    //if (_iceState != null)
-                                    //{
-                                    //    try
-                                    //    {
-                                    //        STUNv2Message stunMessage = STUNv2Message.ParseSTUNMessage(buffer, bytesRead);
-
-                                    //        //logger.Debug("STUN message received from Receiver Client @ " + stunMessage.Header.MessageType + ".");
-
-                                    //        if (stunMessage.Header.MessageType == STUNv2MessageTypesEnum.BindingRequest)
-                                    //        {
-                                    //            //logger.Debug("Sending STUN response to Receiver Client @ " + remoteEndPoint + ".");
-
-                                    //            STUNv2Message stunResponse = new STUNv2Message(STUNv2MessageTypesEnum.BindingSuccessResponse);
-                                    //            stunResponse.Header.TransactionId = stunMessage.Header.TransactionId;
-                                    //            stunResponse.AddXORMappedAddressAttribute(_remoteEndPoint.Address, _remoteEndPoint.Port);
-                                    //            byte[] stunRespBytes = stunResponse.ToByteBufferStringKey(_iceState.SenderPassword, true);
-                                    //            _rtpSocket.SendTo(stunRespBytes, _remoteEndPoint);
-
-                                    //            //logger.Debug("Sending Binding request to Receiver Client @ " + remoteEndPoint + ".");
-
-                                    //            STUNv2Message stunRequest = new STUNv2Message(STUNv2MessageTypesEnum.BindingRequest);
-                                    //            stunRequest.Header.TransactionId = Guid.NewGuid().ToByteArray().Take(12).ToArray();
-                                    //            stunRequest.AddUsernameAttribute(_iceState.ReceiverUser + ":" + _iceState.SenderUser);
-                                    //            stunRequest.Attributes.Add(new STUNv2Attribute(STUNv2AttributeTypesEnum.Priority, new byte[] { 0x6e, 0x7f, 0x1e, 0xff }));
-                                    //            byte[] stunReqBytes = stunRequest.ToByteBufferStringKey(_iceState.ReceiverPassword, true);
-                                    //            _rtpSocket.SendTo(stunReqBytes, _remoteEndPoint);
-
-                                    //            _iceState.LastSTUNMessageReceivedAt = DateTime.Now;
-                                    //        }
-                                    //        else if (stunMessage.Header.MessageType == STUNv2MessageTypesEnum.BindingSuccessResponse)
-                                    //        {
-                                    //            if (!_iceState.IsSTUNExchangeComplete)
-                                    //            {
-                                    //                _iceState.IsSTUNExchangeComplete = true;
-                                    //                logger.Debug("WebRTC client STUN exchange complete for " + _remoteEndPoint.ToString() + ".");
-                                    //            }
-                                    //        }
-                                    //        else if (stunMessage.Header.MessageType == STUNv2MessageTypesEnum.BindingErrorResponse)
-                                    //        {
-                                    //            logger.Warn("A STUN binding error response was received from " + _remoteEndPoint + ".");
-                                    //        }
-                                    //        else
-                                    //        {
-                                    //            logger.Warn("An unrecognised STUN request was received from " + _remoteEndPoint + ".");
-                                    //        }
-                                    //    }
-                                    //    catch (SocketException sockExcp)
-                                    //    {
-                                    //        logger.Debug("RTPChannel.RTPReceive STUN processing (" + _remoteEndPoint + "). " + sockExcp.Message);
-                                    //        continue;
-                                    //    }
-                                    //    catch (Exception stunExcp)
-                                    //    {
-                                    //        logger.Warn("Exception RTPChannel.RTPReceive STUN processing (" + _remoteEndPoint + "). " + stunExcp);
-                                    //        continue;
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-                                    //    logger.Warn("A STUN reponse was received on RTP socket from " + _remoteEndPoint + " but no ICE state was set.");
-                                    //}
-
-                                    #endregion
+                                    _lastRTPReceivedAt = DateTime.Now;
+                                    OnPacketReady(rtpPacket);
                                 }
-                                else
-                                {
-                                    RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
-                                    if (rtpPacket != null && OnPacketReady != null)
-                                    {
-                                        _lastRTPReceivedAt = DateTime.Now;
-                                        OnPacketReady(rtpPacket);
-                                    }
-                                    //System.Diagnostics.Debug.WriteLine("RTPReceive ssrc " + rtpPacket.Header.SyncSource + ", seq num " + rtpPacket.Header.SequenceNumber + ", timestamp " + rtpPacket.Header.Timestamp + ", marker " + rtpPacket.Header.MarkerBit + ".");
+                                //System.Diagnostics.Debug.WriteLine("RTPReceive ssrc " + rtpPacket.Header.SyncSource + ", seq num " + rtpPacket.Header.SequenceNumber + ", timestamp " + rtpPacket.Header.Timestamp + ", marker " + rtpPacket.Header.MarkerBit + ".");
 
-                                    //lock (_packets)
-                                    //{
-                                    //    if (_packets.Count > RTP_PACKETS_MAX_QUEUE_LENGTH)
-                                    //    {
-                                    //        System.Diagnostics.Debug.WriteLine("RTPChannel.RTPReceive packets queue full, clearing.");
-                                    //        logger.Warn("RTPChannel.RTPReceive packets queue full, clearing.");
+                                //lock (_packets)
+                                //{
+                                //    if (_packets.Count > RTP_PACKETS_MAX_QUEUE_LENGTH)
+                                //    {
+                                //        System.Diagnostics.Debug.WriteLine("RTPChannel.RTPReceive packets queue full, clearing.");
+                                //        logger.Warn("RTPChannel.RTPReceive packets queue full, clearing.");
 
-                                    //        _packets.Clear();
+                                //        _packets.Clear();
 
-                                    //        if (OnRTPQueueFull != null)
-                                    //        {
-                                    //            OnRTPQueueFull();
-                                    //        }
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        _packets.Enqueue(rtpPacket);
-                                    //    }
-                                    //}
-                                }
+                                //        if (OnRTPQueueFull != null)
+                                //        {
+                                //            OnRTPQueueFull();
+                                //        }
+                                //    }
+                                //    else
+                                //    {
+                                //        _packets.Enqueue(rtpPacket);
+                                //    }
+                                //}
                             }
                         }
                         else
@@ -538,7 +462,7 @@ namespace SIPSorcery.GB28181.Net
                             logger.Warn("Zero bytes read from RTPChannel RTP socket connected to " + _remoteEndPoint + ".");
                             //break;
                         }
-                        if (DateTime.Now.Subtract(_lastRTPReceivedAt).TotalMilliseconds > 1)
+                        if (DateTime.Now.Subtract(_rtpLastActivityAt).TotalMilliseconds > 1)
                         {
                             Thread.Sleep(1);
                         }

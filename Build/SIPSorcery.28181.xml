@@ -927,25 +927,6 @@
             <param name="host"></param>
             <returns>True if the host is present as a domain or an alias, false otherwise.</returns>
         </member>
-        <member name="M:SIPSorcery.GB28181.Persistence.StorageLayer.QuerySecurityCheck(System.String)">
-            <summary>
-            Checks SQL queries to filter out ones that match an SQL injection attack.
-            </summary>
-            <param name="query"></param>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Persistence.StorageLayer.IsPooledConnectionString(System.String)">
-            <summary>
-            Used to determine whethe Npgsql will treat a connection string as pooling or not.
-            Npgsql assumes a connection string is pooling by default.
-            </summary>
-        </member>
-        <member name="M:SIPSorcery.GB28181.Persistence.StorageLayer.ConvertToBool(System.Object)">
-            <summary>
-            
-            </summary>
-            <param name="column">Needs to be a bit data type from Postgresql.</param>
-            <returns></returns>
-        </member>
         <member name="T:SIPSorcery.GB28181.Servers.ISIPMonitorService">
             <summary>
             监控服务

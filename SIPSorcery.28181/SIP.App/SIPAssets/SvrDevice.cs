@@ -515,5 +515,11 @@ namespace SIPSorcery.GB28181.SIP.App
         {
             return XML_DOCUMENT_ELEMENT_NAME;
         }
+
+
+        public Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

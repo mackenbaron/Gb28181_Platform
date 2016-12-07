@@ -32,8 +32,8 @@ using System.Threading;
 using SIPSorcery.GB28181.Sys;
 using log4net;
 using MySql.Data.MySqlClient;
-using Npgsql;
-using NpgsqlTypes;
+//using Npgsql;
+//using NpgsqlTypes;
 
 #if UNITTEST
 using NUnit.Framework;

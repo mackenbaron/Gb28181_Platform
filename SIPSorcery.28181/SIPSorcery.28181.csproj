@@ -42,9 +42,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\packages\Npgsql.3.0.5\lib\net45\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -166,8 +163,7 @@
     <Compile Include="Persistence\SQL\SQLExpressionVisitor.cs" />
     <Compile Include="Persistence\SQL\SQLObjectReader.cs" />
     <Compile Include="Persistence\SQL\SQLQueryProvider.cs" />
-    <Compile Include="Persistence\StorageLayer.cs" />
-    <Compile Include="Persistence\XML\SIPAssetXMLPersistor.cs" />
+    <Compile Include="Persistence\XML\XMLAssetPersistor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyState.cs" />
     <Compile Include="Servers.Cores\ISIPMonitorService.cs" />

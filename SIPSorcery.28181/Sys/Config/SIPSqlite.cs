@@ -12,7 +12,7 @@ namespace SIPSorcery.GB28181.Sys.Config
     {
         private static readonly string m_storageTypeKey = SIPSorceryConfiguration.PERSISTENCE_STORAGETYPE_KEY;
         private static readonly string m_connStrKey = SIPSorceryConfiguration.PERSISTENCE_STORAGECONNSTR_KEY;
-        private static readonly string m_XMLFilename = string.Empty;
+        private static readonly string m_XMLFilename = "gb28181.xml";
 
         private static StorageTypes m_storageType;
         private static string m_connStr;

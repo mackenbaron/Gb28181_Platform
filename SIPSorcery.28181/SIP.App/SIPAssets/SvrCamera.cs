@@ -262,5 +262,11 @@ namespace SIPSorcery.GB28181.SIP.App
         {
             throw new NotImplementedException();
         }
+
+
+        public Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

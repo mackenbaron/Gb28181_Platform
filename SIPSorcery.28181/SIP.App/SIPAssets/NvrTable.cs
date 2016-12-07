@@ -401,6 +401,12 @@ namespace SIPSorcery.GB28181.Sys.Config
             {
                 throw new NotImplementedException();
             }
+
+
+            public Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         /// <summary>
@@ -628,6 +634,12 @@ namespace SIPSorcery.GB28181.Sys.Config
             }
 
             public string GetXMLDocumentElementName()
+            {
+                throw new NotImplementedException();
+            }
+
+
+            public Dictionary<Guid, object> Load(System.Xml.XmlDocument dom)
             {
                 throw new NotImplementedException();
             }

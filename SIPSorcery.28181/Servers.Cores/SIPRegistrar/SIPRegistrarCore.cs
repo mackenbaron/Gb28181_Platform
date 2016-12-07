@@ -142,16 +142,14 @@ namespace SIPSorcery.GB28181.Servers
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             bool mangleUACContact,
             bool strictRealmHandling,
-            SIPUserAgentConfigurationManager userAgentConfigs,
             SIPAuthenticateRequestDelegate sipRequestAuthenticator)
         {
             m_sipTransport = sipTransport;
             GetSIPAccount_External = getSIPAccount;
             m_mangleUACContact = mangleUACContact;
             m_strictRealmHandling = strictRealmHandling;
-            m_userAgentConfigs = userAgentConfigs;
             SIPRequestAuthenticator_External = sipRequestAuthenticator;
-            m_serverAgent = m_userAgentConfigs.DefaultUserAgent ?? SIPConstants.SIP_SERVER_STRING;
+            m_serverAgent = SIPConstants.SIP_SERVER_STRING;
         }
 
         public void Start(int threadCount)

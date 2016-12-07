@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<sipServer>
-  <sipsockets>
-    <sipsocket>192.168.10.245:5060</sipsocket>
-  </sipsockets>
-  <useragentconfigs>
-    <useragent agent="VisionVera/1.0" expiry="3600" contactlists="true" />
-  </useragentconfigs>
-</sipServer>

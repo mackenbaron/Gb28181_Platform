@@ -40,6 +40,7 @@ using System;
 using SIPSorcery.GB28181.SIP.App;
 using SIPSorcery.GB28181.Sys;
 using log4net;
+using SIPSorcery.GB28181.Persistence.XML;
 
 namespace SIPSorcery.GB28181.Persistence
 {
@@ -51,14 +52,14 @@ namespace SIPSorcery.GB28181.Persistence
         {
             try
             {
-                //if (storageType == StorageTypes.XML)
-                //{
-                //    if (!storageConnectionStr.EndsWith(@"\"))
-                //    {
-                //        storageConnectionStr += @"\";
-                //    }
-                //    return new SIPAssetXMLPersistor<T>(storageConnectionStr + filename);
-                //}
+                if (storageType == StorageTypes.XML)
+                {
+                    if (!storageConnectionStr.EndsWith(@"\"))
+                    {
+                        storageConnectionStr += @"\";
+                    }
+                    return new XMLAssetPersistor<T>(storageConnectionStr + filename);
+                }
                 if (storageType == StorageTypes.SQLLinqMySQL)
                 {
                     return new SQLAssetPersistor<T>(MySql.Data.MySqlClient.MySqlClientFactory.Instance, storageConnectionStr);

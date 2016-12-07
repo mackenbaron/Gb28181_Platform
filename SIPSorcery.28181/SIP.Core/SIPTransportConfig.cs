@@ -56,6 +56,14 @@ namespace SIPSorcery.GB28181.SIP
 
         private const string m_allIPAddresses = LocalIPConfig.ALL_LOCAL_IPADDRESSES_KEY;
 
+        public static List<SIPChannel> ParseSIPChannelsNode(IPAddress localIP, ushort localPort)
+        {
+            var sipChannels = new List<SIPChannel>();
+            var udpChannel = new SIPUDPChannel(new IPEndPoint(localIP, localPort));
+            sipChannels.Add(udpChannel);
+            return sipChannels;
+        }
+
         public static List<SIPChannel> ParseSIPChannelsNode(XmlNode sipChannelsNode, int port = 0)
         {
             var sipChannels = new List<SIPChannel>();
