@@ -88,7 +88,7 @@
             // 
             // btnCatalog
             // 
-            this.btnCatalog.Location = new System.Drawing.Point(494, 75);
+            this.btnCatalog.Location = new System.Drawing.Point(501, 75);
             this.btnCatalog.Name = "btnCatalog";
             this.btnCatalog.Size = new System.Drawing.Size(75, 23);
             this.btnCatalog.TabIndex = 3;
@@ -98,7 +98,7 @@
             // 
             // btnReal
             // 
-            this.btnReal.Location = new System.Drawing.Point(494, 118);
+            this.btnReal.Location = new System.Drawing.Point(501, 118);
             this.btnReal.Name = "btnReal";
             this.btnReal.Size = new System.Drawing.Size(75, 23);
             this.btnReal.TabIndex = 8;
@@ -108,7 +108,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(493, 204);
+            this.button1.Location = new System.Drawing.Point(500, 204);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 9;
@@ -118,7 +118,7 @@
             // 
             // btnBye
             // 
-            this.btnBye.Location = new System.Drawing.Point(493, 161);
+            this.btnBye.Location = new System.Drawing.Point(500, 161);
             this.btnBye.Name = "btnBye";
             this.btnBye.Size = new System.Drawing.Size(75, 23);
             this.btnBye.TabIndex = 10;
@@ -136,7 +136,7 @@
             this.lvDev.Location = new System.Drawing.Point(12, 75);
             this.lvDev.MultiSelect = false;
             this.lvDev.Name = "lvDev";
-            this.lvDev.Size = new System.Drawing.Size(475, 281);
+            this.lvDev.Size = new System.Drawing.Size(483, 281);
             this.lvDev.TabIndex = 11;
             this.lvDev.UseCompatibleStateImageBehavior = false;
             this.lvDev.View = System.Windows.Forms.View.Details;
@@ -157,7 +157,7 @@
             // 
             // btnRecord
             // 
-            this.btnRecord.Location = new System.Drawing.Point(598, 161);
+            this.btnRecord.Location = new System.Drawing.Point(605, 161);
             this.btnRecord.Name = "btnRecord";
             this.btnRecord.Size = new System.Drawing.Size(75, 23);
             this.btnRecord.TabIndex = 12;
@@ -167,7 +167,7 @@
             // 
             // btnStopRecord
             // 
-            this.btnStopRecord.Location = new System.Drawing.Point(598, 204);
+            this.btnStopRecord.Location = new System.Drawing.Point(605, 204);
             this.btnStopRecord.Name = "btnStopRecord";
             this.btnStopRecord.Size = new System.Drawing.Size(75, 23);
             this.btnStopRecord.TabIndex = 13;
@@ -177,41 +177,41 @@
             // 
             // txtStartTime
             // 
-            this.txtStartTime.Location = new System.Drawing.Point(536, 12);
+            this.txtStartTime.Location = new System.Drawing.Point(543, 12);
             this.txtStartTime.Name = "txtStartTime";
             this.txtStartTime.Size = new System.Drawing.Size(137, 21);
             this.txtStartTime.TabIndex = 14;
-            this.txtStartTime.Text = "2016-11-15 8:00:00";
+            this.txtStartTime.Text = "2016-12-8 8:00:00";
             // 
             // txtStopTime
             // 
-            this.txtStopTime.Location = new System.Drawing.Point(536, 47);
+            this.txtStopTime.Location = new System.Drawing.Point(543, 47);
             this.txtStopTime.Name = "txtStopTime";
             this.txtStopTime.Size = new System.Drawing.Size(137, 21);
             this.txtStopTime.TabIndex = 15;
-            this.txtStopTime.Text = "2016-11-15 12:00:00";
+            this.txtStopTime.Text = "2016-12-8 12:00:00";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(453, 17);
+            this.label2.Location = new System.Drawing.Point(486, 17);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 12);
+            this.label2.Size = new System.Drawing.Size(53, 12);
             this.label2.TabIndex = 16;
-            this.label2.Text = "录像开始时间";
+            this.label2.Text = "开始时间";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(453, 51);
+            this.label3.Location = new System.Drawing.Point(486, 51);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 12);
+            this.label3.Size = new System.Drawing.Size(53, 12);
             this.label3.TabIndex = 17;
-            this.label3.Text = "录像结束时间";
+            this.label3.Text = "结束时间";
             // 
             // btnRecordGet
             // 
-            this.btnRecordGet.Location = new System.Drawing.Point(598, 118);
+            this.btnRecordGet.Location = new System.Drawing.Point(605, 118);
             this.btnRecordGet.Name = "btnRecordGet";
             this.btnRecordGet.Size = new System.Drawing.Size(75, 23);
             this.btnRecordGet.TabIndex = 18;
@@ -233,10 +233,10 @@
             this.lvRecord.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2});
-            this.lvRecord.Location = new System.Drawing.Point(5, 362);
+            this.lvRecord.Location = new System.Drawing.Point(12, 362);
             this.lvRecord.MultiSelect = false;
             this.lvRecord.Name = "lvRecord";
-            this.lvRecord.Size = new System.Drawing.Size(668, 166);
+            this.lvRecord.Size = new System.Drawing.Size(668, 125);
             this.lvRecord.TabIndex = 19;
             this.lvRecord.UseCompatibleStateImageBehavior = false;
             this.lvRecord.View = System.Windows.Forms.View.Details;
@@ -270,7 +270,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 538);
+            this.ClientSize = new System.Drawing.Size(690, 497);
             this.Controls.Add(this.lvRecord);
             this.Controls.Add(this.btnRecordGet);
             this.Controls.Add(this.label3);

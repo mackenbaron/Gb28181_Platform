@@ -1,1 +1,16 @@
-2016-12-07 15:48:21,402 [10] DEBUG sipsorcery [(null)] - Logging initialised.
+2016-12-08 09:24:21,673 [10] DEBUG sipsorcery [(null)] - Logging initialised.
+2016-12-08 09:24:22,999 [10] DEBUG sipsorcery [(null)] -  1 SIPSorcery.GB28181.SIP.App.SIPAccount assets loaded from XML record set.
+2016-12-08 09:24:22,999 [10] DEBUG sipsorcery [(null)] - Starting file watch on Config and gb28181.xml.
+2016-12-08 09:24:23,046 [10] DEBUG sipsorcery [(null)] - SIP Registrar daemon starting...
+2016-12-08 09:24:23,108 [10] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel listener created 192.168.10.60:5061.
+2016-12-08 09:24:23,108 [sipchanneludp-ZZFF] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.60:5061 listening started.
+2016-12-08 09:24:23,108 [10] DEBUG sipregistrar [(null)] - SIPRegistrarCore thread started with 1 threads.
+2016-12-08 09:24:23,108 [10] DEBUG sipsorcery [(null)] - SIP Registrar successfully started.
+2016-12-08 09:24:23,405 [sipchanneludp-ZZFF] DEBUG sipsorcery [(null)] - RemoteTrans Init:Remote:udp:192.168.10.221:5060-----User:34020000001320000001
+2016-12-08 09:27:00,155 [10] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopping...
+2016-12-08 09:27:00,155 [10] DEBUG sipsorcery [(null)] - Shutting down SIP Transport.
+2016-12-08 09:27:00,155 [10] DEBUG sipsorcery.sip [(null)] - Closing SIP UDP Channel udp:192.168.10.60:5061.
+2016-12-08 09:27:00,155 [10] DEBUG sipsorcery.sip [(null)] - SIPTransport Shutdown Complete.
+2016-12-08 09:27:00,170 [10] DEBUG sipsorcery [(null)] - sip message service stopped.
+2016-12-08 09:27:00,170 [sipchanneludp-ZZFF] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.60:5061 listening halted.
+2016-12-08 09:27:00,170 [10] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopped.
