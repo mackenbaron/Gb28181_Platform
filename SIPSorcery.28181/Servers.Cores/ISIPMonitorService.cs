@@ -1,4 +1,5 @@
-﻿using SIPSorcery.GB28181.Servers.SIPMessage;
+﻿using SIPSorcery.GB28181.Net;
+using SIPSorcery.GB28181.Servers.SIPMessage;
 using SIPSorcery.GB28181.SIP;
 using SIPSorcery.GB28181.Sys.XML;
 using System;
@@ -52,7 +53,7 @@ namespace SIPSorcery.GB28181.Servers
         /// <summary>
         /// 视频流回调完成
         /// </summary>
-        event Action<byte[]> OnStreamReady;
+        event Action<RTPFrame> OnStreamReady;
 
         /// <summary>
         /// 录像文件检索

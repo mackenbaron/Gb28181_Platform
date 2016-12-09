@@ -535,7 +535,10 @@ namespace SIPSorcery.GB28181.Persistence.XML
         {
 
             string copyFilename = filePath + ".copy";
-            File.Copy(filePath, copyFilename, true);
+            if (!File.Exists(copyFilename))
+            {
+                File.Copy(filePath, copyFilename, true);
+            }
 
             XmlDocument sipAssetDOM = new XmlDocument();
             sipAssetDOM.Load(copyFilename);

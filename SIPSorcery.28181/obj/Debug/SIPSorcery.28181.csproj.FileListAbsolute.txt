@@ -1,3 +1,4 @@
+F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.pdb
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\SIPSorcery.28181.XML
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\SIPSorcery.28181.dll
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\SIPSorcery.28181.pdb
@@ -11,4 +12,3 @@ F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\MySql.Data
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\System.Data.SQLite.xml
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.csprojResolveAssemblyReference.cache
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.dll
-F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.pdb

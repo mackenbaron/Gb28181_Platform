@@ -37,6 +37,12 @@ namespace SIPSorcery.GB28181.Sys.XML
         public CommandType CmdType { get; set; }
 
         /// <summary>
+        /// 序号
+        /// </summary>
+        [XmlElement("SN")]
+        public int SN { get; set; }
+
+        /// <summary>
         /// 设备编码
         /// </summary>
         [XmlElement("DeviceID")]

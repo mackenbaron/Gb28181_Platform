@@ -89,6 +89,9 @@ namespace SIPSorcery.GB28181.Net
         private byte[] _controlSocketBuffer;
         private bool _isClosed;
         private Queue<RTPPacket> _packets = new Queue<RTPPacket>();
+        private int _frameTag = 1;
+        private RTPFrame _firstFrame = new RTPFrame();
+        private RTPFrame _secondFrame = new RTPFrame();
 
         private IPEndPoint _remoteEndPoint;
         public IPEndPoint RemoteEndPoint
@@ -425,11 +428,15 @@ namespace SIPSorcery.GB28181.Net
                             if (bytesRead > RTPHeader.MIN_HEADER_LEN)
                             {
                                 RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
-                                if (rtpPacket != null && OnPacketReady != null)
+                                if (rtpPacket != null)
                                 {
-                                    _lastRTPReceivedAt = DateTime.Now;
-                                    OnPacketReady(rtpPacket);
+                                    CombineFrame(rtpPacket);
                                 }
+                                //if (rtpPacket != null && OnPacketReady != null)
+                                //{
+                                //    _lastRTPReceivedAt = DateTime.Now;
+                                //    OnPacketReady(rtpPacket);
+                                //}
                                 //System.Diagnostics.Debug.WriteLine("RTPReceive ssrc " + rtpPacket.Header.SyncSource + ", seq num " + rtpPacket.Header.SequenceNumber + ", timestamp " + rtpPacket.Header.Timestamp + ", marker " + rtpPacket.Header.MarkerBit + ".");
 
                                 //lock (_packets)
@@ -505,7 +512,53 @@ namespace SIPSorcery.GB28181.Net
                     }
                 }
             }
+
         }
+
+        /// <summary>
+        /// 合并rtp包为一帧数据(包乱序处理)
+        /// </summary>
+        /// <param name="rtpPacket">rtp包</param>
+        private void CombineFrame(RTPPacket rtpPacket)
+        {
+            if (_firstFrame.FramePackets.Count == 0 || _firstFrame.Timestamp == rtpPacket.Header.Timestamp)
+            {
+                _firstFrame.AddRTPPacket(rtpPacket);
+                _firstFrame.FrameType = FrameTypesEnum.H264;
+                _firstFrame.Timestamp = rtpPacket.Header.Timestamp;
+            }
+            else if (_secondFrame.FramePackets.Count == 0 || _secondFrame.Timestamp == rtpPacket.Header.Timestamp)
+            {
+                _secondFrame.AddRTPPacket(rtpPacket);
+                _secondFrame.FrameType = FrameTypesEnum.H264;
+                _secondFrame.Timestamp = rtpPacket.Header.Timestamp;
+            }
+            else
+            {
+                RTPFrame frame = null;
+                if (_frameTag == 1)
+                {
+                    _frameTag = 2;
+                    _firstFrame.HasMarker = _firstFrame.FramePackets.Any(d => d.Header.MarkerBit == 1);
+                    _firstFrame.FramePackets.Clear();
+                    _firstFrame.AddRTPPacket(rtpPacket);
+                    frame = _firstFrame;
+                }
+                else
+                {
+                    _frameTag = 1;
+                    _secondFrame.HasMarker = _secondFrame.FramePackets.Any(d => d.Header.MarkerBit == 1);
+                    _secondFrame.FramePackets.Clear();
+                    _secondFrame.AddRTPPacket(rtpPacket);
+                    frame = _secondFrame;
+                }
+                if (OnFrameReady != null)
+                {
+                    OnFrameReady(frame);
+                }
+            }
+        }
+
 
         List<RTPPacket> _seqnumberPackets = new List<RTPPacket>();
 

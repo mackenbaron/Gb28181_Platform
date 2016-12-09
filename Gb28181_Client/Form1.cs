@@ -98,10 +98,9 @@ namespace Gb28181_Client
             //NvrTable.Instance.ChannelItems.Add(channel);
 
 
-            SIPAssetPersistor<SIPAccount> sipAccountsPersistor = SIPSqlite.Instance.SipAccount;
-
+            SIPAssetPersistor<SIPAccount> account = SIPSqlite.Instance.SipAccount;
             Dictionary<string, PlatformConfig> platformList = new Dictionary<string, PlatformConfig>();
-            _messageDaemon = new SIPMessageDaemon(sipAccountsPersistor.Get, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
+            _messageDaemon = new SIPMessageDaemon(account.Get,SIPSqlite.Instance.Accounts, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
         }
 
         private void btnStart_Click(object sender, System.EventArgs e)
@@ -304,7 +303,7 @@ namespace Gb28181_Client
         private void button1_Click(object sender, EventArgs e)
         {
             XmlDocument xmlDoc = new XmlDocument();
-            
+
             SipServer.Account account = new SipServer.Account()
             {
                 id = Guid.NewGuid(),

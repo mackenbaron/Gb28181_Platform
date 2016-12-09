@@ -223,6 +223,11 @@ namespace SIPSorcery.GB28181.Sys.XML
             /// </summary>
             [XmlElement("Latitude")]
             public double Latitude { get; set; }
+
+            /// <summary>
+            /// 远程设备终结点
+            /// </summary>
+            public string RemoteEP { get; set; }
         }
 
     }

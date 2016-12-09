@@ -498,6 +498,12 @@
             used in order to determine when a full frame has been received.
             </summary>
         </member>
+        <member name="M:SIPSorcery.GB28181.Net.RTPChannel.CombineFrame(SIPSorcery.GB28181.Net.RTPPacket)">
+            <summary>
+            合并rtp包为一帧数据(包乱序处理)
+            </summary>
+            <param name="rtpPacket">rtp包</param>
+        </member>
         <member name="M:SIPSorcery.GB28181.Net.RTPChannel.SendAudioFrame(System.Byte[],System.UInt32,System.Int32)">
             <summary>
             Sends an audio frame where the payload size is less than the maximum RTP packet payload size.
@@ -3450,6 +3456,11 @@
             纬度(可选)
             </summary>
         </member>
+        <member name="P:SIPSorcery.GB28181.Sys.XML.Catalog.Item.RemoteEP">
+            <summary>
+            远程设备终结点
+            </summary>
+        </member>
         <member name="T:SIPSorcery.GB28181.Sys.XML.DevStatus">
             <summary>
             设备状态
@@ -3563,6 +3574,11 @@
         <member name="P:SIPSorcery.GB28181.Sys.XML.KeepAlive.CmdType">
             <summary>
             命令类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.XML.KeepAlive.SN">
+            <summary>
+            序号
             </summary>
         </member>
         <member name="P:SIPSorcery.GB28181.Sys.XML.KeepAlive.DeviceID">
@@ -3728,6 +3744,16 @@
         <member name="P:SIPSorcery.GB28181.Sys.XML.RecordInfo.Item.RecorderID">
             <summary>
             录像产生者ID
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.XML.SipServer">
+            <summary>
+            sip服务器配置
+            </summary>
+        </member>
+        <member name="T:SIPSorcery.GB28181.Sys.XML.SipServer.Account">
+            <summary>
+            账户信息
             </summary>
         </member>
     </members>

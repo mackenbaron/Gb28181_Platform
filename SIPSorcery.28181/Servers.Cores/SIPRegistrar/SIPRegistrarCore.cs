@@ -309,9 +309,9 @@ namespace SIPSorcery.GB28181.Servers
                 SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser && s.SIPDomain == canonicalDomain);
                 //SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser);
                 SIPRequestAuthenticationResult authenticationResult = SIPRequestAuthenticator_External(registerTransaction.LocalSIPEndPoint, registerTransaction.RemoteEndPoint, sipRequest, sipAccount, FireProxyLogEvent);
-                //if (1== 2)
+                //if (1 == 2)
                 //{
-                    
+
                 //}
                 if (!authenticationResult.Authenticated)
                 {

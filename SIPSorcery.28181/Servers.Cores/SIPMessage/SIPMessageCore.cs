@@ -43,7 +43,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
         private static ILog logger = AppState.logger;
 
-        private bool _initSIP = false;
+        private bool _initSIP;
         private int MEDIA_PORT_START = 30000;
         private int MEDIA_PORT_END = 32000;
         private RegistrarCore m_registrarCore;
@@ -108,8 +108,23 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
         public void Initialize(SIPAuthenticateRequestDelegate sipRequestAuthenticator,
             SIPAssetGetDelegate<SIPAccount> getSIPAccount,
-            Dictionary<string, PlatformConfig> platformList)
+            Dictionary<string, PlatformConfig> platformList,
+            List<SIPAccount>accounts)
         {
+            foreach (var account in accounts)
+            {
+                SIPEndPoint remoteEP = SIPEndPoint.ParseSIPEndPoint("udp:" + account.SIPDomain);
+                RemoteTrans.Add(remoteEP.ToString(), account.SIPUsername);
+                if (LocalEndPoint ==null)
+                {
+                    LocalEndPoint = SIPEndPoint.ParseSIPEndPoint("udp:" + account.LocalIP.ToString() + ":" + account.LocalPort);
+                }
+                if (LocalSIPId == null)
+                {
+                    LocalSIPId = account.LocalID;
+                }
+            }
+
             m_registrarCore = new RegistrarCore(Transport, getSIPAccount, true, true, sipRequestAuthenticator);
             m_registrarCore.Start(1);
             MonitorService = new Dictionary<string, ISIPMonitorService>();
@@ -150,7 +165,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 if (!RemoteTrans.ContainsKey(remoteEndPoint.ToString()))
                 {
                     RemoteTrans.Add(remoteEndPoint.ToString(), request.Header.From.FromURI.User);
-                    logger.Debug("RemoteTrans Init:Remote:" + remoteEndPoint.ToString() + "-----User:" + request.Header.From.FromURI.User);
+                    logger.Debug("RemoteTrans Init:Remote:" + remoteEndPoint.ToHost() + "-----User:" + request.Header.From.FromURI.User);
                 }
             }
         }
@@ -176,17 +191,17 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 KeepAlive keepAlive = KeepAlive.Instance.Read(request.Body);
                 if (keepAlive != null && keepAlive.CmdType == CommandType.Keepalive)  //心跳
                 {
-                    if (!_initSIP)
-                    {
-                        LocalEndPoint = request.Header.To.ToURI.ToSIPEndPoint();
-                        RemoteEndPoint = request.Header.From.FromURI.ToSIPEndPoint();
-                        LocalSIPId = request.Header.To.ToURI.User;
-                        RemoteSIPId = request.Header.From.FromURI.User;
-                    }
+                    //if (!_initSIP)
+                    //{
+                        //LocalEndPoint = request.Header.To.ToURI.ToSIPEndPoint();
+                        //RemoteEndPoint = request.Header.From.FromURI.ToSIPEndPoint();
+                        //LocalSIPId = request.Header.To.ToURI.User;
+                        //RemoteSIPId = request.Header.From.FromURI.User;
+                    //}
 
-                    _initSIP = true;
-
-                    OnSIPServiceChange(remoteEndPoint.ToString(), SipServiceStatus.Complete);
+                    //_initSIP = true;
+                    logger.Debug("KeepAlive:" + remoteEndPoint.ToHost() + "=====DevID:" + keepAlive.DeviceID + "=====Status:" + keepAlive.Status + "=====SN:" + keepAlive.SN);
+                    OnSIPServiceChange(remoteEndPoint.ToHost(), SipServiceStatus.Complete);
                 }
                 else
                 {
@@ -195,6 +210,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                     {
                         foreach (var cata in catalog.DeviceList.Items)
                         {
+                            cata.RemoteEP = request.Header.From.FromURI.Host;
                             for (int i = 0; i < 2; i++)
                             {
                                 CommandType cmdType = CommandType.Unknown;
@@ -331,7 +347,21 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 string[] values = item.Split('=');
                 if (values.Contains("s"))
                 {
-                    return values[1];
+                    if (values[1] == "Play\r" || values[1] == "Playback\r")
+                    {
+                        return values[1];
+                    }
+                }
+                else if (values.Contains("t"))
+                {
+                    if (values[1] == "0 0\r")
+                    {
+                        return CommandType.Play.ToString();
+                    }
+                    else
+                    {
+                        return CommandType.Playback.ToString();
+                    }
                 }
             }
             return null;
