@@ -80,8 +80,6 @@ namespace SIPSorcery.GB28181.Net
 
         private static Mutex _allocatePortsMutex = new Mutex();
 
-        private static IPEndPoint _wiresharkEP = new IPEndPoint(IPAddress.Parse("10.1.1.3"), 10001);
-
         private Socket _rtpSocket;
         private SocketError _rtpSocketError = SocketError.Success;
         private Socket _controlSocket;

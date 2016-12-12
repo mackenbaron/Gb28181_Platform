@@ -91,6 +91,7 @@ namespace SIPSorcery.GB28181.SIP.App
                     }
                     else
                     {
+                        return new SIPRequestAuthenticationResult(true, false);
                         // Check for IP address authentication.
                         if (!sipAccount.IPAddressACL.IsNullOrBlank())
                         {

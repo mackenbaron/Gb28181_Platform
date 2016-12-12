@@ -62,17 +62,15 @@ namespace Gb28181_Client.Message
         private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
         private SIPAuthenticateRequestDelegate SIPAuthenticateRequest_External;
         private Dictionary<string, PlatformConfig> _platformList;
-        private List<SIPAccount> _accounts;
+        private SIPAccount _account;
         public SIPMessageCore MessageCore;
 
         public SIPMessageDaemon(
-            SIPAssetGetDelegate<SIPAccount> getSIPAccount,
-            List<SIPAccount> accounts,
+            SIPAccount account,
             SIPAuthenticateRequestDelegate sipRequestAuthenticator,
             Dictionary<string, PlatformConfig> platformList)
         {
-            GetSIPAccount_External = getSIPAccount;
-            _accounts = accounts;
+            _account = account;
             SIPAuthenticateRequest_External = sipRequestAuthenticator;
             _platformList = platformList;
         }
@@ -93,7 +91,7 @@ namespace Gb28181_Client.Message
 
 
                 MessageCore = new SIPMessageCore(m_sipTransport, SIPConstants.SIP_SERVER_STRING);
-                MessageCore.Initialize(SIPAuthenticateRequest_External, GetSIPAccount_External, _platformList,_accounts);
+                MessageCore.Initialize(SIPAuthenticateRequest_External, _platformList,_account);
                 m_sipTransport.SIPTransportRequestReceived += MessageCore.AddMessageRequest;
                 m_sipTransport.SIPTransportResponseReceived += MessageCore.AddMessageResponse;
 

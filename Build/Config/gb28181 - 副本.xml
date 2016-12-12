@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sipaccounts>
+  <sipaccount>
+    <id>8c7982cf-a8c4-4ac6-86c7-8d967e8da30f</id>
+    <sipusername>34020000001320000001</sipusername>
+    <sippassword>12345678</sippassword>
+    <sipdomain>192.168.10.221:5060</sipdomain>
+    <owner>admin</owner>
+    <localID>34020000002000000001</localID>
+    <localSocket>192.168.10.60:5061</localSocket>
+  </sipaccount>
+  <sipaccount>
+    <id>57b229d5-bd26-11e6-a8f4-0023570c2591</id>
+    <sipusername>34020000001320000003</sipusername>
+    <sippassword>12345678</sippassword>
+    <sipdomain>192.168.10.143:5060</sipdomain>
+    <owner>admin</owner>
+    <localID>34020000002000000001</localID>
+    <localSocket>192.168.10.60:5061</localSocket>
+  </sipaccount>
+   <sipaccount>
+    <id>bd5280e6-bd2d-11e6-a8f4-0023570c2591</id>
+    <sipusername>34020000001110000001</sipusername>
+    <sippassword>12345678</sippassword>
+    <sipdomain>192.168.10.220:5060</sipdomain>
+    <owner>admin</owner>
+    <localID>34020000002000000001</localID>
+    <localSocket>192.168.10.60:5061</localSocket>
+  </sipaccount>
+</sipaccounts>

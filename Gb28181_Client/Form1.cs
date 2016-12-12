@@ -52,55 +52,14 @@ namespace Gb28181_Client
         private void Initialize()
         {
             SIPSqlite.Instance.Read();
-
-            //NvrTable.Instance.Read();
-
-            //NvrTable.NvrItem item = new NvrTable.NvrItem()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    NvrID = 1,
-            //    NvrName = "Hik137",
-            //    CamID = "",
-            //    CamIP = "192.168.10.137",
-            //    CamPort = 5060,
-            //    CamUser = "admin",
-            //    CamPassword = "12345",
-            //    DevType = "Hik",
-            //    OnvifAddress = "",
-            //    IsAnalyzer = true,
-            //    IsBackRecord = 0,
-            //    LocalID = "",
-            //    LocalIP = "",
-            //    LocalPort = 5060
-            //};
-
-            //NvrTable.Instance.NvrItems.Add(item);
-
-            //NvrTable.ChannelItem channel = new NvrTable.ChannelItem()
-            //{
-            //    Id = Guid.NewGuid(),
-            //    Guid = 1,
-            //    NvrID = 1,
-            //    Channel = 1,
-            //    Name = "gb28181_Hik151",
-            //    FrameRate = 25,
-            //    StreamFormat = "ES",
-            //    AudioFormat = "",
-            //    Rtsp1 = "",
-            //    Rtsp2 = "",
-            //    MainResolution = ImageResolution.R_Undefined,
-            //    SubResolution = ImageResolution.R_Undefined,
-            //    StreamType = StreamType.mainStream,
-            //    CameraID = "",
-            //    AreaName = "",
-            //    IsBackRecord = 0
-            //};
-            //NvrTable.Instance.ChannelItems.Add(channel);
-
-
-            SIPAssetPersistor<SIPAccount> account = SIPSqlite.Instance.SipAccount;
+            var account = SIPSqlite.Instance.Accounts.FirstOrDefault();
+            if (account == null)
+            {
+                logger.Error("Account Config NULL SIP not started");
+                return;
+            }
             Dictionary<string, PlatformConfig> platformList = new Dictionary<string, PlatformConfig>();
-            _messageDaemon = new SIPMessageDaemon(account.Get,SIPSqlite.Instance.Accounts, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
+            _messageDaemon = new SIPMessageDaemon(account, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
         }
 
         private void btnStart_Click(object sender, System.EventArgs e)
@@ -325,7 +284,6 @@ namespace Gb28181_Client
 
 
             string id = Guid.NewGuid().ToString();
-            return;
             Queue<Packet> packets = new Queue<Packet>();
             FileInfo file = new FileInfo("D:\\test.txt");
             FileStream fStream = file.OpenRead();
@@ -388,6 +346,7 @@ namespace Gb28181_Client
         }
         private void btnRecordGet_Click(object sender, EventArgs e)
         {
+
             _recordSN = 1;
             lvRecord.Items.Clear();
             DateTime startTime = DateTime.Parse(txtStartTime.Text.Trim());

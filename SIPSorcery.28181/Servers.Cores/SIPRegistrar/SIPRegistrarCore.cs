@@ -115,7 +115,6 @@ namespace SIPSorcery.GB28181.Servers
         private int m_minimumBindingExpiry = SIPRegistrarBindingsManager.MINIMUM_EXPIRY_SECONDS;
 
         private SIPTransport m_sipTransport;
-        private SIPAssetGetDelegate<SIPAccount> GetSIPAccount_External;
         private SIPAuthenticateRequestDelegate SIPRequestAuthenticator_External;
         //private SIPAssetPersistor<Customer> CustomerPersistor_External;
 
@@ -139,13 +138,11 @@ namespace SIPSorcery.GB28181.Servers
 
         public RegistrarCore(
             SIPTransport sipTransport,
-            SIPAssetGetDelegate<SIPAccount> getSIPAccount,
             bool mangleUACContact,
             bool strictRealmHandling,
             SIPAuthenticateRequestDelegate sipRequestAuthenticator)
         {
             m_sipTransport = sipTransport;
-            GetSIPAccount_External = getSIPAccount;
             m_mangleUACContact = mangleUACContact;
             m_strictRealmHandling = strictRealmHandling;
             SIPRequestAuthenticator_External = sipRequestAuthenticator;
@@ -163,7 +160,7 @@ namespace SIPSorcery.GB28181.Servers
             //}
             ThreadPool.QueueUserWorkItem(delegate { ProcessRegisterRequest(); });
         }
-        
+
         public void AddRegisterRequest(SIPEndPoint localSIPEndPoint, SIPEndPoint remoteEndPoint, SIPRequest registerRequest)
         {
             try
@@ -180,7 +177,7 @@ namespace SIPSorcery.GB28181.Servers
                         SIPResponse badReqResponse = SIPTransport.GetResponse(registerRequest, SIPResponseStatusCodesEnum.BadRequest, "Missing To header");
                         m_sipTransport.SendResponse(badReqResponse);
                     }
-                    else if(registerRequest.Header.To.ToURI.User.IsNullOrBlank())
+                    else if (registerRequest.Header.To.ToURI.User.IsNullOrBlank())
                     {
                         logger.Debug("Bad register request, no To user from " + remoteEndPoint + ".");
                         SIPResponse badReqResponse = SIPTransport.GetResponse(registerRequest, SIPResponseStatusCodesEnum.BadRequest, "Missing username on To header");
@@ -306,7 +303,14 @@ namespace SIPSorcery.GB28181.Servers
                     return RegisterResultEnum.DomainNotServiced;
                 }
 
-                SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser && s.SIPDomain == canonicalDomain);
+
+
+                //SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser && s.SIPDomain == canonicalDomain);
+                SIPAccount sipAccount = new SIPAccount();
+                sipAccount.Id = Guid.NewGuid();
+                sipAccount.Owner = "admin";
+                sipAccount.SIPUsername = toUser;
+                sipAccount.SIPDomain = canonicalDomain;
                 //SIPAccount sipAccount = GetSIPAccount_External(s => s.SIPUsername == toUser);
                 SIPRequestAuthenticationResult authenticationResult = SIPRequestAuthenticator_External(registerTransaction.LocalSIPEndPoint, registerTransaction.RemoteEndPoint, sipRequest, sipAccount, FireProxyLogEvent);
                 //if (1 == 2)

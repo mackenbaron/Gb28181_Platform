@@ -419,10 +419,10 @@ namespace SIPSorcery.GB28181.SIP.App
             try
             {
                 m_id = (row.Table.Columns.Contains("id") && row["id"].ToString().Trim().Length > 0) ? new Guid(row["id"] as string) : Guid.NewGuid();
-                m_sipUsername = row["sipusername"] as string;
-                m_sipPassword = row["sippassword"] as string;
-                m_sipDomain = row["sipdomain"] as string;
-                m_owner = (row.Table.Columns.Contains("owner") && row["owner"] != null) ? row["owner"] as string : SIPUsername;
+                //m_sipUsername = row["sipusername"] as string;
+                //m_sipPassword = row["sippassword"] as string;
+                //m_sipDomain = row["sipdomain"] as string;
+                //m_owner = (row.Table.Columns.Contains("owner") && row["owner"] != null) ? row["owner"] as string : SIPUsername;
                 m_localID = (row.Table.Columns.Contains("localID") && row["localID"] != null) ? row["localID"] as string : null;
                 string endPoint = (row.Table.Columns.Contains("localSocket") && row["localSocket"] != null) ? row["localSocket"] as string : null;
                 if (endPoint != null)
