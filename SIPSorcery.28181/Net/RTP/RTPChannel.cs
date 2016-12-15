@@ -410,7 +410,7 @@ namespace SIPSorcery.GB28181.Net
             {
                 Thread.CurrentThread.Name = "rtpchanrecv-" + _rtpPort;
 
-                byte[] buffer = new byte[2048 * 4];
+                byte[] buffer = new byte[521 * 1024];
                 _rtpLastActivityAt = DateTime.Now;
 
                 while (!_isClosed)

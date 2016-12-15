@@ -147,6 +147,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 OnStreamReady(frame);
             }
             //byte[] buffer = frame.GetFramePayload();
+            //PsToH264(buffer);
             //foreach (var item in frame.FramePackets)
             //{
             //    logger.Debug("Seq:" + item.Header.SequenceNumber + "----Timestamp:" + item.Header.Timestamp);
@@ -165,6 +166,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// <param name="callId">呼叫编号</param>
         public void BadRequest(string msg, string callId)
         {
+            if (_realReqSession == null)
+            {
+                return;
+            }
             if (_realReqSession.Header.CallId == callId)
             {
 
@@ -420,11 +425,11 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             long tick = videoPESList.FirstOrDefault().GetVideoTimetick();
             var buffer = stream.ToArray();
             stream.Close();
-            //if (this.m_fs == null)
-            //{
-            //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
-            //}
-            //m_fs.Write(buffer, 0, buffer.Length);
+            if (this.m_fs == null)
+            {
+                this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+            }
+            m_fs.Write(buffer, 0, buffer.Length);
             videoPESList.Clear();
         }
         #endregion

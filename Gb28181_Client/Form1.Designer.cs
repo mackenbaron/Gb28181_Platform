@@ -181,7 +181,7 @@
             this.txtStartTime.Name = "txtStartTime";
             this.txtStartTime.Size = new System.Drawing.Size(137, 21);
             this.txtStartTime.TabIndex = 14;
-            this.txtStartTime.Text = "2016-12-9 9:00:00";
+            this.txtStartTime.Text = "2016-12-14 9:00:00";
             // 
             // txtStopTime
             // 
@@ -189,7 +189,7 @@
             this.txtStopTime.Name = "txtStopTime";
             this.txtStopTime.Size = new System.Drawing.Size(137, 21);
             this.txtStopTime.TabIndex = 15;
-            this.txtStopTime.Text = "2016-12-9 11:00:00";
+            this.txtStopTime.Text = "2016-12-14 11:00:00";
             // 
             // label2
             // 
