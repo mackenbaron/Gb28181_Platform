@@ -538,17 +538,17 @@ namespace SIPSorcery.GB28181.Net
                 {
                     _frameTag = 2;
                     _firstFrame.HasMarker = _firstFrame.FramePackets.Any(d => d.Header.MarkerBit == 1);
+                    frame = _firstFrame;
                     _firstFrame.FramePackets.Clear();
                     _firstFrame.AddRTPPacket(rtpPacket);
-                    frame = _firstFrame;
                 }
                 else
                 {
                     _frameTag = 1;
                     _secondFrame.HasMarker = _secondFrame.FramePackets.Any(d => d.Header.MarkerBit == 1);
+                    frame = _secondFrame;
                     _secondFrame.FramePackets.Clear();
                     _secondFrame.AddRTPPacket(rtpPacket);
-                    frame = _secondFrame;
                 }
                 if (OnFrameReady != null)
                 {
