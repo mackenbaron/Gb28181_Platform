@@ -56,11 +56,17 @@ namespace SIPSorcery.GB28181.Servers
         event Action<RTPFrame> OnStreamReady;
 
         /// <summary>
+        /// 录像文件查询结果
+        /// </summary>
+        /// <param name="recordTotal">录像条数</param>
+        void RecordQueryTotal(int recordTotal);
+
+        /// <summary>
         /// 录像文件检索
         /// <param name="beginTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
         /// </summary>
-        void RecordFileQuery(DateTime beginTime,DateTime endTime);
+        int RecordFileQuery(DateTime beginTime,DateTime endTime);
 
         /// <summary>
         /// 录像点播视频请求

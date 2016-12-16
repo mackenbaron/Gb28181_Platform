@@ -1,1 +1,32 @@
-2016-12-14 17:19:51,873 [1] DEBUG sipsorcery [(null)] - Logging initialised.
+2016-12-16 10:58:24,644 [9] DEBUG sipsorcery [(null)] - Logging initialised.
+2016-12-16 10:58:25,707 [9] DEBUG sipsorcery [(null)] -  1 SIPSorcery.GB28181.SIP.App.SIPAccount assets loaded from XML record set.
+2016-12-16 10:58:25,708 [9] DEBUG sipsorcery [(null)] - Starting file watch on Config and gb28181.xml.
+2016-12-16 10:58:25,752 [9] DEBUG sipsorcery [(null)] - SIP Registrar daemon starting...
+2016-12-16 10:58:25,805 [9] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel listener created 192.168.10.60:5061.
+2016-12-16 10:58:25,807 [sipchanneludp-IKGN] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.60:5061 listening started.
+2016-12-16 10:58:25,812 [9] DEBUG sipregistrar [(null)] - SIPRegistrarCore thread started with 1 threads.
+2016-12-16 10:58:25,815 [9] DEBUG sipsorcery [(null)] - SIP Registrar successfully started.
+2016-12-16 10:58:29,822 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - RemoteTrans Init:Remote:192.168.10.221:5060-----User:34020000001320000221
+2016-12-16 10:58:30,029 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.221:5060=====DevID:34020000001320000221=====Status:OK=====SN:1006
+2016-12-16 10:58:38,017 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - up platform return waiting process msg | Trying
+2016-12-16 10:58:38,024 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - RTPChannel allocated RTP port of 30000 and control port of 30001.
+2016-12-16 10:58:39,595 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - RemoteTrans Init:Remote:192.168.10.220:5060-----User:34020000001110000001
+2016-12-16 10:58:39,626 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.220:5060=====DevID:34020000001110000001=====Status:OK=====SN:12373
+2016-12-16 10:58:39,875 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.221:5060=====DevID:34020000001320000221=====Status:OK=====SN:1007
+2016-12-16 10:58:40,728 [9] DEBUG sipsorcery [(null)] - RTPChannel closing, RTP port 30000.
+2016-12-16 10:58:48,854 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.220:5060=====DevID:34020000001110000001=====Status:OK=====SN:12374
+2016-12-16 10:58:49,292 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - RTPChannel allocated RTP port of 30002 and control port of 30003.
+2016-12-16 10:58:49,887 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.221:5060=====DevID:34020000001320000221=====Status:OK=====SN:1008
+2016-12-16 10:58:51,401 [9] DEBUG sipsorcery [(null)] - RTPChannel closing, RTP port 30002.
+2016-12-16 10:58:57,508 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - up platform return waiting process msg | Trying
+2016-12-16 10:58:57,510 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - RTPChannel allocated RTP port of 30004 and control port of 30005.
+2016-12-16 10:58:59,624 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.220:5060=====DevID:34020000001110000001=====Status:OK=====SN:12375
+2016-12-16 10:58:59,885 [sipchanneludp-IKGN] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.221:5060=====DevID:34020000001320000221=====Status:OK=====SN:1009
+2016-12-16 10:59:00,092 [9] DEBUG sipsorcery [(null)] - RTPChannel closing, RTP port 30004.
+2016-12-16 10:59:03,283 [9] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopping...
+2016-12-16 10:59:03,284 [9] DEBUG sipsorcery [(null)] - Shutting down SIP Transport.
+2016-12-16 10:59:03,285 [9] DEBUG sipsorcery.sip [(null)] - Closing SIP UDP Channel udp:192.168.10.60:5061.
+2016-12-16 10:59:03,286 [9] DEBUG sipsorcery.sip [(null)] - SIPTransport Shutdown Complete.
+2016-12-16 10:59:03,293 [9] DEBUG sipsorcery [(null)] - sip message service stopped.
+2016-12-16 10:59:03,298 [sipchanneludp-IKGN] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.60:5061 listening halted.
+2016-12-16 10:59:03,300 [9] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopped.

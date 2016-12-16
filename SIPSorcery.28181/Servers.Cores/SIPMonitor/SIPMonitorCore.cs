@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SIPSorcery.GB28181.Servers.SIPMonitor
@@ -40,6 +41,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         private string _okTag;
         private SIPContactHeader _contact;
         private SIPViaSet _via;
+        private int _recordTotal = -1;
 
         /// <summary>
         /// sip服务状态
@@ -436,19 +438,24 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
 
         #region <<<<<<demon  录像功能>>>>>
 
+        public void RecordQueryTotal(int recordTotal)
+        {
+            _recordTotal = recordTotal;
+        }
+
         /// <summary>
         /// 录像文件查询
         /// </summary>
         /// <param name="startTime">开始时间</param>
         /// <param name="endTime">结束时间</param>
-        public void RecordFileQuery(DateTime startTime, DateTime endTime)
+        public int RecordFileQuery(DateTime startTime, DateTime endTime)
         {
             lock (_msgCore.RemoteTrans)
             {
                 if (!_msgCore.RemoteTrans.ContainsKey(_remoteEndPoint.ToString()))
                 {
                     OnSIPServiceChange(_deviceName + "-" + _deviceId + _remoteEndPoint.ToString(), SipServiceStatus.Wait);
-                    return;
+                    return 0;
                 }
             }
 
@@ -485,9 +492,23 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 Type = "time"
             };
 
+            _recordTotal = -1;
             string xmlBody = RecordQuery.Instance.Save<RecordQuery>(record);
             recordFileReq.Body = xmlBody;
             _msgCore.Transport.SendRequest(_remoteEndPoint, recordFileReq);
+            DateTime recordQueryTime = DateTime.Now;
+            while (_recordTotal < 0)
+            {
+                Thread.Sleep(50);
+                if (DateTime.Now.Subtract(recordQueryTime).TotalSeconds > 2)
+                {
+                    logger.Debug(_deviceName + "[" + _deviceId + "] 等待录像查询超时");
+                    _recordTotal = 0;
+                    break;
+                }
+            }
+
+            return _recordTotal;
         }
 
         /// <summary>
@@ -584,6 +605,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             sdp.Connection = sdpConn;
             sdp.Timing = startTime + " " + stopTime;
             sdp.Address = localIp;
+            sdp.URI = _deviceId + ":" + 1;
 
             SDPMediaFormat psFormat = new SDPMediaFormat(SDPMediaFormatsEnum.PS);
             psFormat.IsStandardAttribute = false;

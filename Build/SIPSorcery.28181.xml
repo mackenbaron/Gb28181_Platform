@@ -968,6 +968,12 @@
             <param name="callId">呼叫编号</param>
             <returns></returns>
         </member>
+        <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.RecordQueryTotal(System.Int32)">
+            <summary>
+            录像文件查询结果
+            </summary>
+            <param name="recordTotal">录像条数</param>
+        </member>
         <member name="M:SIPSorcery.GB28181.Servers.ISIPMonitorService.RecordFileQuery(System.DateTime,System.DateTime)">
             <summary>
             录像文件检索

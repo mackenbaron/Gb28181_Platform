@@ -246,6 +246,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                     RecordInfo record = RecordInfo.Instance.Read(request.Body);
                     if (record != null && record.CmdType == CommandType.RecordInfo)  //录像检索
                     {
+                        lock (MonitorService)
+                        {
+                            MonitorService[record.DeviceID + CommandType.Playback].RecordQueryTotal(record.SumNum);
+                        }
                         if (OnRecordInfoReceived != null && record.RecordItems != null)
                         {
                             OnRecordInfoReceived(record);
@@ -453,22 +457,24 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                 OnSIPServiceChange(RemoteSIPId, SipServiceStatus.Wait);
                 return;
             }
-            foreach (var trans in RemoteTrans)
+            lock (RemoteTrans)
             {
-                SIPEndPoint remoteEndPoint = SIPEndPoint.ParseSIPEndPoint(trans.Key);
-
-                SIPRequest catalogReq = QueryItems(remoteEndPoint, trans.Value);
-                CatalogQuery catalog = new CatalogQuery()
+                foreach (var trans in RemoteTrans)
                 {
-                    CommandType = CommandType.Catalog,
-                    DeviceID = trans.Value,
-                    SN = new Random().Next(1, ushort.MaxValue)
-                };
-                string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
-                catalogReq.Body = xmlBody;
-                Transport.SendRequest(remoteEndPoint, catalogReq);
-            }
+                    SIPEndPoint remoteEndPoint = SIPEndPoint.ParseSIPEndPoint(trans.Key);
 
+                    SIPRequest catalogReq = QueryItems(remoteEndPoint, trans.Value);
+                    CatalogQuery catalog = new CatalogQuery()
+                    {
+                        CommandType = CommandType.Catalog,
+                        DeviceID = trans.Value,
+                        SN = new Random().Next(1, ushort.MaxValue)
+                    };
+                    string xmlBody = CatalogQuery.Instance.Save<CatalogQuery>(catalog);
+                    catalogReq.Body = xmlBody;
+                    Transport.SendRequest(remoteEndPoint, catalogReq);
+                }
+            }
             //_catalogTask = new TaskTiming(catalogReq, Transport);
             //this.SendRequestTimeout += _catalogTask.MessageSendRequestTimeout;
             //_catalogTask.Start();

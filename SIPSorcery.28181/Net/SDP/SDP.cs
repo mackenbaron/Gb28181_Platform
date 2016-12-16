@@ -331,8 +331,9 @@ namespace SIPSorcery.GB28181.Net
             string sdp =
                 "v=" + SDP_PROTOCOL_VERSION + CRLF +
                 "o=" + Owner + CRLF +
-                "s=" + SessionName + CRLF +
-                ((Connection != null) ? Connection.ToString() : null);
+                "s=" + SessionName + CRLF;
+            sdp += string.IsNullOrWhiteSpace(URI) ? null : "u=" + URI + CRLF;
+            sdp += ((Connection != null) ? Connection.ToString() : null);
             foreach (string bandwidth in BandwidthAttributes)
             {
                 sdp += "b=" + bandwidth + CRLF;
@@ -343,7 +344,6 @@ namespace SIPSorcery.GB28181.Net
             sdp += !string.IsNullOrWhiteSpace(IceUfrag) ? "a=" + ICE_UFRAG_ATTRIBUTE_PREFIX + ":" + IceUfrag + CRLF : null;
             sdp += !string.IsNullOrWhiteSpace(IcePwd) ? "a=" + ICE_PWD_ATTRIBUTE_PREFIX + ":" + IcePwd + CRLF : null;
             sdp += string.IsNullOrWhiteSpace(SessionDescription) ? null : "i=" + SessionDescription + CRLF;
-            sdp += string.IsNullOrWhiteSpace(URI) ? null : "u=" + URI + CRLF;
 
             if (OriginatorEmailAddresses != null && OriginatorEmailAddresses.Length > 0)
             {

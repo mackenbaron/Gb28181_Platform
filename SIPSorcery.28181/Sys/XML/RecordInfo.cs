@@ -141,7 +141,7 @@ namespace SIPSorcery.GB28181.Sys.XML
         /// <summary>
         /// 录像总条数
         /// </summary>
-        [XmlElement("SunNum")]
+        [XmlElement("SumNum")]
         public int SumNum { get; set; }
 
         /// <summary>
