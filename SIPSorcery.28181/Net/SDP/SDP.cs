@@ -328,10 +328,26 @@ namespace SIPSorcery.GB28181.Net
 
         public override string ToString()
         {
+            //SDPË³ÐòÅÅÁÐ
+            /*
+             * v=0
+             * o=34020000002000000001 0 0 IN IP4 192.168.10.60
+             * s=Playback
+             * u=34020000001320000020:3
+             * c=IN IP4 192.168.10.60
+             * t=1481852021 1481855621
+             * m=video 10004 RTP/AVP 96 98
+             * a=recvonly
+             * a=rtpmap:96 PS/90000
+             * a=rtpmap:98 H264/90000
+             */
+
+
             string sdp =
                 "v=" + SDP_PROTOCOL_VERSION + CRLF +
                 "o=" + Owner + CRLF +
                 "s=" + SessionName + CRLF;
+            //º£¿µÂ¼Ïñµã²¥sdpË³Ðò
             sdp += string.IsNullOrWhiteSpace(URI) ? null : "u=" + URI + CRLF;
             sdp += ((Connection != null) ? Connection.ToString() : null);
             foreach (string bandwidth in BandwidthAttributes)
