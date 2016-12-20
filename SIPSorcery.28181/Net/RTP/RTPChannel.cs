@@ -425,7 +425,8 @@ namespace SIPSorcery.GB28181.Net
 
                             if (bytesRead > RTPHeader.MIN_HEADER_LEN)
                             {
-                                RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
+                                //RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
+                                RTPPacket rtpPacket = new RTPPacket(buffer, bytesRead);
                                 if (rtpPacket != null)
                                 {
                                     CombineFrame(rtpPacket);

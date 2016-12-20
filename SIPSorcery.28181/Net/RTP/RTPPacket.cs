@@ -37,6 +37,13 @@ namespace SIPSorcery.GB28181.Net
             Array.Copy(packet, Header.Length, Payload, 0, Payload.Length);
 		}
 
+        public RTPPacket(byte[] packet, int length)
+        {
+            Header = new RTPHeader(packet);
+            Payload = new byte[length - Header.Length];
+            Array.Copy(packet, Header.Length, Payload, 0, Payload.Length);
+        }
+
 		public byte[] GetBytes()
 		{
 			byte[] header = Header.GetBytes();

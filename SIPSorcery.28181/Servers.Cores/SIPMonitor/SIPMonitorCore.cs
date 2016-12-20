@@ -7,6 +7,7 @@ using SIPSorcery.GB28181.Sys;
 using SIPSorcery.GB28181.Sys.XML;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,6 +18,87 @@ using System.Threading.Tasks;
 
 namespace SIPSorcery.GB28181.Servers.SIPMonitor
 {
+    /// <summary>
+    /// 云台控制命令
+    /// </summary>
+    public enum PTZCommand : int
+    {
+        /// <summary>
+        /// 无
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 上
+        /// </summary>
+        [Description("上")]
+        Up = 1,
+        /// <summary>
+        /// 左上
+        /// </summary>
+        [Description("左上")]
+        UpLeft = 2,
+        /// <summary>
+        /// 右下
+        /// </summary>
+        [Description("右上")]
+        UpRight = 3,
+        /// <summary>
+        /// 下
+        /// </summary>
+        [Description("下")]
+        Down = 4,
+        /// <summary>
+        /// 左下
+        /// </summary>
+        [Description("左下")]
+        DownLeft = 5,
+        /// <summary>
+        /// 右下
+        /// </summary>
+        [Description("右下")]
+        DownRight = 6,
+        /// <summary>
+        /// 左
+        /// </summary>
+        [Description("左")]
+        Left = 7,
+        /// <summary>
+        /// 右
+        /// </summary>
+        [Description("右")]
+        Right = 8,
+        /// <summary>
+        /// 聚焦+
+        /// </summary>
+        [Description("聚焦+")]
+        Focus1 = 9,
+        /// <summary>
+        /// 聚焦-
+        /// </summary>
+        [Description("聚焦-")]
+        Focus2 = 10,
+        /// <summary>
+        /// 变倍+
+        /// </summary>
+        [Description("变倍+")]
+        Zoom1 = 11,
+        /// <summary>
+        /// 变倍-
+        /// </summary>
+        [Description("变倍-")]
+        Zoom2 = 12,
+        /// <summary>
+        /// 光圈开
+        /// </summary>
+        [Description("光圈Open")]
+        Iris1 = 13,
+        /// <summary>
+        /// 光圈关
+        /// </summary>
+        [Description("光圈Close")]
+        Iris2 = 14
+    }
+
     /// <summary>
     /// sip监控核心处理
     /// </summary>
@@ -92,8 +174,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             }
 
             _mediaPort = _msgCore.SetMediaPort();
-
             this.Stop();
+            ByeVideoReq();
             SIPRequest realReq = RealVideoReq(_mediaPort);
             _msgCore.Transport.SendRequest(_remoteEndPoint, realReq);
 
@@ -889,6 +971,199 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             return str;
         }
 
+        #endregion
+
+        #region PTZ云台控制
+
+        /// <summary>
+        /// PTZ云台控制
+        /// </summary>
+        /// <param name="ucommand">控制命令</param>
+        /// <param name="dwStop">开始或结束</param>
+        /// <param name="dwSpeed">速度</param>
+        public void PtzContrl(int ucommand, int dwStop, int dwSpeed)
+        {
+            lock (_msgCore.RemoteTrans)
+            {
+                if (!_msgCore.RemoteTrans.ContainsKey(_remoteEndPoint.ToString()))
+                {
+                    OnSIPServiceChange(_deviceName + "-" + _deviceId + _remoteEndPoint.ToString(), SipServiceStatus.Wait);
+                    return;
+                }
+            }
+
+            string fromTag = CallProperties.CreateNewTag();
+            string toTag = CallProperties.CreateNewTag();
+            int cSeq = CallProperties.CreateNewCSeq();
+            string callId = CallProperties.CreateNewCallId();
+            SIPRequest catalogReq = PTZRequest(fromTag, toTag, cSeq, callId);
+            string cmdStr = GetPtzCmd(ucommand, dwStop, dwSpeed);
+
+            PTZControl ptz = new PTZControl()
+            {
+                CommandType = CommandType.DeviceControl,
+                DeviceID = _deviceId,
+                SN = new Random().Next(9999),
+                PTZCmd = cmdStr
+            };
+            string xmlBody = PTZControl.Instance.Save<PTZControl>(ptz);
+            catalogReq.Body = xmlBody;
+            _msgCore.Transport.SendRequest(_remoteEndPoint, catalogReq);
+
+        }
+
+        /// <summary>
+        /// 查询设备目录请求
+        /// </summary>
+        /// <returns></returns>
+        private SIPRequest PTZRequest(string fromTag, string toTag, int cSeq, string callId)
+        {
+            SIPURI remoteUri = new SIPURI(_deviceId, _remoteEndPoint.ToHost(), "");
+            SIPURI localUri = new SIPURI(_msgCore.LocalSIPId, _msgCore.LocalEndPoint.ToHost(), "");
+            SIPFromHeader from = new SIPFromHeader(null, localUri, fromTag);
+            SIPToHeader to = new SIPToHeader(null, remoteUri, toTag);
+            SIPRequest catalogReq = _msgCore.Transport.GetRequest(SIPMethodsEnum.MESSAGE, remoteUri);
+            catalogReq.Header.From = from;
+            catalogReq.Header.Contact = null;
+            catalogReq.Header.Allow = null;
+            catalogReq.Header.To = to;
+            catalogReq.Header.UserAgent = _msgCore.UserAgent;
+            catalogReq.Header.CSeq = cSeq;
+            catalogReq.Header.CallId = callId;
+            catalogReq.Header.ContentType = "application/MANSCDP+xml";
+            return catalogReq;
+        }
+
+
+        /// <summary>
+        /// 拼接ptz控制指令
+        /// </summary>
+        /// <param name="ucommand"></param>
+        /// <param name="dwStop"></param>
+        /// <param name="dwSpeed"></param>
+        /// <returns></returns>
+        private string GetPtzCmd(int ucommand, int dwStop, int dwSpeed)
+        {
+            List<int> cmdList = new List<int>(8);
+            cmdList.Add(0xA5);
+            cmdList.Add(0x0F);
+            cmdList.Add(0x01);
+            if (dwStop == 1)//停止云台控制
+            {
+                cmdList.Add(00);
+                cmdList.Add(00);
+                cmdList.Add(00);
+                cmdList.Add(00);
+                cmdList.Add(0xB5);
+            }
+            else//开始云台控制
+            {
+                switch ((PTZCommand)ucommand)
+                {
+                    case PTZCommand.Up:
+                        cmdList.Add(0x08);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Down:
+                        cmdList.Add(0x04);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Left:
+                        cmdList.Add(0x02);
+                        cmdList.Add(00);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Right:
+                        cmdList.Add(0x01);
+                        cmdList.Add(00);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.UpRight:
+                        cmdList.Add(0x9);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.DownRight:
+                        cmdList.Add(0x09);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.UpLeft:
+                        cmdList.Add(0x0A);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.DownLeft:
+                        cmdList.Add(0x06);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Zoom1://镜头放大
+                        cmdList.Add(0x10);
+                        cmdList.Add(00);
+                        cmdList.Add(00);
+                        cmdList.Add(dwSpeed << 4);
+                        break;
+                    case PTZCommand.Zoom2://镜头缩小
+                        cmdList.Add(0x20);
+                        cmdList.Add(00);
+                        cmdList.Add(00);
+                        cmdList.Add(dwSpeed << 4);
+                        break;
+                    case PTZCommand.Focus1://聚焦+
+                        cmdList.Add(0x42);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Focus2://聚焦—
+                        cmdList.Add(0x41);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Iris1: //光圈open
+                        cmdList.Add(0x44);
+                        cmdList.Add(00);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    case PTZCommand.Iris2: //光圈close
+                        cmdList.Add(0x48);
+                        cmdList.Add(00);
+                        cmdList.Add(dwSpeed);
+                        cmdList.Add(00);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            int checkBit = 0;
+            foreach (int cmdItem in cmdList)
+            {
+                checkBit = checkBit + cmdItem;
+            }
+            checkBit = checkBit % 256;
+            cmdList.Add(checkBit);
+
+            string cmdStr = string.Empty;
+            foreach (var cmdItemStr in cmdList)
+            {
+                cmdStr = cmdStr + cmdItemStr.ToString("X").PadLeft(2, '0');
+            }
+            return cmdStr;
+        }
         #endregion
 
         public event Action OnBadRequest;
