@@ -92,7 +92,10 @@ namespace SIPSorcery.GB28181.Servers
         private const int CHECK_REGEXPIRY_DURATION = 1000;            // Period at which to check for expired bindings.
         public const int NATKEEPALIVE_DEFAULTSEND_INTERVAL = 10;
         private const int MAX_USERAGENT_LENGTH = 128;
-        public const int MINIMUM_EXPIRY_SECONDS = 3600;
+        /// <summary>
+        /// 最小有效期(秒)
+        /// </summary>
+        public const int MINIMUM_EXPIRY_SECONDS = 100;
         private const int DEFAULT_BINDINGS_PER_USER = 1;              // The default maixmim number of bindings that will be allowed for each unique SIP account.
         private const int REMOVE_EXPIRED_BINDINGS_INTERVAL = 3000;    // The interval in seconds at which to check for and remove expired bindings.
         private const int SEND_NATKEEPALIVES_INTERVAL = 5000;

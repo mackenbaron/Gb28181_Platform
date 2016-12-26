@@ -44,6 +44,10 @@ namespace Gb28181_Client
             this.OnPacketReady += Form1_OnPacketReady;
         }
 
+       
+
+
+      
         private void Form1_OnPacketReady(Packet packet)
         {
             logger.Debug(packet.TimeStamp + "\t" + packet.SeqNumber + "\t" + packet.Length);
@@ -51,6 +55,11 @@ namespace Gb28181_Client
 
         private void Initialize()
         {
+            //lvDev.Items.Clear();
+            //ListViewItem lvItem = new ListViewItem(new string[] { "22", "微创球机7", "34020000001320000020" });
+            //lvItem.ImageKey = "34020000001320000020";
+            //lvDev.Items.Add(lvItem);
+
             SIPSqlite.Instance.Read();
             var account = SIPSqlite.Instance.Accounts.FirstOrDefault();
             if (account == null)
@@ -59,6 +68,13 @@ namespace Gb28181_Client
                 return;
             }
             Dictionary<string, PlatformConfig> platformList = new Dictionary<string, PlatformConfig>();
+            //PlatformConfig config = new PlatformConfig()
+            //{
+            //    ChannelName = "微创球机7",
+            //    RemoteIP = "192.168.10.220",
+            //    RemotePort = 5060
+            //};
+            //platformList.Add("34020000001320000020",config);
             _messageDaemon = new SIPMessageDaemon(account, SIPRequestAuthenticator.AuthenticateSIPRequest, platformList);
         }
 

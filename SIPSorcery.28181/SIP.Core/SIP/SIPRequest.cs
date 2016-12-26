@@ -205,7 +205,8 @@ namespace SIPSorcery.GB28181.SIP
 			catch(Exception excp)
 			{
 				logger.Error("Exception SIPRequest ToString. " + excp.Message);
-				throw excp;
+				//throw excp;
+                return "";
 			}
 		}
 

@@ -1257,6 +1257,86 @@
             消息发送超时
             </summary>
         </member>
+        <member name="T:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand">
+            <summary>
+            云台控制命令
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.None">
+            <summary>
+            无
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Up">
+            <summary>
+            上
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.UpLeft">
+            <summary>
+            左上
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.UpRight">
+            <summary>
+            右下
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Down">
+            <summary>
+            下
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.DownLeft">
+            <summary>
+            左下
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.DownRight">
+            <summary>
+            右下
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Left">
+            <summary>
+            左
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Right">
+            <summary>
+            右
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Focus1">
+            <summary>
+            聚焦+
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Focus2">
+            <summary>
+            聚焦-
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Zoom1">
+            <summary>
+            变倍+
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Zoom2">
+            <summary>
+            变倍-
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Iris1">
+            <summary>
+            光圈开
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPMonitor.PTZCommand.Iris2">
+            <summary>
+            光圈关
+            </summary>
+        </member>
         <member name="T:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore">
             <summary>
             sip监控核心处理
@@ -1444,6 +1524,29 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.PtzContrl(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            PTZ云台控制
+            </summary>
+            <param name="ucommand">控制命令</param>
+            <param name="dwStop">开始或结束</param>
+            <param name="dwSpeed">速度</param>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.PTZRequest(System.String,System.String,System.Int32,System.String)">
+            <summary>
+            查询设备目录请求
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.GetPtzCmd(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            拼接ptz控制指令
+            </summary>
+            <param name="ucommand"></param>
+            <param name="dwStop"></param>
+            <param name="dwSpeed"></param>
+            <returns></returns>
+        </member>
         <member name="E:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.OnSIPServiceChanged">
             <summary>
             sip服务状态
@@ -1452,6 +1555,16 @@
         <member name="E:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.OnStreamReady">
             <summary>
             视频流回调
+            </summary>
+        </member>
+        <member name="E:SIPSorcery.GB28181.Servers.SIPMonitor.SIPMonitorCore.OnBadRequest">
+            <summary>
+            失败的请求
+            </summary>
+        </member>
+        <member name="F:SIPSorcery.GB28181.Servers.SIPRegistrarBindingsManager.MINIMUM_EXPIRY_SECONDS">
+            <summary>
+            最小有效期(秒)
             </summary>
         </member>
         <member name="M:SIPSorcery.GB28181.Servers.SIPRegistrarBindingsManager.UpdateBindings(SIPSorcery.GB28181.SIP.App.SIPAccount,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,SIPSorcery.GB28181.SIP.SIPEndPoint,System.Collections.Generic.List{SIPSorcery.GB28181.SIP.SIPContactHeader},System.String,System.Int32,System.Int32,System.String,SIPSorcery.GB28181.SIP.SIPResponseStatusCodesEnum@,System.String@)">
@@ -3595,6 +3708,26 @@
         <member name="P:SIPSorcery.GB28181.Sys.XML.KeepAlive.Status">
             <summary>
             状态
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.XML.PTZControl.Instance">
+            <summary>
+            单例模式访问
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.XML.PTZControl.CommandType">
+            <summary>
+            命令类型
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.XML.PTZControl.SN">
+            <summary>
+            序号
+            </summary>
+        </member>
+        <member name="P:SIPSorcery.GB28181.Sys.XML.PTZControl.DeviceID">
+            <summary>
+            设备编码
             </summary>
         </member>
         <member name="T:SIPSorcery.GB28181.Sys.XML.RecordQuery">

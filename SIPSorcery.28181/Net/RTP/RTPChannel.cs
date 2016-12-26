@@ -320,7 +320,7 @@ namespace SIPSorcery.GB28181.Net
                 //_thProcRTP = new Thread(new ThreadStart(ProcessRTPPackets));
                 //_thProcRTP.Start();
                 //ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
-                //ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
+                ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
                 //_thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
                 //_thrtcpRecv.Start();
                 _controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
@@ -410,8 +410,8 @@ namespace SIPSorcery.GB28181.Net
             {
                 Thread.CurrentThread.Name = "rtpchanrecv-" + _rtpPort;
 
-                byte[] buffer = new byte[521 * 1024];
-                _rtpLastActivityAt = DateTime.Now;
+                byte[] buffer = new byte[2 * 1024 * 1024];
+                //_rtpLastActivityAt = DateTime.Now;
 
                 while (!_isClosed)
                 {
@@ -427,10 +427,10 @@ namespace SIPSorcery.GB28181.Net
                             {
                                 //RTPPacket rtpPacket = new RTPPacket(buffer.Take(bytesRead).ToArray());
                                 RTPPacket rtpPacket = new RTPPacket(buffer, bytesRead);
-                                if (rtpPacket != null)
-                                {
-                                    CombineFrame(rtpPacket);
-                                }
+                                //if (rtpPacket != null)
+                                //{
+                                //    CombineFrame(rtpPacket);
+                                //}
                                 //if (rtpPacket != null && OnPacketReady != null)
                                 //{
                                 //    _lastRTPReceivedAt = DateTime.Now;
@@ -438,25 +438,25 @@ namespace SIPSorcery.GB28181.Net
                                 //}
                                 //System.Diagnostics.Debug.WriteLine("RTPReceive ssrc " + rtpPacket.Header.SyncSource + ", seq num " + rtpPacket.Header.SequenceNumber + ", timestamp " + rtpPacket.Header.Timestamp + ", marker " + rtpPacket.Header.MarkerBit + ".");
 
-                                //lock (_packets)
-                                //{
-                                //    if (_packets.Count > RTP_PACKETS_MAX_QUEUE_LENGTH)
-                                //    {
-                                //        System.Diagnostics.Debug.WriteLine("RTPChannel.RTPReceive packets queue full, clearing.");
-                                //        logger.Warn("RTPChannel.RTPReceive packets queue full, clearing.");
+                                lock (_packets)
+                                {
+                                    if (_packets.Count > RTP_PACKETS_MAX_QUEUE_LENGTH)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("RTPChannel.RTPReceive packets queue full, clearing.");
+                                        logger.Warn("RTPChannel.RTPReceive packets queue full, clearing.");
 
-                                //        _packets.Clear();
+                                        _packets.Clear();
 
-                                //        if (OnRTPQueueFull != null)
-                                //        {
-                                //            OnRTPQueueFull();
-                                //        }
-                                //    }
-                                //    else
-                                //    {
-                                //        _packets.Enqueue(rtpPacket);
-                                //    }
-                                //}
+                                        if (OnRTPQueueFull != null)
+                                        {
+                                            OnRTPQueueFull();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _packets.Enqueue(rtpPacket);
+                                    }
+                                }
                             }
                         }
                         else
@@ -581,11 +581,6 @@ namespace SIPSorcery.GB28181.Net
                             try
                             {
                                 rtpPacket = _packets.Dequeue();
-                                if (_packets.Count > 20)
-                                {
-                                    logger.Debug(_packets.Count);
-
-                                }
                             }
                             catch { }
                         }
@@ -593,7 +588,8 @@ namespace SIPSorcery.GB28181.Net
                         if (rtpPacket != null)
                         {
                             _lastRTPReceivedAt = DateTime.Now;
-                            _bytesSinceLastBWCalc += RTPHeader.MIN_HEADER_LEN + rtpPacket.Payload.Length;
+                            CombineFrame(rtpPacket);
+                            //_bytesSinceLastBWCalc += RTPHeader.MIN_HEADER_LEN + rtpPacket.Payload.Length;
 
                             //if (_rtpTrackingAction != null)
                             //{
@@ -612,46 +608,46 @@ namespace SIPSorcery.GB28181.Net
                             //    _rtpTrackingAction(rtpTrackingText);
                             //}
 
-                            if (rtpPacket.Header.Timestamp < _lastCompleteFrameTimestamp)
-                            {
-                                System.Diagnostics.Debug.WriteLine("Ignoring RTP packet with timestamp " + rtpPacket.Header.Timestamp + " as it's earlier than the last complete frame.");
-                            }
-                            else if (_frameType == FrameTypesEnum.Audio)
-                            {
-                                var frame = RTPFrame.MakeSinglePacketFrame(rtpPacket);
+                            //if (rtpPacket.Header.Timestamp < _lastCompleteFrameTimestamp)
+                            //{
+                            //    System.Diagnostics.Debug.WriteLine("Ignoring RTP packet with timestamp " + rtpPacket.Header.Timestamp + " as it's earlier than the last complete frame.");
+                            //}
+                            //else if (_frameType == FrameTypesEnum.Audio)
+                            //{
+                            //    var frame = RTPFrame.MakeSinglePacketFrame(rtpPacket);
 
-                                if (OnFrameReady != null)
-                                {
-                                    try
-                                    {
-                                        //System.Diagnostics.Debug.WriteLine("RTP audio frame ready for timestamp " + frame.Timestamp + ".");
-                                        OnFrameReady(frame);
-                                    }
-                                    catch (Exception frameReadyExcp)
-                                    {
-                                        logger.Error("Exception RTPChannel.ProcessRTPPackets OnFrameReady Audio. " + frameReadyExcp);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                lock (_seqnumberPackets)
-                                {
+                            //    if (OnFrameReady != null)
+                            //    {
+                            //        try
+                            //        {
+                            //            //System.Diagnostics.Debug.WriteLine("RTP audio frame ready for timestamp " + frame.Timestamp + ".");
+                            //            OnFrameReady(frame);
+                            //        }
+                            //        catch (Exception frameReadyExcp)
+                            //        {
+                            //            logger.Error("Exception RTPChannel.ProcessRTPPackets OnFrameReady Audio. " + frameReadyExcp);
+                            //        }
+                            //    }
+                            //}
+                            //else
+                            //{
+                                //lock (_seqnumberPackets)
+                                //{
 
-                                    _seqnumberPackets.Add(rtpPacket);
-                                    _seqnumberPackets = _seqnumberPackets.OrderBy(p => p.Header.SequenceNumber).ToList();
+                                //    _seqnumberPackets.Add(rtpPacket);
+                                //    _seqnumberPackets = _seqnumberPackets.OrderBy(p => p.Header.SequenceNumber).ToList();
 
-                                    if (_seqnumberPackets.Count > 300)
-                                    {
-                                        RTPPacket packet = _seqnumberPackets.FirstOrDefault();
-                                        //logger.Debug(packet.Header.Timestamp + "\t" + packet.Header.SequenceNumber + "\t" + packet.Payload.Length);
-                                        if (OnPacketReady != null)
-                                        {
-                                            OnPacketReady(packet);
-                                            _seqnumberPackets.Remove(packet);
-                                        }
-                                    }
-                                }
+                                //    if (_seqnumberPackets.Count > 300)
+                                //    {
+                                //        RTPPacket packet = _seqnumberPackets.FirstOrDefault();
+                                //        //logger.Debug(packet.Header.Timestamp + "\t" + packet.Header.SequenceNumber + "\t" + packet.Payload.Length);
+                                //        if (OnPacketReady != null)
+                                //        {
+                                //            OnPacketReady(packet);
+                                //            _seqnumberPackets.Remove(packet);
+                                //        }
+                                //    }
+                                //}
                                 //while (_frames.Count > MAX_FRAMES_QUEUE_LENGTH)
                                 //{
                                 //    var oldestFrame = _frames.OrderBy(x => x.Timestamp).First();
@@ -717,7 +713,7 @@ namespace SIPSorcery.GB28181.Net
                                 //        }
                                 //    }
                                 //}
-                            }
+                            //}
                         }
                     }
 

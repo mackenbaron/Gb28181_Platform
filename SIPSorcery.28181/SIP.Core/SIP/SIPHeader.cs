@@ -215,7 +215,7 @@ namespace SIPSorcery.GB28181.SIP
         { }
 
         public SIPViaHeader(string contactEndPoint, string branch) :
-            this (IPSocket.GetIPEndPoint(contactEndPoint).Address.ToString(), IPSocket.GetIPEndPoint(contactEndPoint).Port, branch, SIPProtocolsEnum.udp)
+            this(IPSocket.GetIPEndPoint(contactEndPoint).Address.ToString(), IPSocket.GetIPEndPoint(contactEndPoint).Port, branch, SIPProtocolsEnum.udp)
         { }
 
         public SIPViaHeader(IPEndPoint contactEndPoint, string branch, SIPProtocolsEnum protocol) :
@@ -2047,7 +2047,7 @@ namespace SIPSorcery.GB28181.SIP
                             headerNameLower == SIPHeaders.SIP_HEADER_CONTACT.ToLower())
                         {
                             List<SIPContactHeader> contacts = SIPContactHeader.ParseContactHeader(headerValue);
-                            if(contacts != null && contacts.Count > 0)
+                            if (contacts != null && contacts.Count > 0)
                             {
                                 sipHeader.Contact.AddRange(contacts);
                             }
@@ -2598,7 +2598,7 @@ namespace SIPSorcery.GB28181.SIP
                 headersBuilder.Append((ReferTo != null) ? SIPHeaders.SIP_HEADER_REFERTO + ": " + ReferTo + m_CRLF : null);
                 headersBuilder.Append((ReferredBy != null) ? SIPHeaders.SIP_HEADER_REFERREDBY + ": " + ReferredBy + m_CRLF : null);
                 headersBuilder.Append((Reason != null) ? SIPHeaders.SIP_HEADER_REASON + ": " + Reason + m_CRLF : null);
-                
+
                 // Custom SIP headers.
                 headersBuilder.Append((ProxyReceivedFrom != null) ? SIPHeaders.SIP_HEADER_PROXY_RECEIVEDFROM + ": " + ProxyReceivedFrom + m_CRLF : null);
                 headersBuilder.Append((ProxyReceivedOn != null) ? SIPHeaders.SIP_HEADER_PROXY_RECEIVEDON + ": " + ProxyReceivedOn + m_CRLF : null);
@@ -2630,7 +2630,8 @@ namespace SIPSorcery.GB28181.SIP
             catch (Exception excp)
             {
                 logger.Error("Exception SIPHeader ToString. " + excp.Message);
-                throw excp;
+                return "";
+                //throw excp;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using GLib.Net;
+﻿using GLib.IO;
+using GLib.Net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,9 @@ using System.Threading.Tasks;
 
 namespace SIPSorcery.GB28181.Servers.Cores.Packet
 {
-    public class PESPacket : IByteObj
+
+
+    public partial class PESPacket : IByteObj
     {
 
         public byte[] Packet_Start_Code_Prefix;     // 3 bytes
@@ -32,13 +35,13 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
                 try
                 {
                     _MediaFrame = value;
-                    //if (_MediaFrame == null)
-                    //    throw new Exception();
+                    if (_MediaFrame == null)
+                        throw new Exception();
 
                 }
                 catch (Exception e)
                 {
-                    //throw;
+                    throw;
                 }
             }
         }
@@ -112,14 +115,22 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
             }
         }
 
-        private unsafe long ParsePTS(byte* pBuf)
+        private static unsafe long ParsePTS(byte* pBuf)
         {
-            long llpts = (((uint)(pBuf[0] & 0x0E)) << 29)
-               | (uint)(pBuf[1] << 22)
-               | (((uint)(pBuf[2] & 0xFE)) << 14)
-               | (uint)(pBuf[3] << 7)
-               | (uint)(pBuf[4] >> 1);
+            long llpts = (((long)(pBuf[0] & 0x0E)) << 29)
+               | (long)(pBuf[1] << 22)
+               | (((long)(pBuf[2] & 0xFE)) << 14)
+               | (long)(pBuf[3] << 7)
+               | (long)(pBuf[4] >> 1);
             return llpts;
+        }
+
+        public unsafe long GetAudioTimetick()
+        {
+            fixed (byte* pbuf = PES_Header_Fields)
+            {
+                return ParsePTS(pbuf) / 90;
+            }
         }
 
         public unsafe long GetVideoTimetick()
@@ -162,15 +173,12 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
             var br = new System.IO.BinaryReader(stream);
             Packet_Start_Code_Prefix = br.ReadBytes(3);
             if (Packet_Start_Code_Prefix[0] != 0 || Packet_Start_Code_Prefix[1] != 0 || Packet_Start_Code_Prefix[2] != 1)
-            {
-
-            }
-            // throw new Exception();
+                throw new Exception();
             Stream_ID = br.ReadByte();
             PES_Packet_Length = (ushort)IPAddress.NetworkToHostOrder(br.ReadInt16());
             if (PES_Packet_Length == 0 && false)
             {
-                //throw new Exception("PES_Packet_Length error");
+                throw new Exception("PES_Packet_Length error");
             }
             PES_Header_Flags = br.ReadBytes(2);
             PES_Header_Length = br.ReadByte();
@@ -194,5 +202,118 @@ namespace SIPSorcery.GB28181.Servers.Cores.Packet
             var ms = new System.IO.MemoryStream(buf);
             SetBytes(ms);
         }
+
+        private static long nTimetick = 0;
+
+        public static PESPacket MediaFrame2PES(MediaFrame frame)
+        {
+            if (nTimetick == 0)
+                nTimetick = frame.nTimetick;
+            try
+            {
+                List<PESPacket> packs = new List<PESPacket>();
+                var ms = new MemoryStream(frame.Data);
+                ms.Position = 0;
+                var max = 65526000;
+                var tick = (frame.nTimetick - nTimetick) * 90;
+                while (ms.Position < ms.Length)
+                {
+                    var size = frame.nSize;
+                    byte[] buf = null;
+                    if (frame.nIsAudio == 0)
+                    {
+                        buf = new byte[size + 6];
+                        buf[0] = 0x00;
+                        buf[1] = 0x00;
+                        buf[2] = 0x00;
+                        buf[3] = 0x01;
+                        buf[4] = 0x09;
+                        buf[5] = 0xF0;
+                        Array.Copy(frame.Data, 0, buf, 6, size);
+                    }
+                    else
+                    {
+                        buf = frame.Data;
+                    }
+                    var pack = new PESPacket(buf, frame.nIsAudio == 0, tick);
+                    return pack;
+                }
+                return null;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
+
+    public class PSPacketHeader : IByteObj
+    {
+        public int start_code;                                  //32bit  0x000000BA
+        public byte marker1;                                    //2bit
+        public byte system_clock1;                              //3bit
+        public byte marker2;                                    //1bit
+        public short system_clock2;                             //15bit
+        public byte marker3;                                    //1bit
+        public short system_clock3;                             //15bit
+        public byte marker4;                                    //1bit
+        public short SCR_externsion;                            //9bit
+        public byte marker5;                                    //1bit
+        public int mutiplex_rate;                               //22bit
+        public byte marker6;                                    //2bit
+        public byte reserved;                                   //5bit
+        public byte stuffing_length;                            //3bit
+        public byte[] stuffing;
+
+        public PSPacketHeader(Stream stream)
+        {
+            byte[] buffer = new byte[14];
+            stream.Read(buffer, 0, buffer.Length);
+            BitStream bs = new BitStream(buffer);
+            bs.Position = 0;
+            bs.Read(out start_code, 0, 32);
+            bs.Read(out marker1, 0, 2);
+            bs.Read(out system_clock1, 0, 3);
+            bs.Read(out marker2, 0, 1);
+            bs.Read(out system_clock2, 0, 15);
+            bs.Read(out marker3, 0, 1);
+            bs.Read(out system_clock3, 0, 15);
+            bs.Read(out marker4, 0, 1);
+            bs.Read(out SCR_externsion, 0, 9);
+            bs.Read(out marker5, 0, 1);
+            bs.Read(out mutiplex_rate, 0, 22);
+            bs.Read(out marker6, 0, 2);
+            bs.Read(out reserved, 0, 5);
+            bs.Read(out stuffing_length, 0, 3);
+            stuffing = new byte[stuffing_length];
+            stream.Read(stuffing, 0, stuffing_length);
+        }
+
+        public byte[] GetBytes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBytes(byte[] buf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public long GetSCR()
+        {
+
+            BitStream bb = new BitStream();
+            bb.Write(0, 0, 64 - 33);
+            bb.Write(system_clock1, 0, 3);
+            bb.Write(system_clock2, 0, 15);
+            bb.Write(system_clock3, 0, 15);
+            bb.Position = 32;
+            long scr = 0;
+            bb.Read(out scr, 0, 32);
+            bb.Close();
+            scr = scr / 90;
+            return scr;
+        }
+    }
+
 }

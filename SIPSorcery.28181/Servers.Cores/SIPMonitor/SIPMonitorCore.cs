@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace SIPSorcery.GB28181.Servers.SIPMonitor
 {
+    #region 云台控制命令
     /// <summary>
     /// 云台控制命令
     /// </summary>
@@ -97,7 +98,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// </summary>
         [Description("光圈Close")]
         Iris2 = 14
-    }
+    } 
+    #endregion
 
     /// <summary>
     /// sip监控核心处理
@@ -135,6 +137,11 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         /// </summary>
         public event Action<RTPFrame> OnStreamReady;
 
+        /// <summary>
+        /// 失败的请求
+        /// </summary>
+        public event Action OnBadRequest;
+
         public SIPMonitorCore(SIPMessageCore msgCore, string deviceId, string name, SIPEndPoint remoteEndPoint)
         {
             _msgCore = msgCore;
@@ -144,6 +151,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         }
 
         private FileStream m_fs = null;
+        private FileStream m_fs2 = null;
 
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
         {
@@ -158,6 +166,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             }
         }
 
+        #region 实时视频
         /// <summary>
         /// 实时视频请求
         /// </summary>
@@ -416,7 +425,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         private string SetSubject()
         {
             return _deviceId + ":" + 0 + "," + _msgCore.LocalSIPId + ":" + new Random().Next(100, ushort.MaxValue);
-        }
+        } 
+        #endregion
 
         #region 处理PS数据
 
@@ -426,6 +436,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             _publicByte = copybyte(_publicByte, buffer);
             int i = 0;
             int BANum = 0;
+            int startIndex = 0;
             if (buffer == null || buffer.Length < 5)
             {
                 return;
@@ -436,6 +447,10 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 if (_publicByte[i] == 0x00 && _publicByte[i + 1] == 0x00 && _publicByte[i + 2] == 0x01 && _publicByte[i + 3] == 0xBA)
                 {
                     BANum++;
+                    if (BANum == 1)
+                    {
+                        startIndex = i;
+                    }
                     if (BANum == 2)
                     {
                         break;
@@ -446,11 +461,13 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
 
             if (BANum == 2)
             {
-                byte[] psByte = new byte[i];
-                Array.Copy(_publicByte, 0, psByte, 0, i);
+                 int esNum = i - startIndex;
+                byte[] psByte = new byte[esNum];
+                Array.Copy(_publicByte, startIndex, psByte, 0, esNum);
 
                 try
                 {
+                   
                     //处理psByte
                     doPsByte(psByte);
                 }
@@ -475,7 +492,15 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
 
         private void doPsByte(byte[] psDate)
         {
+            if (!(psDate[0] == 0 && psDate[1] == 0 && psDate[2] == 1 && psDate[3] == 0xBA))
+            {
+                Console.WriteLine("出错了！！！！！！！！");
+            }
+            long scr = 0;
             Stream msStream = new System.IO.MemoryStream(psDate);
+
+            var ph = new PSPacketHeader(msStream);
+            scr = ph.GetSCR();
             List<PESPacket> videoPESList = new List<PESPacket>();
 
             while (msStream.Length - msStream.Position > 4)
@@ -496,26 +521,37 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
 
         private void HandlES(List<PESPacket> videoPESList)
         {
-            var stream = new MemoryStream();
-            foreach (var item in videoPESList)
+            try
             {
-                stream.Write(item.PES_Packet_Data, 0, item.PES_Packet_Data.Length);
-            }
-            if (videoPESList.Count == 0)
-            {
+                var stream = new MemoryStream();
+                foreach (var item in videoPESList)
+                {
+                    stream.Write(item.PES_Packet_Data, 0, item.PES_Packet_Data.Length);
+                }
+                if (videoPESList.Count == 0)
+                {
+                    stream.Close();
+                    return;
+                }
+                long tick = videoPESList.FirstOrDefault().GetVideoTimetick();
+                var esdata = stream.ToArray();
                 stream.Close();
-                return;
+                videoPESList.Clear();
+
+                if (this.m_fs2 == null)
+                {
+                    this.m_fs2 = new FileStream("D:\\111.h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+                }
+                m_fs2.Write(esdata, 0, esdata.Length);
+
             }
-            long tick = videoPESList.FirstOrDefault().GetVideoTimetick();
-            var buffer = stream.ToArray();
-            stream.Close();
-            if (this.m_fs == null)
+            catch (Exception ex)
             {
-                this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+                //ComHelper.Log.Write(ex, "PsanalyzeOther");
             }
-            m_fs.Write(buffer, 0, buffer.Length);
-            videoPESList.Clear();
         }
+
+
         #endregion
 
         #region <<<<<<demon  录像功能>>>>>
@@ -1165,7 +1201,5 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             return cmdStr;
         }
         #endregion
-
-        public event Action OnBadRequest;
     }
 }
