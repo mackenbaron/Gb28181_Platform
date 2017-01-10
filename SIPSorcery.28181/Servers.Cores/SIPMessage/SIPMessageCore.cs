@@ -213,7 +213,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                     {
                         foreach (var cata in catalog.DeviceList.Items)
                         {
-                            cata.RemoteEP = request.Header.From.FromURI.Host;
+                            //cata.RemoteEP = request.Header.From.FromURI.Host;
+                            cata.RemoteEP = remoteEndPoint.ToHost();
                             for (int i = 0; i < 2; i++)
                             {
                                 CommandType cmdType = CommandType.Unknown;

@@ -23,7 +23,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-
+using System.Net;
+using System.Net.Sockets;
 namespace Gb28181_Client
 {
     public delegate void SetSIPServiceText(string msg, SipServiceStatus state);
@@ -44,10 +45,10 @@ namespace Gb28181_Client
             this.OnPacketReady += Form1_OnPacketReady;
         }
 
-       
 
 
-      
+
+
         private void Form1_OnPacketReady(Packet packet)
         {
             logger.Debug(packet.TimeStamp + "\t" + packet.SeqNumber + "\t" + packet.Length);
@@ -378,6 +379,31 @@ namespace Gb28181_Client
                 return;
             }
             _messageDaemon.MessageCore.MonitorService[key].RecordFileQuery(startTime, stopTime);
+        }
+
+        Socket socket;
+        bool Stop = false;
+        private void button2_Click(object sender, EventArgs e)
+        {
+            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            socket.Bind(new IPEndPoint(IPAddress.Any, 0));
+            Thread recvThread = new Thread(new ThreadStart(Start)); ;
+            recvThread.Start();
+            Stop = true;
+        }
+
+        public void Start()
+        {
+            while (Stop)
+            {
+                EndPoint remoteEP = new IPEndPoint(IPAddress.Any, 0);
+                byte[] buffer = new byte[2048];
+                if (socket.Poll(3000, SelectMode.SelectRead))
+                {
+                    int recvLength = socket.ReceiveFrom(buffer, 0, buffer.Length, SocketFlags.None, ref remoteEP);
+                }
+                Thread.Sleep(50);
+            }
         }
     }
 
