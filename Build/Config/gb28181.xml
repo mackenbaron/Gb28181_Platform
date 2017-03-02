@@ -2,6 +2,8 @@
 <sipaccounts>
   <sipaccount>
     <localID>34020000002000000001</localID>
-    <localSocket>192.168.10.36:5061</localSocket>
+    <localSocket>192.168.10.28:5061</localSocket>
+    <remoteID></remoteID>
+    <remoteSocket></remoteSocket>
   </sipaccount>
 </sipaccounts>

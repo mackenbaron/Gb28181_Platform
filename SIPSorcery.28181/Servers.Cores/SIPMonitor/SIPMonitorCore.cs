@@ -151,7 +151,6 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
         }
 
         private FileStream m_fs = null;
-        private FileStream m_fs2 = null;
 
         public void OnSIPServiceChange(string msg, SipServiceStatus state)
         {
@@ -239,8 +238,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
             {
                 OnStreamReady(frame);
             }
-            //byte[] buffer = frame.GetFramePayload();
-            //PsToH264(buffer);
+            byte[] buffer = frame.GetFramePayload();
+            PsToH264(buffer);
             //foreach (var item in frame.FramePackets)
             //{
             //    logger.Debug("Seq:" + item.Header.SequenceNumber + "----Timestamp:" + item.Header.Timestamp);
@@ -538,11 +537,11 @@ namespace SIPSorcery.GB28181.Servers.SIPMonitor
                 stream.Close();
                 videoPESList.Clear();
 
-                if (this.m_fs2 == null)
-                {
-                    this.m_fs2 = new FileStream("D:\\111.h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
-                }
-                m_fs2.Write(esdata, 0, esdata.Length);
+                //if (this.m_fs == null)
+                //{
+                //    this.m_fs = new FileStream("D:\\" + _deviceId + ".h264", FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 50 * 1024);
+                //}
+                //m_fs.Write(esdata, 0, esdata.Length);
 
             }
             catch (Exception ex)

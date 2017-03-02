@@ -321,10 +321,10 @@ namespace SIPSorcery.GB28181.Net
                 //_thProcRTP.Start();
                 //ThreadPool.QueueUserWorkItem(delegate { RTPReceive(); });
                 ThreadPool.QueueUserWorkItem(delegate { ProcessRTPPackets(); });
-                //_thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
-                //_thrtcpRecv.Start();
-                _controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
-                _controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
+                _thrtcpRecv = new Thread(new ThreadStart(RTCPReceive));
+                _thrtcpRecv.Start();
+                //_controlSocketBuffer = new byte[RECEIVE_BUFFER_SIZE];
+                //_controlSocket.BeginReceive(_controlSocketBuffer, 0, _controlSocketBuffer.Length, SocketFlags.None, out _controlSocketError, ControlSocketReceive, null);
             }
             else
             {

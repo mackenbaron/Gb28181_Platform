@@ -12,3 +12,17 @@ F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\MySql.Data
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\bin\Debug\System.Data.SQLite.xml
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.csprojResolveAssemblyReference.cache
 F:\VisionVera\SourceCoder\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\SIPSorcery.28181.pdb
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\SIPSorcery.28181.XML
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\SIPSorcery.28181.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\GLib.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\log4net.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\MySql.Data.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\System.Data.SQLite.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\Newtonsoft.Json.dll
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\log4net.xml
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\MySql.Data.xml
+D:\Gb28181_Platform\SIPSorcery.28181\bin\Debug\System.Data.SQLite.xml
+D:\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.csprojResolveAssemblyReference.cache
+D:\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.dll
+D:\Gb28181_Platform\SIPSorcery.28181\obj\Debug\SIPSorcery.28181.pdb

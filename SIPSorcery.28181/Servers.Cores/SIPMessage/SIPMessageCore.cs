@@ -44,8 +44,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
         private static ILog logger = AppState.logger;
 
         private bool _initSIP;
-        private int MEDIA_PORT_START = 30000;
-        private int MEDIA_PORT_END = 32000;
+        private int MEDIA_PORT_START = 12002;
+        private int MEDIA_PORT_END = 14000;
         private RegistrarCore m_registrarCore;
         private TaskTiming _catalogTask;
 
@@ -213,7 +213,8 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
                     {
                         foreach (var cata in catalog.DeviceList.Items)
                         {
-                            cata.RemoteEP = request.Header.From.FromURI.Host;
+                            //cata.RemoteEP = request.Header.From.FromURI.Host;
+                            cata.RemoteEP = remoteEndPoint.ToHost();
                             for (int i = 0; i < 2; i++)
                             {
                                 CommandType cmdType = CommandType.Unknown;
@@ -568,7 +569,7 @@ namespace SIPSorcery.GB28181.Servers.SIPMessage
 
             if (MEDIA_PORT_START >= MEDIA_PORT_END)
             {
-                MEDIA_PORT_START = 10000;
+                MEDIA_PORT_START = 12002;
             }
             MEDIA_PORT_START += 2;
             int[] mediaPort = new int[2];
