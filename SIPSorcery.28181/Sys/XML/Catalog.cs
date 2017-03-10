@@ -138,7 +138,7 @@ namespace SIPSorcery.GB28181.Sys.XML
             /// 是否有子设备，1有，0没有
             /// </summary>
             [XmlElement("Parental")]
-            public byte Parental { get; set; }
+            public string Parental { get; set; }
 
             /// <summary>
             /// 父设备ID(可选)
@@ -150,13 +150,13 @@ namespace SIPSorcery.GB28181.Sys.XML
             /// 信令安全模式，0：不采用，2：S/MIME签名方式 3：S/MIME加密签名 4数字摘要方式(可选) 
             /// </summary>
             [XmlElement("SafetyWay")]
-            public byte SafetyWay { get; set; }
+            public string SafetyWay { get; set; }
 
             /// <summary>
             /// 符合sip3261标准的认证注册方式，2：基于口令的双向认证方式，3：基于数字证书的双向认证方式
             /// </summary>
             [XmlElement("RegisterWay")]
-            public byte RegisterWay { get; set; }
+            public string RegisterWay { get; set; }
 
             /// <summary>
             /// 证书序列号（可选）
@@ -168,13 +168,13 @@ namespace SIPSorcery.GB28181.Sys.XML
             /// 证书有效标志，0无效，1有效(可选)
             /// </summary>
             [XmlElement("Certifiable")]
-            public byte Certifiable { get; set; }
+            public string Certifiable { get; set; }
 
             /// <summary>
             /// 证书无效原因码(可选)
             /// </summary>
             [XmlElement("ErrCode")]
-            public int ErrCode { get; set; }
+            public string ErrCode { get; set; }
 
             /// <summary>
             /// 证书终止有效期(可选)
@@ -186,7 +186,7 @@ namespace SIPSorcery.GB28181.Sys.XML
             /// 保密属性，0：不涉密，1涉密
             /// </summary>
             [XmlElement("Secrecy")]
-            public byte Secrecy { get; set; }
+            public string Secrecy { get; set; }
 
             /// <summary>
             /// 设备IP（可选）
@@ -216,13 +216,13 @@ namespace SIPSorcery.GB28181.Sys.XML
             /// 精度(可选)
             /// </summary>
             [XmlElement("Longitude")]
-            public double Longitude { get; set; }
+            public string Longitude { get; set; }
 
             /// <summary>
             /// 纬度(可选)
             /// </summary>
             [XmlElement("Latitude")]
-            public double Latitude { get; set; }
+            public string Latitude { get; set; }
 
             /// <summary>
             /// 远程设备终结点
