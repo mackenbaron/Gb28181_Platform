@@ -1,1 +1,102 @@
-2017-03-08 16:42:35,961 [9] DEBUG sipsorcery [(null)] - Logging initialised.
+2017-03-10 13:16:55,670 [1] DEBUG sipsorcery [(null)] - Logging initialised.
+2017-03-10 13:16:56,794 [1] DEBUG sipsorcery [(null)] -  1 SIPSorcery.GB28181.SIP.App.SIPAccount assets loaded from XML record set.
+2017-03-10 13:16:56,794 [1] DEBUG sipsorcery [(null)] - Starting file watch on Config and gb28181.xml.
+2017-03-10 13:16:56,809 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon starting...
+2017-03-10 13:16:56,856 [1] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel listener created 192.168.10.28:5061.
+2017-03-10 13:16:56,856 [sipchanneludp-AKNS] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.28:5061 listening started.
+2017-03-10 13:16:56,872 [1] DEBUG sipregistrar [(null)] - SIPRegistrarCore thread started with 1 threads.
+2017-03-10 13:16:56,872 [1] DEBUG sipsorcery [(null)] - SIP Registrar successfully started.
+2017-03-10 13:16:58,338 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - RemoteTrans Init:Remote:192.168.10.6:5060-----User:33020000000000000099
+2017-03-10 13:16:58,432 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:125
+2017-03-10 13:17:04,640 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:126
+2017-03-10 13:17:34,655 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:127
+2017-03-10 13:18:04,656 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:128
+2017-03-10 13:18:34,670 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:129
+2017-03-10 13:19:04,691 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:130
+2017-03-10 13:19:34,702 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:131
+2017-03-10 13:20:04,720 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:132
+2017-03-10 13:20:34,731 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:133
+2017-03-10 13:21:04,741 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:134
+2017-03-10 13:21:18,781 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - up platform return waiting process msg | Trying
+2017-03-10 13:21:18,796 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:19,311 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:20,325 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:22,338 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:26,362 [sipchanneludp-AKNS] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:30,184 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopping...
+2017-03-10 13:21:30,200 [1] DEBUG sipsorcery [(null)] - Shutting down SIP Transport.
+2017-03-10 13:21:30,200 [1] DEBUG sipsorcery.sip [(null)] - Closing SIP UDP Channel udp:192.168.10.28:5061.
+2017-03-10 13:21:30,200 [1] DEBUG sipsorcery.sip [(null)] - SIPTransport Shutdown Complete.
+2017-03-10 13:21:30,200 [1] DEBUG sipsorcery [(null)] - sip message service stopped.
+2017-03-10 13:21:30,200 [sipchanneludp-AKNS] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.28:5061 listening halted.
+2017-03-10 13:21:30,200 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopped.
+2017-03-10 13:21:32,025 [1] DEBUG sipsorcery [(null)] -  1 SIPSorcery.GB28181.SIP.App.SIPAccount assets loaded from XML record set.
+2017-03-10 13:21:32,025 [1] DEBUG sipsorcery [(null)] - Starting file watch on Config and gb28181.xml.
+2017-03-10 13:21:32,025 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon starting...
+2017-03-10 13:21:32,025 [1] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel listener created 192.168.10.28:5061.
+2017-03-10 13:21:32,025 [1] DEBUG sipregistrar [(null)] - SIPRegistrarCore thread started with 1 threads.
+2017-03-10 13:21:32,025 [1] DEBUG sipsorcery [(null)] - SIP Registrar successfully started.
+2017-03-10 13:21:32,025 [sipchanneludp-SWTY] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.28:5061 listening started.
+2017-03-10 13:21:34,412 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:34,755 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - RemoteTrans Init:Remote:192.168.10.6:5060-----User:33020000000000000099
+2017-03-10 13:21:34,755 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:135
+2017-03-10 13:21:38,437 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:42,462 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:46,487 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:21:50,511 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - 31010100001320080003===RealVideo 400 BadRequest
+2017-03-10 13:22:04,770 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:136
+2017-03-10 13:22:34,784 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:137
+2017-03-10 13:23:04,799 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:138
+2017-03-10 13:23:34,810 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:139
+2017-03-10 13:24:04,825 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:140
+2017-03-10 13:24:34,839 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:141
+2017-03-10 13:25:04,854 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:142
+2017-03-10 13:25:10,314 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - up platform return waiting process msg | Trying
+2017-03-10 13:25:10,407 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - RTPChannel allocated RTP port of 12002 and control port of 12003.
+2017-03-10 13:25:25,992 [1] DEBUG sipsorcery [(null)] - RTPChannel closing, RTP port 12002.
+2017-03-10 13:25:26,007 [rtpchanrecv-12002] ERROR sipsorcery [(null)] - Exception RTCPChannel.ControlSocketReceive. System.Net.Sockets.SocketException (0x80004005): 一个封锁操作被对 WSACancelBlockingCall 的调用中断。
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags, EndPoint& remoteEP)
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, EndPoint& remoteEP)
+   在 SIPSorcery.GB28181.Net.RTPChannel.RTCPReceive() 位置 d:\Gb28181_Platform\SIPSorcery.28181\Net\RTP\RTPChannel.cs:行号 349
+2017-03-10 13:25:34,881 [sipchanneludp-SWTY] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:143
+2017-03-10 13:26:01,516 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopping...
+2017-03-10 13:26:01,532 [1] DEBUG sipsorcery [(null)] - Shutting down SIP Transport.
+2017-03-10 13:26:01,532 [1] DEBUG sipsorcery.sip [(null)] - Closing SIP UDP Channel udp:192.168.10.28:5061.
+2017-03-10 13:26:01,532 [1] DEBUG sipsorcery.sip [(null)] - SIPTransport Shutdown Complete.
+2017-03-10 13:26:01,532 [1] DEBUG sipsorcery [(null)] - sip message service stopped.
+2017-03-10 13:26:01,532 [sipchanneludp-SWTY] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.28:5061 listening halted.
+2017-03-10 13:26:01,532 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopped.
+2017-03-10 13:26:03,186 [1] DEBUG sipsorcery [(null)] -  1 SIPSorcery.GB28181.SIP.App.SIPAccount assets loaded from XML record set.
+2017-03-10 13:26:03,186 [1] DEBUG sipsorcery [(null)] - Starting file watch on Config and gb28181.xml.
+2017-03-10 13:26:03,201 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon starting...
+2017-03-10 13:26:03,201 [sipchanneludp-TATV] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.28:5061 listening started.
+2017-03-10 13:26:03,201 [1] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel listener created 192.168.10.28:5061.
+2017-03-10 13:26:03,201 [1] DEBUG sipregistrar [(null)] - SIPRegistrarCore thread started with 1 threads.
+2017-03-10 13:26:03,201 [1] DEBUG sipsorcery [(null)] - SIP Registrar successfully started.
+2017-03-10 13:26:04,886 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - RemoteTrans Init:Remote:192.168.10.6:5060-----User:33020000000000000099
+2017-03-10 13:26:04,886 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:144
+2017-03-10 13:26:12,671 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - up platform return waiting process msg | Trying
+2017-03-10 13:26:12,873 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - RTPChannel allocated RTP port of 12002 and control port of 12003.
+2017-03-10 13:26:24,308 [1] DEBUG sipsorcery [(null)] - RTPChannel closing, RTP port 12002.
+2017-03-10 13:26:24,308 [rtpchanrecv-12002] ERROR sipsorcery [(null)] - Exception RTCPChannel.ControlSocketReceive. System.Net.Sockets.SocketException (0x80004005): 一个封锁操作被对 WSACancelBlockingCall 的调用中断。
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags, EndPoint& remoteEP)
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, EndPoint& remoteEP)
+   在 SIPSorcery.GB28181.Net.RTPChannel.RTCPReceive() 位置 d:\Gb28181_Platform\SIPSorcery.28181\Net\RTP\RTPChannel.cs:行号 349
+2017-03-10 13:26:34,909 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:145
+2017-03-10 13:26:44,283 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - up platform return waiting process msg | Trying
+2017-03-10 13:26:44,858 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - RTPChannel allocated RTP port of 12004 and control port of 12005.
+2017-03-10 13:27:00,080 [1] DEBUG sipsorcery [(null)] - RTPChannel closing, RTP port 12004.
+2017-03-10 13:27:00,080 [rtpchanrecv-12004] ERROR sipsorcery [(null)] - Exception RTCPChannel.ControlSocketReceive. System.Net.Sockets.SocketException (0x80004005): 一个封锁操作被对 WSACancelBlockingCall 的调用中断。
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags, EndPoint& remoteEP)
+   在 System.Net.Sockets.Socket.ReceiveFrom(Byte[] buffer, EndPoint& remoteEP)
+   在 SIPSorcery.GB28181.Net.RTPChannel.RTCPReceive() 位置 d:\Gb28181_Platform\SIPSorcery.28181\Net\RTP\RTPChannel.cs:行号 349
+2017-03-10 13:27:04,916 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:146
+2017-03-10 13:27:34,937 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:147
+2017-03-10 13:28:04,937 [sipchanneludp-TATV] DEBUG sipsorcery [(null)] - KeepAlive:192.168.10.6:5060=====DevID:33020000000000000099=====Status:OK=====SN:148
+2017-03-10 13:28:28,624 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopping...
+2017-03-10 13:28:28,624 [1] DEBUG sipsorcery [(null)] - Shutting down SIP Transport.
+2017-03-10 13:28:28,624 [1] DEBUG sipsorcery.sip [(null)] - Closing SIP UDP Channel udp:192.168.10.28:5061.
+2017-03-10 13:28:28,640 [1] DEBUG sipsorcery.sip [(null)] - SIPTransport Shutdown Complete.
+2017-03-10 13:28:28,640 [1] DEBUG sipsorcery [(null)] - sip message service stopped.
+2017-03-10 13:28:28,640 [1] DEBUG sipsorcery [(null)] - SIP Registrar daemon stopped.
+2017-03-10 13:28:28,640 [sipchanneludp-TATV] DEBUG sipsorcery.sip [(null)] - SIPUDPChannel socket on udp:192.168.10.28:5061 listening halted.
