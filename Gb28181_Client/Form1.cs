@@ -475,6 +475,11 @@ namespace Gb28181_Client
                 Thread.Sleep(50);
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.btnStop_Click(sender, e);
+        }
     }
 
     public class BitWriter
